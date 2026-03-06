@@ -476,11 +476,14 @@
     const cardState = {};
     SIZES.forEach(s => cardState[s.id] = { on: false, disabled: false });
 
-    const CHECK_ICONS = { 16: 'assets/checkbox-check-16.svg', 20: 'assets/checkbox-check-20.svg', 24: 'assets/checkbox-check-24.svg' };
+    const CHECK_SVG = {
+      16: `<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display:block" viewBox="0 0 7.24853 5.27279" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.24853 0.848528L2.82426 5.27279L0 2.44853L0.848528 1.6L2.82426 3.57574L6.4 0L7.24853 0.848528Z" fill="white"/></svg>`,
+      20: `<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display:block" viewBox="0 0 9.06066 6.59099" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.06066 1.06066L3.53033 6.59099L0 3.06066L1.06066 2L3.53033 4.46967L8 0L9.06066 1.06066Z" fill="white"/></svg>`,
+      24: `<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display:block" viewBox="0 0 10.8728 7.90919" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.8728 1.27279L4.2364 7.90919L0 3.67279L1.27279 2.4L4.2364 5.3636L9.6 0L10.8728 1.27279Z" fill="white"/></svg>`,
+    };
     const TOGGLE_HTML = `<div class="toggle-track"></div><div class="toggle-thumb"><div class="toggle-dot"></div></div>`;
-
     function checkboxHtml(sz) {
-      return `<div class="cb-bg"></div><div class="cb-box"></div><div class="cb-check"><img src="${CHECK_ICONS[sz]}" alt=""></div>`;
+      return `<div class="cb-bg"></div><div class="cb-box"></div><div class="cb-check">${CHECK_SVG[sz]}</div>`;
     }
 
     function renderCheckbox(sid) {
