@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Banner — Snabbit Design System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: "Instrument Sans", sans-serif;
+      background: #141414; color: #fff;
+      display: flex; min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed; top: 0; left: 0;
+      width: 216px; height: 100vh;
+      background: #1a1a1a; border-right: 1px solid #252525;
+      padding: 48px 16px;
+      display: flex; flex-direction: column; gap: 2px;
+      z-index: 100; overflow-y: auto;
+    }
+    .sidebar-heading {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: #484848;
+      padding: 0 12px; margin-bottom: 8px;
+    }
+    .sidebar-separator { height: 1px; background: #252525; margin: 20px 4px; }
+    .nav-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: 8px;
+      font-size: 14px; font-weight: 500; color: #666;
+      text-decoration: none; transition: color 0.15s, background 0.15s;
+    }
+    .nav-link:hover { color: #e0e0e0; background: #242424; }
+    .nav-link.active { color: #fff; background: #272727; }
+    .nav-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+
+    /* ── Main ── */
+    .main { margin-left: 216px; flex: 1; padding: 60px 80px; min-height: 100vh; }
+
+    /* ── Component header ── */
+    .component-header {
+      background: #272727; margin: -60px -80px 60px; padding: 44px 80px;
+      display: flex; align-items: flex-end; justify-content: space-between;
+    }
+    .component-header-left { display: flex; flex-direction: column; gap: 10px; }
+    .component-breadcrumb { font-size: 13px; font-weight: 500; color: #666; }
+    .component-breadcrumb a { color: #666; text-decoration: none; }
+    .component-breadcrumb a:hover { color: #aaa; }
+    .component-header h1 { font-size: 56px; font-weight: 700; line-height: 1; letter-spacing: -2px; }
+    .component-header-right p {
+      font-size: 14px; font-weight: 500; color: #828282;
+      max-width: 280px; line-height: 20px; text-align: right;
+    }
+
+    /* ── Sections ── */
+    .section { margin-bottom: 64px; }
+    .section-title { font-size: 32px; font-weight: 500; letter-spacing: -1px; margin-bottom: 24px; color: #fff; }
+    .divider { height: 1px; background: #2a2a2a; margin: 48px 0; }
+
+    /* ── Variant grid ── */
+    .variant-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .variant-card {
+      background: #272727; border-radius: 16px;
+      padding: 32px 24px 24px;
+      display: flex; flex-direction: column; align-items: center; gap: 20px;
+    }
+    .variant-card--wide {
+      grid-column: 1 / -1;
+    }
+    .variant-card__preview {
+      width: 100%; display: flex; justify-content: center;
+    }
+    .variant-card__label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: #555;
+    }
+
+    /* ── Props table ── */
+    .props-table { width: 100%; border-collapse: collapse; border-radius: 16px; overflow: hidden; }
+    .props-table th {
+      background: #fff; color: #000; font-size: 13px; font-weight: 600;
+      padding: 14px 20px; text-align: left;
+    }
+    .props-table td {
+      background: #272727; padding: 0 20px; height: 52px;
+      font-size: 13px; font-weight: 500; color: #e0e0e0;
+      border-top: 1px solid #333;
+    }
+    .props-table td code {
+      background: #1a1a1a; border: 1px solid #333; border-radius: 4px;
+      padding: 2px 6px; font-size: 12px; color: #f70f79;
+    }
+    .props-table td.prop-name { color: #fff; font-weight: 600; }
+    .props-table td.prop-default { color: #828282; }
+
+    /* ══════════════════════════════════════════════
+       Banner component styles
+    ══════════════════════════════════════════════ */
+
+    .bn {
+      width: 361px; border-radius: 12px;
+      font-family: 'Outfit', sans-serif; box-sizing: border-box;
+    }
+    .bn--white { background: #fff; border: 1px solid #f0f0f0; }
+    .bn--promo { background: #a0e934; }
+
+    /* Close button */
+    .bn-close {
+      background: none; border: none; cursor: pointer; padding: 0;
+      width: 24px; height: 24px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+
+    /* Icon circle */
+    .bn-icon-circle {
+      width: 40px; height: 40px; border-radius: 50%; background: #fff;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .bn-icon-circle img { width: 24px; height: 24px; display: block; }
+
+    /* ── InlineLink ── */
+    .bn--inline-link {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding: 12px;
+    }
+    .bn--inline-link .bn-content {
+      display: flex; gap: 12px; align-items: center; flex: 1; min-width: 0;
+    }
+    .bn-inline-text { flex: 1; font-size: 14px; line-height: 18px; }
+    .bn-inline-text .grey { color: #ababab; font-weight: 400; }
+    .bn-inline-text .pink { color: #f70f79; font-weight: 600; }
+
+    /* ── PrimaryCTA ── */
+    .bn--primary-cta {
+      display: flex; flex-direction: column; gap: 20px; padding: 12px;
+    }
+    .bn--primary-cta .bn-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+    }
+    .bn--primary-cta .bn-header-left {
+      display: flex; gap: 12px; align-items: center; flex: 1; min-width: 0;
+    }
+    .bn-text-col { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+    .bn-title { font-size: 16px; font-weight: 500; line-height: 20px; color: #303030; letter-spacing: 0.032px; }
+    .bn-subtitle { font-size: 14px; font-weight: 400; line-height: 16px; color: #ababab; }
+    .bn-btn-primary {
+      width: 100%; height: 36px; background: #f70f79; border: none; border-radius: 12px;
+      cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 14px;
+      font-weight: 600; color: #fff; line-height: 20px;
+    }
+
+    /* ── Promo ── */
+    .bn--promo {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px;
+    }
+    .bn--promo .bn-promo-text {
+      font-size: 14px; line-height: 18px; color: #303030; font-weight: 400;
+      max-width: 285px;
+    }
+    .bn-arrow-circle {
+      width: 24px; height: 24px; border-radius: 30px; background: #fff;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+
+    /* ── WarningCTA ── */
+    .bn--warning-cta {
+      display: flex; flex-direction: column; padding: 16px 12px;
+    }
+    .bn--warning-cta .bn-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .bn--warning-cta .bn-header-left {
+      display: flex; gap: 12px; align-items: flex-start; flex: 1; min-width: 0;
+    }
+    .bn-warning-text {
+      font-size: 16px; font-weight: 500; line-height: 20px; color: #303030;
+      letter-spacing: 0.032px; flex: 1;
+    }
+    .bn-btn-small {
+      height: 36px; padding: 0 16px; background: #f70f79; border: none;
+      border-radius: 12px; cursor: pointer; font-family: 'Outfit', sans-serif;
+      font-size: 14px; font-weight: 600; color: #fff; line-height: 20px;
+    }
+
+    /* ── InlineCTA ── */
+    .bn--inline-cta {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding: 12px;
+    }
+    .bn--inline-cta .bn-content {
+      display: flex; gap: 12px; align-items: flex-start; flex: 1; min-width: 0;
+    }
+    .bn-cta-col { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+    .bn-cta-text {
+      font-size: 16px; font-weight: 500; line-height: 20px; color: #303030;
+      letter-spacing: 0.032px;
+    }
+    .bn-cta-link {
+      background: none; border: none; cursor: pointer; padding: 8px 0;
+      display: inline-flex; align-items: center; gap: 2px;
+    }
+    .bn-cta-link span {
+      font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600;
+      color: #f70f79; line-height: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <aside class="sidebar">
+    <p class="sidebar-heading">Foundations</p>
+    <a class="nav-link" href="tokens.preview.html#color"><span class="nav-icon">⬛</span> Color</a>
+    <a class="nav-link" href="tokens.preview.html#shadow"><span class="nav-icon">◻️</span> Shadow</a>
+    <a class="nav-link" href="tokens.preview.html#typography"><span class="nav-icon">Aa</span> Typography</a>
+    <a class="nav-link" href="tokens.preview.html#radius"><span class="nav-icon">◜</span> Radius</a>
+    <div class="sidebar-separator"></div>
+    <p class="sidebar-heading">Components</p>
+    <a class="nav-link" href="Accordion.preview.html"><span class="nav-icon" style="font-size:13px">☰</span> Accordion</a>
+    <a class="nav-link active" href="Banner.preview.html"><span class="nav-icon" style="font-size:13px">◫</span> Banner</a>
+    <a class="nav-link" href="Button.preview.html"><span class="nav-icon" style="font-size:13px">▣</span> Button</a>
+    <a class="nav-link" href="Checkbox.preview.html"><span class="nav-icon" style="font-size:13px">☑</span> Checkbox</a>
+    <a class="nav-link" href="TextField.preview.html"><span class="nav-icon" style="font-size:13px">▭</span> Input</a>
+    <a class="nav-link" href="Toast.preview.html"><span class="nav-icon" style="font-size:13px">◩</span> Toast</a>
+    <a class="nav-link" href="Toggle.preview.html"><span class="nav-icon" style="font-size:13px">⬭</span> Toggle</a>
+  </aside>
+
+  <main class="main">
+
+    <div class="component-header">
+      <div class="component-header-left">
+        <p class="component-breadcrumb"><a href="tokens.preview.html">Design System</a> / Components</p>
+        <h1>Banner</h1>
+      </div>
+      <div class="component-header-right">
+        <p>Contextual banners. 5 variants — inline link, primary CTA, promo, warning, and inline CTA.</p>
+      </div>
+    </div>
+
+    <!-- ─── VARIANTS ─── -->
+    <div class="section">
+      <p class="section-title">Variants</p>
+      <div class="variant-grid">
+
+        <!-- Inline Link -->
+        <div class="variant-card">
+          <div class="variant-card__preview">
+            <div class="bn bn--white bn--inline-link">
+              <div class="bn-content">
+                <div class="bn-icon-circle"><img src="assets/banner-icon.svg" alt=""></div>
+                <div class="bn-inline-text">
+                  <span class="grey">Find deals with Klarna's price comparison </span><span class="pink">Status Privacy</span>
+                </div>
+              </div>
+              <button class="bn-close">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1L13 13M13 1L1 13" stroke="#ababab" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="variant-card__label">Inline Link</div>
+        </div>
+
+        <!-- Primary CTA -->
+        <div class="variant-card">
+          <div class="variant-card__preview">
+            <div class="bn bn--white bn--primary-cta">
+              <div class="bn-header">
+                <div class="bn-header-left">
+                  <div class="bn-icon-circle"><img src="assets/banner-icon.svg" alt=""></div>
+                  <div class="bn-text-col">
+                    <p class="bn-title">Compare prices. Save money</p>
+                    <p class="bn-subtitle">Achieve your results faster</p>
+                  </div>
+                </div>
+                <button class="bn-close">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1L13 13M13 1L1 13" stroke="#ababab" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </button>
+              </div>
+              <button class="bn-btn-primary">Primary Button</button>
+            </div>
+          </div>
+          <div class="variant-card__label">Primary CTA</div>
+        </div>
+
+        <!-- Promo — wide -->
+        <div class="variant-card variant-card--wide">
+          <div class="variant-card__preview">
+            <div class="bn bn--promo bn--promo">
+              <p class="bn-promo-text">
+                Get up to 12K off on every Snabbit booking, <strong style="font-weight:500">including this one!</strong>
+              </p>
+              <div class="bn-arrow-circle">
+                <svg width="13" height="11" viewBox="0 0 13.0667 10.7333" fill="none">
+                  <path d="M0.7 5.37L10.7 5.37" stroke="#303030" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M7.7 0.7L12.37 5.37L7.7 10.03" stroke="#303030" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="variant-card__label">Promo</div>
+        </div>
+
+        <!-- Warning CTA -->
+        <div class="variant-card">
+          <div class="variant-card__preview">
+            <div class="bn bn--white bn--warning-cta">
+              <div class="bn-header">
+                <div class="bn-header-left">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="flex-shrink:0">
+                    <path d="M12 2L2 20H22L12 2Z" fill="#F9A825"/>
+                    <line x1="12" y1="9" x2="12" y2="13.5" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <circle cx="12" cy="16.5" r="1" fill="white"/>
+                  </svg>
+                  <p class="bn-warning-text">We think you may have entered an invalid apartment or suite number. Please check and correct if needed.</p>
+                </div>
+                <button class="bn-close">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1L13 13M13 1L1 13" stroke="#ababab" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </button>
+              </div>
+              <button class="bn-btn-small">Edit Address</button>
+            </div>
+          </div>
+          <div class="variant-card__label">Warning CTA</div>
+        </div>
+
+        <!-- Inline CTA -->
+        <div class="variant-card">
+          <div class="variant-card__preview">
+            <div class="bn bn--white bn--inline-cta">
+              <div class="bn-content">
+                <div class="bn-icon-circle"><img src="assets/banner-icon.svg" alt=""></div>
+                <div class="bn-cta-col">
+                  <p class="bn-cta-text">We think you may have entered an invalid apartment or suite number.</p>
+                  <button class="bn-cta-link">
+                    <span>Activate Now</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M6 4L10 8L6 12" stroke="#f70f79" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <button class="bn-close">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1L13 13M13 1L1 13" stroke="#ababab" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="variant-card__label">Inline CTA</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── PROPS ─── -->
+    <div class="section">
+      <p class="section-title">Props</p>
+      <table class="props-table">
+        <thead>
+          <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="prop-name"><code>variant</code></td>
+            <td>inline-link · primary-cta · promo · warning-cta · inline-cta</td>
+            <td class="prop-default">"inline-link"</td>
+            <td>Visual style and layout of the banner</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>onClose</code></td>
+            <td>() =&gt; void</td>
+            <td class="prop-default">—</td>
+            <td>Called when the × dismiss button is tapped</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+</body>
+</html>

@@ -8,6 +8,7 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
         tokens: resolve(__dirname, 'tokens.preview.html'),
         accordion: resolve(__dirname, 'Accordion.preview.html'),
+        banner: resolve(__dirname, 'Banner.preview.html'),
         button: resolve(__dirname, 'Button.preview.html'),
         checkbox: resolve(__dirname, 'Checkbox.preview.html'),
         textfield: resolve(__dirname, 'TextField.preview.html'),
