@@ -106,6 +106,17 @@
     .props-table td.prop-name { color: #303030; font-weight: 600; }
     .props-table td.prop-default { color: #828282; }
 
+    /* ── Card toggles ── */
+    .ctrl-toggles { display: flex; gap: 8px; flex-wrap: wrap; }
+    .ctrl-toggle {
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 13px; font-weight: 600; font-family: "Instrument Sans", sans-serif;
+      background: #ebebeb; color: #ababab; border: none; cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .ctrl-toggle:hover { background: #e0e0e0; color: #303030; }
+    .ctrl-toggle.on { background: #f70f79; color: #fff; }
+
     /* ══════════════════════════════════════════════
        Banner component styles
     ══════════════════════════════════════════════ */
@@ -157,9 +168,10 @@
     .bn-title { font-size: 16px; font-weight: 500; line-height: 20px; color: #303030; letter-spacing: 0.032px; }
     .bn-subtitle { font-size: 14px; font-weight: 400; line-height: 16px; color: #ababab; }
     .bn-btn-primary {
-      width: 100%; height: 36px; background: #f70f79; border: none; border-radius: 12px;
-      cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 14px;
-      font-weight: 600; color: #303030; line-height: 20px;
+      width: 100%; display: inline-flex; align-items: center; justify-content: center;
+      padding: 8px 12px; border-radius: 10px;
+      background: #f70f79; color: #ffffff; border: none; cursor: pointer;
+      font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600; line-height: 20px;
     }
 
     /* ── Promo ── */
@@ -192,9 +204,10 @@
       letter-spacing: 0.032px; flex: 1;
     }
     .bn-btn-small {
-      height: 36px; padding: 0 16px; background: #f70f79; border: none;
-      border-radius: 12px; cursor: pointer; font-family: 'Outfit', sans-serif;
-      font-size: 14px; font-weight: 600; color: #303030; line-height: 20px;
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 8px 12px; border-radius: 10px; align-self: flex-start;
+      background: #f70f79; color: #ffffff; border: none; cursor: pointer;
+      font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600; line-height: 20px;
     }
 
     /* ── InlineCTA ── */
@@ -211,10 +224,9 @@
       letter-spacing: 0.032px;
     }
     .bn-cta-link {
-      background: none; border: none; cursor: pointer; padding: 8px 0;
-      display: inline-flex; align-items: center; gap: 2px;
-    }
-    .bn-cta-link span {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 0; align-self: flex-start;
+      background: transparent; border: none; cursor: pointer;
       font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600;
       color: #f70f79; line-height: 20px;
     }
@@ -257,109 +269,45 @@
       <p class="section-title">Variants</p>
       <div class="variant-grid">
 
-        <!-- Inline Link -->
-        <div class="variant-card">
-          <div class="variant-card__preview">
-            <div class="bn bn--white bn--inline-link">
-              <div class="bn-content">
-                <div class="bn-icon-circle"><img src="assets/banner-icon.svg" alt=""></div>
-                <div class="bn-inline-text">
-                  <span class="grey">Find deals with Klarna's price comparison </span><span class="pink">Status Privacy</span>
-                </div>
-              </div>
-              <button class="bn-close">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1L13 13M13 1L1 13" stroke="#ababab" stroke-width="1.5" stroke-linecap="round"/></svg>
-              </button>
-            </div>
-          </div>
+        <div class="variant-card" data-bn="inline-link">
+          <div class="variant-card__preview" id="bnp-inline-link"></div>
           <div class="variant-card__label">Inline Link</div>
+          <div class="ctrl-toggles" style="justify-content:center;">
+            <button class="ctrl-toggle on" id="bntog-inline-link-leftIcon" onclick="bnToggle('inline-link','leftIcon')">Left Icon</button>
+            <button class="ctrl-toggle on" id="bntog-inline-link-cta" onclick="bnToggle('inline-link','cta')">CTA</button>
+          </div>
         </div>
 
-        <!-- Primary CTA -->
-        <div class="variant-card">
-          <div class="variant-card__preview">
-            <div class="bn bn--white bn--primary-cta">
-              <div class="bn-header">
-                <div class="bn-header-left">
-                  <div class="bn-icon-circle"><img src="assets/banner-icon.svg" alt=""></div>
-                  <div class="bn-text-col">
-                    <p class="bn-title">Compare prices. Save money</p>
-                    <p class="bn-subtitle">Achieve your results faster</p>
-                  </div>
-                </div>
-                <button class="bn-close">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1L13 13M13 1L1 13" stroke="#ababab" stroke-width="1.5" stroke-linecap="round"/></svg>
-                </button>
-              </div>
-              <button class="bn-btn-primary">Primary Button</button>
-            </div>
-          </div>
+        <div class="variant-card" data-bn="primary-cta">
+          <div class="variant-card__preview" id="bnp-primary-cta"></div>
           <div class="variant-card__label">Primary CTA</div>
+          <div class="ctrl-toggles" style="justify-content:center;">
+            <button class="ctrl-toggle on" id="bntog-primary-cta-leftIcon" onclick="bnToggle('primary-cta','leftIcon')">Left Icon</button>
+            <button class="ctrl-toggle on" id="bntog-primary-cta-cta" onclick="bnToggle('primary-cta','cta')">CTA</button>
+          </div>
         </div>
 
-        <!-- Promo — wide -->
-        <div class="variant-card variant-card--wide">
-          <div class="variant-card__preview">
-            <div class="bn bn--promo bn--promo">
-              <p class="bn-promo-text">
-                Get up to 12K off on every Snabbit booking, <strong style="font-weight:500">including this one!</strong>
-              </p>
-              <div class="bn-arrow-circle">
-                <svg width="13" height="11" viewBox="0 0 13.0667 10.7333" fill="none">
-                  <path d="M0.7 5.37L10.7 5.37" stroke="#303030" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M7.7 0.7L12.37 5.37L7.7 10.03" stroke="#303030" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
-            </div>
-          </div>
+        <div class="variant-card variant-card--wide" data-bn="promo">
+          <div class="variant-card__preview" id="bnp-promo"></div>
           <div class="variant-card__label">Promo</div>
         </div>
 
-        <!-- Warning CTA -->
-        <div class="variant-card">
-          <div class="variant-card__preview">
-            <div class="bn bn--white bn--warning-cta">
-              <div class="bn-header">
-                <div class="bn-header-left">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="flex-shrink:0">
-                    <path d="M12 2L2 20H22L12 2Z" fill="#F9A825"/>
-                    <line x1="12" y1="9" x2="12" y2="13.5" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                    <circle cx="12" cy="16.5" r="1" fill="white"/>
-                  </svg>
-                  <p class="bn-warning-text">We think you may have entered an invalid apartment or suite number. Please check and correct if needed.</p>
-                </div>
-                <button class="bn-close">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1L13 13M13 1L1 13" stroke="#ababab" stroke-width="1.5" stroke-linecap="round"/></svg>
-                </button>
-              </div>
-              <button class="bn-btn-small">Edit Address</button>
-            </div>
-          </div>
+        <div class="variant-card" data-bn="warning-cta">
+          <div class="variant-card__preview" id="bnp-warning-cta"></div>
           <div class="variant-card__label">Warning CTA</div>
+          <div class="ctrl-toggles" style="justify-content:center;">
+            <button class="ctrl-toggle on" id="bntog-warning-cta-leftIcon" onclick="bnToggle('warning-cta','leftIcon')">Left Icon</button>
+            <button class="ctrl-toggle on" id="bntog-warning-cta-cta" onclick="bnToggle('warning-cta','cta')">CTA</button>
+          </div>
         </div>
 
-        <!-- Inline CTA -->
-        <div class="variant-card">
-          <div class="variant-card__preview">
-            <div class="bn bn--white bn--inline-cta">
-              <div class="bn-content">
-                <div class="bn-icon-circle"><img src="assets/banner-icon.svg" alt=""></div>
-                <div class="bn-cta-col">
-                  <p class="bn-cta-text">We think you may have entered an invalid apartment or suite number.</p>
-                  <button class="bn-cta-link">
-                    <span>Activate Now</span>
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path d="M6 4L10 8L6 12" stroke="#f70f79" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              <button class="bn-close">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1L13 13M13 1L1 13" stroke="#ababab" stroke-width="1.5" stroke-linecap="round"/></svg>
-              </button>
-            </div>
-          </div>
+        <div class="variant-card" data-bn="inline-cta">
+          <div class="variant-card__preview" id="bnp-inline-cta"></div>
           <div class="variant-card__label">Inline CTA</div>
+          <div class="ctrl-toggles" style="justify-content:center;">
+            <button class="ctrl-toggle on" id="bntog-inline-cta-leftIcon" onclick="bnToggle('inline-cta','leftIcon')">Left Icon</button>
+            <button class="ctrl-toggle on" id="bntog-inline-cta-cta" onclick="bnToggle('inline-cta','cta')">CTA</button>
+          </div>
         </div>
 
       </div>
@@ -377,13 +325,25 @@
         <tbody>
           <tr>
             <td class="prop-name"><code>variant</code></td>
-            <td>inline-link · primary-cta · promo · warning-cta · inline-cta</td>
-            <td class="prop-default">"inline-link"</td>
+            <td><code>inline-link</code> <code>primary-cta</code> <code>promo</code> <code>warning-cta</code> <code>inline-cta</code></td>
+            <td class="prop-default"><code>inline-link</code></td>
             <td>Visual style and layout of the banner</td>
           </tr>
           <tr>
+            <td class="prop-name"><code>cta</code></td>
+            <td><code>boolean</code></td>
+            <td class="prop-default"><code>true</code></td>
+            <td>Show or hide the CTA element (button or link text)</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>leftIcon</code></td>
+            <td><code>boolean</code></td>
+            <td class="prop-default"><code>true</code></td>
+            <td>Show or hide the leading icon (circle icon or warning triangle)</td>
+          </tr>
+          <tr>
             <td class="prop-name"><code>onClose</code></td>
-            <td>() =&gt; void</td>
+            <td><code>() =&gt; void</code></td>
             <td class="prop-default">—</td>
             <td>Called when the × dismiss button is tapped</td>
           </tr>
@@ -392,6 +352,97 @@
     </div>
 
   </main>
+
+<script>
+  const CLOSE_SVG = `<button class="bn-close"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1L13 13M13 1L1 13" stroke="#ababab" stroke-width="1.5" stroke-linecap="round"/></svg></button>`;
+  const ICON_CIRCLE = `<div class="bn-icon-circle"><img src="assets/banner-icon.svg" alt=""></div>`;
+  const WARNING_ICON = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M12 2L2 20H22L12 2Z" fill="#F9A825"/><line x1="12" y1="9" x2="12" y2="13.5" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16.5" r="1" fill="white"/></svg>`;
+
+  const BN_VARIANTS = ['inline-link', 'primary-cta', 'promo', 'warning-cta', 'inline-cta'];
+  const bnState = {};
+  BN_VARIANTS.forEach(v => { bnState[v] = { cta: true, leftIcon: true }; });
+
+  function bnRender(variant) {
+    const { cta, leftIcon } = bnState[variant];
+    const el = document.getElementById(`bnp-${variant}`);
+
+    if (variant === 'inline-link') {
+      el.innerHTML = `
+        <div class="bn bn--white bn--inline-link">
+          <div class="bn-content">
+            ${leftIcon ? ICON_CIRCLE : ''}
+            <div class="bn-inline-text">
+              <span class="grey">Find deals with Klarna's price comparison </span>${cta ? '<span class="pink">Status Privacy</span>' : ''}
+            </div>
+          </div>
+          ${CLOSE_SVG}
+        </div>`;
+
+    } else if (variant === 'primary-cta') {
+      el.innerHTML = `
+        <div class="bn bn--white bn--primary-cta">
+          <div class="bn-header">
+            <div class="bn-header-left">
+              ${leftIcon ? ICON_CIRCLE : ''}
+              <div class="bn-text-col">
+                <p class="bn-title">Compare prices. Save money</p>
+                <p class="bn-subtitle">Achieve your results faster</p>
+              </div>
+            </div>
+            ${CLOSE_SVG}
+          </div>
+          ${cta ? '<button class="bn-btn-primary">Primary Button</button>' : ''}
+        </div>`;
+
+    } else if (variant === 'promo') {
+      el.innerHTML = `
+        <div class="bn bn--promo bn--promo">
+          <p class="bn-promo-text">Get up to 12K off on every Snabbit booking, <strong style="font-weight:500">including this one!</strong></p>
+          <div class="bn-arrow-circle">
+            <svg width="13" height="11" viewBox="0 0 13.0667 10.7333" fill="none">
+              <path d="M0.7 5.37L10.7 5.37" stroke="#303030" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7.7 0.7L12.37 5.37L7.7 10.03" stroke="#303030" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>`;
+
+    } else if (variant === 'warning-cta') {
+      el.innerHTML = `
+        <div class="bn bn--white bn--warning-cta">
+          <div class="bn-header">
+            <div class="bn-header-left">
+              ${leftIcon ? WARNING_ICON : ''}
+              <p class="bn-warning-text">We think you may have entered an invalid apartment or suite number. Please check and correct if needed.</p>
+            </div>
+            ${CLOSE_SVG}
+          </div>
+          ${cta ? '<button class="bn-btn-small">Edit Address</button>' : ''}
+        </div>`;
+
+    } else if (variant === 'inline-cta') {
+      el.innerHTML = `
+        <div class="bn bn--white bn--inline-cta">
+          <div class="bn-content">
+            ${leftIcon ? ICON_CIRCLE : ''}
+            <div class="bn-cta-col">
+              <p class="bn-cta-text">We think you may have entered an invalid apartment or suite number.</p>
+              ${cta ? `<button class="bn-cta-link">Activate Now<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>` : ''}
+            </div>
+          </div>
+          ${CLOSE_SVG}
+        </div>`;
+    }
+  }
+
+  function bnToggle(variant, key) {
+    bnState[variant][key] = !bnState[variant][key];
+    document.getElementById(`bntog-${variant}-${key}`).classList.toggle('on', bnState[variant][key]);
+    bnRender(variant);
+  }
+
+  // Initial render
+  BN_VARIANTS.forEach(bnRender);
+</script>
 
 </body>
 </html>

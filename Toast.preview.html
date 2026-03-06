@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Toast — Snabbit Design System</title>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&display=swap"
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&family=Outfit:wght@400;500;600&display=swap"
     rel="stylesheet" />
   <style>
     *,
@@ -380,16 +380,7 @@
     }
 
     .toast-btn {
-      border: none;
-      cursor: pointer;
-      font-family: var(--font-family);
-      font-size: 13px;
-      font-weight: 500;
-      line-height: 20px;
-      letter-spacing: 0.026px;
-      color: #303030;
-      white-space: nowrap;
-      flex-shrink: 0;
+      /* base class — see .toast-btn-okay / .toast-btn-undo for full styles */
     }
 
     /* Sizes */
@@ -442,25 +433,16 @@
       color: #303030;
     }
 
-    /* Action buttons */
-    .toast-btn-okay {
-      background: #303030;
-      border-radius: 8px;
-    }
-
+    /* Action buttons — 24px neutral */
+    .toast-btn-okay,
     .toast-btn-undo {
-      background: transparent;
-      text-decoration: underline;
-      padding: 0 !important;
-    }
-
-    /* Size-specific button padding */
-    .toast-52 .toast-btn-okay {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: #303030; color: #ffffff;
+      border: none; border-radius: 8px; cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px; font-weight: 600; line-height: 16px;
       padding: 4px 6px;
-    }
-
-    .toast-40 .toast-btn-okay {
-      padding: 2px 12px;
+      white-space: nowrap; flex-shrink: 0;
     }
 
     /* ══════════════════════════════════════════════
@@ -598,9 +580,8 @@
 
     <div class="sidebar-separator"></div>
     <p class="sidebar-heading">Components</p>
-        <a class="nav-link" href="Banner.preview.html"><span class="nav-icon" style="font-size:13px">◫</span> Banner</a>
-<a class="nav-link" href="Accordion.preview.html"><span class="nav-icon" style="font-size:13px">☰</span>
-      Accordion</a>
+    <a class="nav-link" href="Accordion.preview.html"><span class="nav-icon" style="font-size:13px">☰</span> Accordion</a>
+    <a class="nav-link" href="Banner.preview.html"><span class="nav-icon" style="font-size:13px">◫</span> Banner</a>
     <a class="nav-link" href="Button.preview.html"><span class="nav-icon" style="font-size:13px">▣</span> Button</a>
     <a class="nav-link" href="Checkbox.preview.html"><span class="nav-icon" style="font-size:13px">☑</span> Checkbox</a>
     <a class="nav-link" href="TextField.preview.html"><span class="nav-icon" style="font-size:13px">▭</span> Input</a>

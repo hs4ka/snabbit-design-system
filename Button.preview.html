@@ -1,773 +1,665 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Button — Snabbit Design System</title>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --bg-primary: #ffffff;
-      --bg-tertiary: #f0f0f0;
-      --text-primary: #303030;
-      --text-tertiary: #ababab;
-      --accent-primary: #f70f79;
-      --accent-light: #fff3f8;
-      --stroke-secondary: #f0f0f0;
-      --red-dark: #e93544;
-      --font-family: "Instrument Sans", sans-serif;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
     body {
-      font-family: var(--font-family);
-      background: #ffffff;
-      color: #303030;
-      display: flex;
-      min-height: 100vh;
+      font-family: "Instrument Sans", sans-serif;
+      background: #ffffff; color: #303030;
+      display: flex; min-height: 100vh;
     }
 
     /* ── Sidebar ── */
     .sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 216px;
-      height: 100vh;
-      background: #fafafa;
-      border-right: 1px solid #ebebeb;
+      position: fixed; top: 0; left: 0;
+      width: 216px; height: 100vh;
+      background: #fafafa; border-right: 1px solid #ebebeb;
       padding: 48px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      z-index: 100;
-      overflow-y: auto;
+      display: flex; flex-direction: column; gap: 2px;
+      z-index: 100; overflow-y: auto;
     }
-
     .sidebar-heading {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #ababab;
-      padding: 0 12px;
-      margin-bottom: 8px;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: #ababab;
+      padding: 0 12px; margin-bottom: 8px;
     }
-
-    .sidebar-separator {
-      height: 1px;
-      background: #ebebeb;
-      margin: 20px 4px;
-    }
-
+    .sidebar-separator { height: 1px; background: #ebebeb; margin: 20px 4px; }
     .nav-link {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 12px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 500;
-      color: #ababab;
-      text-decoration: none;
-      transition: color 0.15s, background 0.15s;
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: 8px;
+      font-size: 14px; font-weight: 500; color: #ababab;
+      text-decoration: none; transition: color 0.15s, background 0.15s;
     }
-
-    .nav-link:hover {
-      color: #303030;
-      background: #ebebeb;
-    }
-
-    .nav-link.active {
-      color: #303030;
-      background: #f5f5f5;
-    }
-
-    .nav-icon {
-      font-size: 15px;
-      width: 20px;
-      text-align: center;
-      flex-shrink: 0;
-    }
+    .nav-link:hover { color: #303030; background: #ebebeb; }
+    .nav-link.active { color: #303030; background: #f0f0f0; }
+    .nav-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
 
     /* ── Main ── */
-    .main {
-      margin-left: 216px;
-      flex: 1;
-      padding: 60px 80px;
-      min-height: 100vh;
-    }
+    .main { margin-left: 216px; flex: 1; padding: 60px 80px; min-height: 100vh; }
 
     /* ── Component header ── */
     .component-header {
-      background: #f5f5f5;
-      margin: -60px -80px 60px;
-      padding: 44px 80px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
+      background: #f5f5f5; margin: -60px -80px 60px; padding: 44px 80px;
+      display: flex; align-items: flex-end; justify-content: space-between;
     }
-
-    .component-header-left {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .component-breadcrumb {
-      font-size: 13px;
-      font-weight: 500;
-      color: #ababab;
-    }
-
-    .component-breadcrumb a {
-      color: #ababab;
-      text-decoration: none;
-    }
-
-    .component-breadcrumb a:hover {
-      color: #303030;
-    }
-
-    .component-header h1 {
-      font-size: 56px;
-      font-weight: 700;
-      line-height: 1;
-      letter-spacing: -2px;
-    }
-
+    .component-header-left { display: flex; flex-direction: column; gap: 10px; }
+    .component-breadcrumb { font-size: 13px; font-weight: 500; color: #ababab; }
+    .component-breadcrumb a { color: #ababab; text-decoration: none; }
+    .component-breadcrumb a:hover { color: #303030; }
+    .component-header h1 { font-size: 56px; font-weight: 700; line-height: 1; letter-spacing: -2px; }
     .component-header-right p {
-      font-size: 14px;
-      font-weight: 500;
-      color: #828282;
-      max-width: 280px;
-      line-height: 20px;
-      text-align: right;
+      font-size: 14px; font-weight: 500; color: #828282;
+      max-width: 280px; line-height: 20px; text-align: right;
     }
 
     /* ── Sections ── */
-    .section {
-      margin-bottom: 64px;
-    }
-
-    .section-title {
-      font-size: 32px;
-      font-weight: 500;
-      letter-spacing: -1px;
-      margin-bottom: 24px;
-      color: #303030;
-    }
-
-    .divider {
-      height: 1px;
-      background: #e8e8e8;
-      margin: 48px 0;
-    }
-
-    /* ── Variant grid ── */
-    .btn-showcase-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-    }
-
-    .btn-showcase-card {
-      background: #f5f5f5;
-      border-radius: 16px;
-      padding: 32px 24px 24px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .btn-showcase-label {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #ababab;
-    }
-
-    /* ── Size scale ── */
-    .size-stack {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .size-row {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .size-tag {
-      background: #f5f5f5;
-      border-radius: 6px;
-      padding: 3px 8px;
-      font-size: 11px;
-      font-weight: 600;
-      color: #ababab;
-      width: 36px;
-      text-align: center;
-      flex-shrink: 0;
-    }
-
-    /* ── Icon options ── */
-    .icon-row {
-      display: flex;
-      align-items: flex-end;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-
-    .icon-item {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-    }
-
-    .icon-label {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: #ababab;
-    }
+    .section { margin-bottom: 64px; }
+    .section-title { font-size: 32px; font-weight: 500; letter-spacing: -1px; margin-bottom: 24px; color: #303030; }
+    .divider { height: 1px; background: #e8e8e8; margin: 48px 0; }
 
     /* ── Props table ── */
-    .props-table {
-      width: 100%;
-      border-collapse: collapse;
-      border-radius: 16px;
-      overflow: hidden;
-    }
-
+    .props-table { width: 100%; border-collapse: collapse; border-radius: 16px; overflow: hidden; }
     .props-table th {
-      background: #fff;
-      color: #828282;
-      font-size: 13px;
-      font-weight: 600;
-      padding: 14px 20px;
-      text-align: left;
+      background: #fff; color: #828282; font-size: 13px; font-weight: 600;
+      padding: 14px 20px; text-align: left;
     }
-
     .props-table td {
-      background: #ffffff;
-      padding: 0 20px;
-      height: 52px;
-      font-size: 13px;
-      font-weight: 500;
-      color: #303030;
+      background: #ffffff; padding: 0 20px; height: 52px;
+      font-size: 13px; font-weight: 500; color: #303030;
       border-top: 1px solid #e8e8e8;
     }
-
     .props-table td code {
-      background: #f5f5f5;
-      border: 1px solid #e8e8e8;
-      border-radius: 4px;
-      padding: 2px 6px;
-      font-size: 12px;
-      color: #f70f79;
+      background: #f5f5f5; border: 1px solid #e8e8e8; border-radius: 4px;
+      padding: 2px 6px; font-size: 12px; color: #f70f79;
+    }
+    .props-table td.prop-name { font-weight: 600; }
+    .props-table td.prop-default { color: #828282; }
+
+    /* ── Playground ── */
+    .playground-card {
+      background: #f5f5f5; border-radius: 20px;
+      padding: 48px 32px 32px;
+      display: flex; flex-direction: column; align-items: center; gap: 40px;
+    }
+    .playground-preview {
+      min-height: 80px; display: flex; align-items: center; justify-content: center;
+    }
+    .playground-controls {
+      width: 100%; display: flex; flex-direction: column; gap: 20px;
+    }
+    .ctrl-row {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .ctrl-label {
+      font-size: 12px; font-weight: 600; letter-spacing: 0.06em;
+      text-transform: uppercase; color: #ababab; width: 88px; flex-shrink: 0;
+    }
+    .ctrl-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+    .ctrl-pill {
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 13px; font-weight: 600; font-family: "Instrument Sans", sans-serif;
+      background: #ebebeb; color: #ababab; border: none; cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .ctrl-pill:hover { background: #e0e0e0; color: #303030; }
+    .ctrl-pill.active { background: #303030; color: #fff; }
+
+    .ctrl-toggles { display: flex; gap: 8px; flex-wrap: wrap; }
+    .ctrl-toggle {
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 13px; font-weight: 600; font-family: "Instrument Sans", sans-serif;
+      background: #ebebeb; color: #ababab; border: none; cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .ctrl-toggle:hover { background: #e0e0e0; color: #303030; }
+    .ctrl-toggle.on { background: #f70f79; color: #fff; }
+
+    .ctrl-divider { height: 1px; background: #e0e0e0; }
+
+    /* ── Variant grid ── */
+    .variant-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .variant-card {
+      background: #f5f5f5; border-radius: 16px;
+      padding: 32px 24px 24px;
+      display: flex; flex-direction: column; align-items: center; gap: 20px;
+    }
+    .variant-card__preview {
+      width: 100%; display: flex; justify-content: center; align-items: center;
+      flex-wrap: wrap; gap: 12px; min-height: 60px;
+    }
+    .variant-card__label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: #ababab;
     }
 
-    .props-table td.prop-name {
-      color: #303030;
-      font-weight: 600;
-    }
-
-    .props-table td.prop-default {
-      color: #828282;
-    }
-
-    /* ══════════════════════════════════════════════
-       Button component styles
-    ══════════════════════════════════════════════ */
+    /* ── Button styles (matching Button.tsx exactly) ── */
     .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      font-family: var(--font-family);
-      font-weight: 600;
-      letter-spacing: 0.002em;
-      white-space: nowrap;
-      cursor: pointer;
-      border: none;
-      text-decoration: none;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: 'Outfit', sans-serif; font-weight: 600;
+      border: none; cursor: pointer; white-space: nowrap;
+      text-decoration: none; transition: opacity 0.15s;
     }
-
-    /* Sizes */
-    .btn-56 {
-      padding: 18px 24px;
-      font-size: 16px;
-      line-height: 20px;
-      border-radius: 16px;
-    }
-
-    .btn-48 {
-      padding: 14px 24px;
-      font-size: 16px;
-      line-height: 20px;
-      border-radius: 12px;
-    }
-
-    .btn-40 {
-      padding: 10px 12px;
-      font-size: 14px;
-      line-height: 20px;
-      border-radius: 12px;
-    }
-
-    .btn-36 {
-      padding: 8px 12px;
-      font-size: 14px;
-      line-height: 20px;
-      border-radius: 12px;
-    }
-
-    .btn-32 {
-      padding: 6px 8px;
-      font-size: 13px;
-      line-height: 20px;
-      border-radius: 8px;
-    }
-
-    .btn-28 {
-      padding: 4px 8px;
-      font-size: 13px;
-      line-height: 20px;
-      border-radius: 8px;
-    }
-
-    .btn-24 {
-      padding: 2px 8px;
-      font-size: 12px;
-      line-height: 16px;
-      border-radius: 8px;
-    }
+    .btn:disabled { cursor: not-allowed; }
+    .btn .btn-icon { display: flex; align-items: center; flex-shrink: 0; }
 
     /* Variants */
-    .btn-primary {
-      background: #f70f79;
-      color: #303030;
-    }
-
-    .btn-primary:hover {
-      background: #d80c6a;
-    }
-
-    .btn-secondary {
-      background: #fff3f8;
-      color: #f70f79;
-    }
-
-    .btn-secondary:hover {
-      background: #fde3f0;
-    }
-
-    .btn-neutral {
-      background: #303030;
-      color: #303030;
-    }
-
-    .btn-neutral:hover {
-      background: #444;
-    }
-
-    .btn-stroke {
-      background: transparent;
-      color: #303030;
-      border: 1.5px solid #f0f0f0;
-    }
-
-    .btn-stroke:hover {
-      background: #f0f0f0;
-    }
-
-    .btn-link {
-      background: transparent;
-      color: #f70f79;
-      text-decoration: underline;
-    }
-
-    .btn-link:hover {
-      text-decoration: none;
-    }
-
-    .btn-destructive {
-      background: #e93544;
-      color: #303030;
-    }
-
-    .btn-destructive:hover {
-      background: #c42a38;
-    }
+    .btn-primary     { background: #f70f79; color: #ffffff; }
+    .btn-secondary   { background: #f0f0f0; color: #303030; }
+    .btn-neutral     { background: #303030; color: #ffffff; }
+    .btn-stroke      { background: transparent; color: #303030; border: 1.5px solid #f0f0f0 !important; }
+    .btn-link        { background: transparent; color: #f70f79; }
+    .btn-destructive { background: #e93544; color: #ffffff; }
 
     /* Disabled */
-    .btn:disabled {
-      background: #f0f0f0 !important;
-      color: #ababab !important;
-      border-color: #f0f0f0 !important;
-      cursor: not-allowed;
+    .btn-primary:disabled, .btn-secondary:disabled,
+    .btn-neutral:disabled, .btn-stroke:disabled, .btn-destructive:disabled {
+      background: #f5f5f5; color: #ababab; border: 1.5px solid #f0f0f0 !important;
     }
-
-    .btn-link:disabled {
-      background: transparent !important;
-    }
-
-    .btn-icon {
-      display: flex;
-      align-items: center;
-      flex-shrink: 0;
-    }
+    .btn-link:disabled { background: transparent; color: #ababab; }
   </style>
 </head>
-
 <body>
 
-  <aside class="sidebar">
-    <p class="sidebar-heading">Foundations</p>
-    <a class="nav-link" href="tokens.preview.html#color"><span class="nav-icon">⬛</span> Color</a>
-    <a class="nav-link" href="tokens.preview.html#shadow"><span class="nav-icon">◻️</span> Shadow</a>
-    <a class="nav-link" href="tokens.preview.html#typography"><span class="nav-icon">Aa</span> Typography</a>
-    <a class="nav-link" href="tokens.preview.html#radius"><span class="nav-icon">◜</span> Radius</a>
+<!-- Sidebar -->
+<nav class="sidebar">
+  <p class="sidebar-heading">Foundations</p>
+  <a class="nav-link" href="tokens.preview.html#color"><span class="nav-icon">⬛</span> Color</a>
+  <a class="nav-link" href="tokens.preview.html#shadow"><span class="nav-icon">◻️</span> Shadow</a>
+  <a class="nav-link" href="tokens.preview.html#typography"><span class="nav-icon">Aa</span> Typography</a>
+  <a class="nav-link" href="tokens.preview.html#radius"><span class="nav-icon">◜</span> Radius</a>
+  <div class="sidebar-separator"></div>
+  <p class="sidebar-heading">Components</p>
+  <a class="nav-link" href="Accordion.preview.html"><span class="nav-icon" style="font-size:13px">☰</span> Accordion</a>
+  <a class="nav-link" href="Banner.preview.html"><span class="nav-icon" style="font-size:13px">◫</span> Banner</a>
+  <a class="nav-link active" href="Button.preview.html"><span class="nav-icon" style="font-size:13px">▣</span> Button</a>
+  <a class="nav-link" href="Checkbox.preview.html"><span class="nav-icon" style="font-size:13px">☑</span> Checkbox</a>
+  <a class="nav-link" href="TextField.preview.html"><span class="nav-icon" style="font-size:13px">▭</span> Input</a>
+  <a class="nav-link" href="Toast.preview.html"><span class="nav-icon" style="font-size:13px">◩</span> Toast</a>
+  <a class="nav-link" href="Toggle.preview.html"><span class="nav-icon" style="font-size:13px">⬭</span> Toggle</a>
+</nav>
 
-    <div class="sidebar-separator"></div>
-    <p class="sidebar-heading">Components</p>
-        <a class="nav-link" href="Banner.preview.html"><span class="nav-icon" style="font-size:13px">◫</span> Banner</a>
-<a class="nav-link" href="Accordion.preview.html"><span class="nav-icon" style="font-size:13px">☰</span>
-      Accordion</a>
-    <a class="nav-link active" href="Button.preview.html"><span class="nav-icon" style="font-size:13px">▣</span>
-      Button</a>
-    <a class="nav-link" href="Checkbox.preview.html"><span class="nav-icon" style="font-size:13px">☑</span> Checkbox</a>
-    <a class="nav-link" href="TextField.preview.html"><span class="nav-icon" style="font-size:13px">▭</span> Input</a>
-    <a class="nav-link" href="Toast.preview.html"><span class="nav-icon" style="font-size:13px">◩</span> Toast</a>
-    <a class="nav-link" href="Toggle.preview.html"><span class="nav-icon" style="font-size:13px">⬭</span> Toggle</a>
-  </aside>
+<!-- Main -->
+<main class="main">
 
-  <main class="main">
-
-    <div class="component-header">
-      <div class="component-header-left">
-        <p class="component-breadcrumb"><a href="tokens.preview.html">Design System</a> / Components</p>
-        <h1>Button</h1>
+  <div class="component-header">
+    <div class="component-header-left">
+      <div class="component-breadcrumb">
+        <a href="#">Design System</a> / Components
       </div>
-      <div class="component-header-right">
-        <p>Triggers an action or event. Available in 6 variants across 7 sizes.</p>
+      <h1>Button</h1>
+    </div>
+    <div class="component-header-right">
+      <p>6 variants × 7 sizes. Primary, Secondary, Neutral, Stroke, Link, and Destructive.</p>
+    </div>
+  </div>
+
+  <!-- Playground -->
+  <section class="section">
+    <div class="section-title">Playground</div>
+    <div class="playground-card">
+      <div class="playground-preview" id="pg-preview">
+        <!-- rendered by JS -->
+      </div>
+      <div class="playground-controls">
+        <div class="ctrl-row">
+          <span class="ctrl-label">Variant</span>
+          <div class="ctrl-pills" id="pg-variant-pills">
+            <button class="ctrl-pill active" onclick="pgSetVariant('primary')">Primary</button>
+            <button class="ctrl-pill" onclick="pgSetVariant('secondary')">Secondary</button>
+            <button class="ctrl-pill" onclick="pgSetVariant('neutral')">Neutral</button>
+            <button class="ctrl-pill" onclick="pgSetVariant('stroke')">Stroke</button>
+            <button class="ctrl-pill" onclick="pgSetVariant('link')">Link</button>
+            <button class="ctrl-pill" onclick="pgSetVariant('destructive')">Destructive</button>
+          </div>
+        </div>
+        <div class="ctrl-row">
+          <span class="ctrl-label">Size</span>
+          <div class="ctrl-pills" id="pg-size-pills">
+            <button class="ctrl-pill" onclick="pgSetSize(56)">56</button>
+            <button class="ctrl-pill active" onclick="pgSetSize(48)">48</button>
+            <button class="ctrl-pill" onclick="pgSetSize(40)">40</button>
+            <button class="ctrl-pill" onclick="pgSetSize(36)">36</button>
+            <button class="ctrl-pill" onclick="pgSetSize(32)">32</button>
+            <button class="ctrl-pill" onclick="pgSetSize(28)">28</button>
+            <button class="ctrl-pill" onclick="pgSetSize(24)">24</button>
+          </div>
+        </div>
+        <div class="ctrl-row">
+          <span class="ctrl-label">Style</span>
+          <div class="ctrl-pills" id="pg-style-pills">
+            <button class="ctrl-pill active" onclick="pgSetStyle('normal')">Normal</button>
+            <button class="ctrl-pill" onclick="pgSetStyle('icon-only')">Icon Only</button>
+          </div>
+        </div>
+        <div class="ctrl-divider"></div>
+        <div class="ctrl-row">
+          <span class="ctrl-label">Options</span>
+          <div class="ctrl-toggles">
+            <button class="ctrl-toggle on" id="tog-leading" onclick="pgToggle('leading')">Leading Icon</button>
+            <button class="ctrl-toggle" id="tog-trailing" onclick="pgToggle('trailing')">Trailing Icon</button>
+            <button class="ctrl-toggle" id="tog-disabled" onclick="pgToggle('disabled')">Disabled</button>
+          </div>
+        </div>
       </div>
     </div>
+  </section>
 
-    <!-- ─── GLOBAL CONTROLS ─── -->
-    <div class="section">
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:32px;">
-        <p class="section-title" style="margin-bottom:0;">Variants</p>
-        <label style="display:flex; align-items:center; gap:10px; cursor:pointer; user-select:none;">
-          <span style="font-size:13px; font-weight:600; color:#888;">Disabled</span>
-          <span class="toggle" id="globalDisabled" onclick="toggleGlobalDisabled()">
-            <span class="toggle-thumb"></span>
-          </span>
-        </label>
+  <div class="divider"></div>
+
+  <!-- All Variants -->
+  <section class="section">
+    <div class="section-title">Variants</div>
+    <div class="variant-grid">
+
+      <!-- Primary -->
+      <div class="variant-card" data-variant="primary">
+        <div class="variant-card__preview" id="vp-primary"></div>
+        <span class="variant-card__label">Primary</span>
+        <div class="ctrl-pills" style="justify-content:center;">
+          <button class="ctrl-pill" onclick="vSetSize('primary', 56)">56</button>
+          <button class="ctrl-pill active" onclick="vSetSize('primary', 48)">48</button>
+          <button class="ctrl-pill" onclick="vSetSize('primary', 40)">40</button>
+          <button class="ctrl-pill" onclick="vSetSize('primary', 36)">36</button>
+          <button class="ctrl-pill" onclick="vSetSize('primary', 32)">32</button>
+          <button class="ctrl-pill" onclick="vSetSize('primary', 28)">28</button>
+          <button class="ctrl-pill" onclick="vSetSize('primary', 24)">24</button>
+        </div>
+        <div class="ctrl-toggles" style="justify-content:center;">
+          <button class="ctrl-toggle on" id="vtog-primary-leading" onclick="vToggle('primary','leading')">Leading</button>
+          <button class="ctrl-toggle" id="vtog-primary-trailing" onclick="vToggle('primary','trailing')">Trailing</button>
+        </div>
       </div>
 
-      <div class="btn-showcase-grid" id="variantGrid"></div>
+      <!-- Secondary -->
+      <div class="variant-card" data-variant="secondary">
+        <div class="variant-card__preview" id="vp-secondary"></div>
+        <span class="variant-card__label">Secondary</span>
+        <div class="ctrl-pills" style="justify-content:center;">
+          <button class="ctrl-pill" onclick="vSetSize('secondary', 56)">56</button>
+          <button class="ctrl-pill active" onclick="vSetSize('secondary', 48)">48</button>
+          <button class="ctrl-pill" onclick="vSetSize('secondary', 40)">40</button>
+          <button class="ctrl-pill" onclick="vSetSize('secondary', 36)">36</button>
+          <button class="ctrl-pill" onclick="vSetSize('secondary', 32)">32</button>
+          <button class="ctrl-pill" onclick="vSetSize('secondary', 28)">28</button>
+          <button class="ctrl-pill" onclick="vSetSize('secondary', 24)">24</button>
+        </div>
+        <div class="ctrl-toggles" style="justify-content:center;">
+          <button class="ctrl-toggle on" id="vtog-secondary-leading" onclick="vToggle('secondary','leading')">Leading</button>
+          <button class="ctrl-toggle" id="vtog-secondary-trailing" onclick="vToggle('secondary','trailing')">Trailing</button>
+        </div>
+      </div>
+
+      <!-- Neutral -->
+      <div class="variant-card" data-variant="neutral">
+        <div class="variant-card__preview" id="vp-neutral"></div>
+        <span class="variant-card__label">Neutral</span>
+        <div class="ctrl-pills" style="justify-content:center;">
+          <button class="ctrl-pill" onclick="vSetSize('neutral', 56)">56</button>
+          <button class="ctrl-pill active" onclick="vSetSize('neutral', 48)">48</button>
+          <button class="ctrl-pill" onclick="vSetSize('neutral', 40)">40</button>
+          <button class="ctrl-pill" onclick="vSetSize('neutral', 36)">36</button>
+          <button class="ctrl-pill" onclick="vSetSize('neutral', 32)">32</button>
+          <button class="ctrl-pill" onclick="vSetSize('neutral', 28)">28</button>
+          <button class="ctrl-pill" onclick="vSetSize('neutral', 24)">24</button>
+        </div>
+        <div class="ctrl-toggles" style="justify-content:center;">
+          <button class="ctrl-toggle on" id="vtog-neutral-leading" onclick="vToggle('neutral','leading')">Leading</button>
+          <button class="ctrl-toggle" id="vtog-neutral-trailing" onclick="vToggle('neutral','trailing')">Trailing</button>
+        </div>
+      </div>
+
+      <!-- Stroke -->
+      <div class="variant-card" data-variant="stroke">
+        <div class="variant-card__preview" id="vp-stroke"></div>
+        <span class="variant-card__label">Stroke</span>
+        <div class="ctrl-pills" style="justify-content:center;">
+          <button class="ctrl-pill" onclick="vSetSize('stroke', 56)">56</button>
+          <button class="ctrl-pill active" onclick="vSetSize('stroke', 48)">48</button>
+          <button class="ctrl-pill" onclick="vSetSize('stroke', 40)">40</button>
+          <button class="ctrl-pill" onclick="vSetSize('stroke', 36)">36</button>
+          <button class="ctrl-pill" onclick="vSetSize('stroke', 32)">32</button>
+          <button class="ctrl-pill" onclick="vSetSize('stroke', 28)">28</button>
+          <button class="ctrl-pill" onclick="vSetSize('stroke', 24)">24</button>
+        </div>
+        <div class="ctrl-toggles" style="justify-content:center;">
+          <button class="ctrl-toggle on" id="vtog-stroke-leading" onclick="vToggle('stroke','leading')">Leading</button>
+          <button class="ctrl-toggle" id="vtog-stroke-trailing" onclick="vToggle('stroke','trailing')">Trailing</button>
+        </div>
+      </div>
+
+      <!-- Link -->
+      <div class="variant-card" data-variant="link">
+        <div class="variant-card__preview" id="vp-link"></div>
+        <span class="variant-card__label">Link</span>
+        <div class="ctrl-pills" style="justify-content:center;">
+          <button class="ctrl-pill" onclick="vSetSize('link', 56)">56</button>
+          <button class="ctrl-pill active" onclick="vSetSize('link', 48)">48</button>
+          <button class="ctrl-pill" onclick="vSetSize('link', 40)">40</button>
+          <button class="ctrl-pill" onclick="vSetSize('link', 36)">36</button>
+          <button class="ctrl-pill" onclick="vSetSize('link', 32)">32</button>
+          <button class="ctrl-pill" onclick="vSetSize('link', 28)">28</button>
+          <button class="ctrl-pill" onclick="vSetSize('link', 24)">24</button>
+        </div>
+        <div class="ctrl-toggles" style="justify-content:center;">
+          <button class="ctrl-toggle on" id="vtog-link-leading" onclick="vToggle('link','leading')">Leading</button>
+          <button class="ctrl-toggle" id="vtog-link-trailing" onclick="vToggle('link','trailing')">Trailing</button>
+        </div>
+      </div>
+
+      <!-- Destructive -->
+      <div class="variant-card" data-variant="destructive">
+        <div class="variant-card__preview" id="vp-destructive"></div>
+        <span class="variant-card__label">Destructive</span>
+        <div class="ctrl-pills" style="justify-content:center;">
+          <button class="ctrl-pill" onclick="vSetSize('destructive', 56)">56</button>
+          <button class="ctrl-pill active" onclick="vSetSize('destructive', 48)">48</button>
+          <button class="ctrl-pill" onclick="vSetSize('destructive', 40)">40</button>
+          <button class="ctrl-pill" onclick="vSetSize('destructive', 36)">36</button>
+          <button class="ctrl-pill" onclick="vSetSize('destructive', 32)">32</button>
+          <button class="ctrl-pill" onclick="vSetSize('destructive', 28)">28</button>
+          <button class="ctrl-pill" onclick="vSetSize('destructive', 24)">24</button>
+        </div>
+        <div class="ctrl-toggles" style="justify-content:center;">
+          <button class="ctrl-toggle on" id="vtog-destructive-leading" onclick="vToggle('destructive','leading')">Leading</button>
+          <button class="ctrl-toggle" id="vtog-destructive-trailing" onclick="vToggle('destructive','trailing')">Trailing</button>
+        </div>
+      </div>
+
     </div>
+  </section>
 
-    <div class="divider"></div>
+  <div class="divider"></div>
 
-    <!-- Toggle & card control styles -->
-    <style>
-      .toggle {
-        position: relative;
-        display: inline-block;
-        width: 44px;
-        height: 24px;
-        background: #d0d0d0;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: background 0.2s;
-        flex-shrink: 0;
-      }
+  <!-- Icon Only -->
+  <section class="section">
+    <div class="section-title">Icon Only</div>
+    <div class="variant-grid">
 
-      .toggle.active {
-        background: #f70f79;
-      }
+      <div class="variant-card">
+        <div class="variant-card__preview" style="gap:12px; flex-wrap:wrap;">
+          <button class="btn btn-primary" style="padding:18px;border-radius:16px;">
+            <span class="btn-icon" style="width:20px;height:20px;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <button class="btn btn-primary" style="padding:14px;border-radius:16px;">
+            <span class="btn-icon" style="width:20px;height:20px;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <button class="btn btn-primary" style="padding:10px;border-radius:12px;">
+            <span class="btn-icon" style="width:20px;height:20px;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <button class="btn btn-primary" style="padding:10px;border-radius:10px;">
+            <span class="btn-icon" style="width:16px;height:16px;"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <button class="btn btn-primary" style="padding:8px;border-radius:8px;">
+            <span class="btn-icon" style="width:16px;height:16px;"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <button class="btn btn-primary" style="padding:6px;border-radius:8px;">
+            <span class="btn-icon" style="width:16px;height:16px;"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <button class="btn btn-primary" style="padding:5px;border-radius:8px;">
+            <span class="btn-icon" style="width:14px;height:14px;"><svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+        </div>
+        <span class="variant-card__label">Primary — 56 · 48 · 40 · 36 · 32 · 28 · 24</span>
+      </div>
 
-      .toggle-thumb {
-        position: absolute;
-        top: 2px;
-        left: 2px;
-        width: 20px;
-        height: 20px;
-        background: #fff;
-        border-radius: 50%;
-        transition: transform 0.2s;
-        pointer-events: none;
-      }
+      <div class="variant-card">
+        <div class="variant-card__preview" style="gap:12px; flex-wrap:wrap;">
+          <button class="btn btn-secondary" style="padding:18px;border-radius:16px;">
+            <span class="btn-icon" style="width:20px;height:20px;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <button class="btn btn-secondary" style="padding:14px;border-radius:16px;">
+            <span class="btn-icon" style="width:20px;height:20px;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <button class="btn btn-secondary" style="padding:10px;border-radius:12px;">
+            <span class="btn-icon" style="width:20px;height:20px;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <button class="btn btn-secondary" style="padding:10px;border-radius:10px;">
+            <span class="btn-icon" style="width:16px;height:16px;"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <button class="btn btn-secondary" style="padding:8px;border-radius:8px;">
+            <span class="btn-icon" style="width:16px;height:16px;"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <button class="btn btn-secondary" style="padding:6px;border-radius:8px;">
+            <span class="btn-icon" style="width:16px;height:16px;"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <button class="btn btn-secondary" style="padding:5px;border-radius:8px;">
+            <span class="btn-icon" style="width:14px;height:14px;"><svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+        </div>
+        <span class="variant-card__label">Secondary — 56 · 48 · 40 · 36 · 32 · 28 · 24</span>
+      </div>
 
-      .toggle.active .toggle-thumb {
-        transform: translateX(20px);
-      }
+      <div class="variant-card">
+        <div class="variant-card__preview" style="gap:12px; flex-wrap:wrap;">
+          <button class="btn btn-neutral" style="padding:18px;border-radius:16px;">
+            <span class="btn-icon" style="width:20px;height:20px;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <button class="btn btn-neutral" style="padding:14px;border-radius:16px;">
+            <span class="btn-icon" style="width:20px;height:20px;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <button class="btn btn-neutral" style="padding:10px;border-radius:12px;">
+            <span class="btn-icon" style="width:20px;height:20px;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <button class="btn btn-neutral" style="padding:10px;border-radius:10px;">
+            <span class="btn-icon" style="width:16px;height:16px;"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <button class="btn btn-neutral" style="padding:8px;border-radius:8px;">
+            <span class="btn-icon" style="width:16px;height:16px;"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <button class="btn btn-neutral" style="padding:6px;border-radius:8px;">
+            <span class="btn-icon" style="width:16px;height:16px;"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <button class="btn btn-neutral" style="padding:5px;border-radius:8px;">
+            <span class="btn-icon" style="width:14px;height:14px;"><svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+        </div>
+        <span class="variant-card__label">Neutral — 56 · 48 · 40 · 36 · 32 · 28 · 24</span>
+      </div>
 
-      /* Variant card — extended layout */
-      .variant-card {
-        background: #f5f5f5;
-        border-radius: 16px;
-        padding: 24px 24px 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 0;
-      }
-
-      .variant-card__preview {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 80px;
-        margin-bottom: 16px;
-      }
-
-      .variant-card__label {
-        font-size: 11px;
-        font-weight: 600;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: #ababab;
-        text-align: center;
-        margin-bottom: 20px;
-      }
-
-      .variant-card__controls {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        border-top: 1px solid #e8e8e8;
-        padding-top: 16px;
-      }
-
-      .ctrl-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-
-      .ctrl-label {
-        font-size: 11px;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        color: #ababab;
-      }
-
-      /* Size pill bar */
-      .size-pills {
-        display: flex;
-        gap: 4px;
-        flex-wrap: wrap;
-      }
-
-      .size-pill {
-        padding: 3px 8px;
-        border-radius: 6px;
-        border: none;
-        font-family: var(--font-family);
-        font-size: 11px;
-        font-weight: 600;
-        color: #ababab;
-        background: #e8e8e8;
-        cursor: pointer;
-        transition: background 0.15s, color 0.15s;
-      }
-
-      .size-pill:hover {
-        background: #d0d0d0;
-        color: #303030;
-      }
-
-      .size-pill.active {
-        background: #f70f79;
-        color: #303030;
-      }
-    </style>
-
-    <script>
-      /* ── Data ── */
-      const VARIANTS = [
-        { id: 'primary', label: 'Primary', cls: 'btn-primary' },
-        { id: 'secondary', label: 'Secondary', cls: 'btn-secondary' },
-        { id: 'neutral', label: 'Neutral', cls: 'btn-neutral' },
-        { id: 'stroke', label: 'Stroke', cls: 'btn-stroke' },
-        { id: 'link', label: 'Link', cls: 'btn-link' },
-        { id: 'destructive', label: 'Destructive', cls: 'btn-destructive' },
-      ];
-      const SIZES = [56, 48, 40, 36, 32, 28, 24];
-      const ICON_SIZES = { 56: 20, 48: 20, 40: 20, 36: 20, 32: 20, 28: 16, 24: 16 };
-
-      /* Per-variant state: { size, leading, trailing } */
-      const cardState = {};
-      VARIANTS.forEach(v => cardState[v.id] = { size: 48, leading: false, trailing: false });
-      let globalDisabled = false;
-
-      /* ── Icons ── */
-      function leadingSvg(sz) {
-        return `<span class="btn-icon"><svg width="${sz}" height="${sz}" viewBox="0 0 20 20" fill="none"><path d="M12.5 5L7.5 10L12.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
-      }
-      function trailingSvg(sz) {
-        return `<span class="btn-icon"><svg width="${sz}" height="${sz}" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
-      }
-
-      /* ── Render a single card's button ── */
-      function renderButton(vid) {
-        const s = cardState[vid];
-        const v = VARIANTS.find(x => x.id === vid);
-        const isz = ICON_SIZES[s.size];
-        const btnEl = document.getElementById('btn-' + vid);
-        btnEl.className = `btn btn-${s.size} ${v.cls}`;
-        btnEl.disabled = globalDisabled;
-        btnEl.innerHTML =
-          (s.leading ? leadingSvg(isz) : '') +
-          v.label + ' Button' +
-          (s.trailing ? trailingSvg(isz) : '');
-      }
-
-      /* ── Render all ── */
-      function renderAll() {
-        VARIANTS.forEach(v => renderButton(v.id));
-      }
-
-      /* ── Toggle handlers ── */
-      function toggleGlobalDisabled() {
-        globalDisabled = !globalDisabled;
-        document.getElementById('globalDisabled').classList.toggle('active', globalDisabled);
-        renderAll();
-      }
-
-      function setSize(vid, sz) {
-        cardState[vid].size = sz;
-        // Update pills
-        document.querySelectorAll(`#pills-${vid} .size-pill`).forEach(p => {
-          p.classList.toggle('active', +p.dataset.size === sz);
-        });
-        renderButton(vid);
-      }
-
-      function toggleCardProp(vid, prop) {
-        cardState[vid][prop] = !cardState[vid][prop];
-        document.getElementById(`toggle-${prop}-${vid}`).classList.toggle('active', cardState[vid][prop]);
-        renderButton(vid);
-      }
-
-      /* ── Build grid ── */
-      (function init() {
-        const grid = document.getElementById('variantGrid');
-        VARIANTS.forEach(v => {
-          const pills = SIZES.map(sz =>
-            `<button class="size-pill${sz === 48 ? ' active' : ''}" data-size="${sz}" onclick="setSize('${v.id}',${sz})">${sz}</button>`
-          ).join('');
-
-          grid.insertAdjacentHTML('beforeend', `
-            <div class="variant-card">
-              <div class="variant-card__preview">
-                <button class="btn btn-48 ${v.cls}" id="btn-${v.id}">${v.label} Button</button>
-              </div>
-              <div class="variant-card__label">${v.label}</div>
-              <div class="variant-card__controls">
-                <div class="ctrl-row">
-                  <span class="ctrl-label">Size</span>
-                  <div class="size-pills" id="pills-${v.id}">${pills}</div>
-                </div>
-                <div class="ctrl-row">
-                  <span class="ctrl-label">Leading Icon</span>
-                  <span class="toggle" id="toggle-leading-${v.id}" onclick="toggleCardProp('${v.id}','leading')">
-                    <span class="toggle-thumb"></span>
-                  </span>
-                </div>
-                <div class="ctrl-row">
-                  <span class="ctrl-label">Trailing Icon</span>
-                  <span class="toggle" id="toggle-trailing-${v.id}" onclick="toggleCardProp('${v.id}','trailing')">
-                    <span class="toggle-thumb"></span>
-                  </span>
-                </div>
-              </div>
-            </div>
-          `);
-        });
-      })();
-    </script>
-
-    <div class="divider"></div>
-
-    <!-- ─── PROPS ─── -->
-    <div class="section">
-      <p class="section-title">Props</p>
-      <table class="props-table">
-        <thead>
-          <tr>
-            <th>Prop</th>
-            <th>Type</th>
-            <th>Default</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="prop-name"><code>variant</code></td>
-            <td>primary · secondary · neutral · stroke · link · destructive</td>
-            <td class="prop-default">"primary"</td>
-            <td>Visual style of the button</td>
-          </tr>
-          <tr>
-            <td class="prop-name"><code>size</code></td>
-            <td>56 · 48 · 40 · 36 · 32 · 28 · 24</td>
-            <td class="prop-default">48</td>
-            <td>Height in px — controls padding, font size, and border radius</td>
-          </tr>
-          <tr>
-            <td class="prop-name"><code>leadingIcon</code></td>
-            <td>ReactNode</td>
-            <td class="prop-default">undefined</td>
-            <td>Icon rendered before the label</td>
-          </tr>
-          <tr>
-            <td class="prop-name"><code>trailingIcon</code></td>
-            <td>ReactNode</td>
-            <td class="prop-default">undefined</td>
-            <td>Icon rendered after the label</td>
-          </tr>
-          <tr>
-            <td class="prop-name"><code>disabled</code></td>
-            <td>boolean</td>
-            <td class="prop-default">false</td>
-            <td>Disables interaction and applies muted styling</td>
-          </tr>
-          <tr>
-            <td class="prop-name"><code>onClick</code></td>
-            <td>MouseEventHandler</td>
-            <td class="prop-default">—</td>
-            <td>Click handler — passed through to the native button element</td>
-          </tr>
-        </tbody>
-      </table>
     </div>
+  </section>
 
-  </main>
+  <div class="divider"></div>
+
+  <!-- Props -->
+  <section class="section">
+    <div class="section-title">Props</div>
+    <table class="props-table">
+      <thead>
+        <tr>
+          <th>Prop</th><th>Type</th><th>Default</th><th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="prop-name">variant</td>
+          <td><code>primary</code> <code>secondary</code> <code>neutral</code> <code>stroke</code> <code>link</code> <code>destructive</code></td>
+          <td class="prop-default"><code>primary</code></td>
+          <td>Visual style</td>
+        </tr>
+        <tr>
+          <td class="prop-name">size</td>
+          <td><code>56</code> <code>48</code> <code>40</code> <code>36</code> <code>32</code> <code>28</code> <code>24</code></td>
+          <td class="prop-default"><code>48</code></td>
+          <td>Button height in px</td>
+        </tr>
+        <tr>
+          <td class="prop-name">buttonStyle</td>
+          <td><code>normal</code> <code>icon-only</code></td>
+          <td class="prop-default"><code>normal</code></td>
+          <td>Normal shows label + optional icons; Icon Only shows a single centered icon</td>
+        </tr>
+        <tr>
+          <td class="prop-name">leadingIcon</td>
+          <td><code>ReactNode</code></td>
+          <td class="prop-default">—</td>
+          <td>Icon before label text</td>
+        </tr>
+        <tr>
+          <td class="prop-name">trailingIcon</td>
+          <td><code>ReactNode</code></td>
+          <td class="prop-default">—</td>
+          <td>Icon after label text</td>
+        </tr>
+        <tr>
+          <td class="prop-name">icon</td>
+          <td><code>ReactNode</code></td>
+          <td class="prop-default">—</td>
+          <td>Icon for icon-only style</td>
+        </tr>
+        <tr>
+          <td class="prop-name">disabled</td>
+          <td><code>boolean</code></td>
+          <td class="prop-default"><code>false</code></td>
+          <td>Disables the button</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<script>
+  /* ── Size config ── */
+  const SIZES = {
+    56: { paddingH: 20, paddingV: 16, radius: 16, iconSize: 20, fontSize: 16, lineHeight: 24, gap: 8 },
+    48: { paddingH: 20, paddingV: 12, radius: 16, iconSize: 20, fontSize: 16, lineHeight: 24, gap: 8 },
+    40: { paddingH: 16, paddingV: 10, radius: 12, iconSize: 20, fontSize: 14, lineHeight: 20, gap: 8 },
+    36: { paddingH: 12, paddingV:  8, radius: 10, iconSize: 16, fontSize: 14, lineHeight: 20, gap: 8 },
+    32: { paddingH:  8, paddingV:  6, radius:  8, iconSize: 16, fontSize: 14, lineHeight: 20, gap: 8 },
+    28: { paddingH:  8, paddingV:  6, radius:  8, iconSize: 16, fontSize: 12, lineHeight: 16, gap: 8 },
+    24: { paddingH:  6, paddingV:  4, radius:  8, iconSize: 14, fontSize: 12, lineHeight: 16, gap: 6 },
+  };
+
+  const VARIANT_BG = {
+    primary: '#f70f79', secondary: '#f0f0f0', neutral: '#303030',
+    stroke: 'transparent', link: 'transparent', destructive: '#e93544'
+  };
+  const VARIANT_TEXT = {
+    primary: '#ffffff', secondary: '#303030', neutral: '#ffffff',
+    stroke: '#303030', link: '#f70f79', destructive: '#ffffff'
+  };
+  const VARIANT_BORDER = {
+    stroke: '1.5px solid #f0f0f0'
+  };
+
+  function iconSvg(size) {
+    return `<svg width="${size}" height="${size}" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  }
+
+  /* ── Playground state ── */
+  const pg = { variant: 'primary', size: 48, style: 'normal', leading: true, trailing: false, disabled: false };
+
+  function pgRender() {
+    const s = SIZES[pg.size];
+    const isIconOnly = pg.style === 'icon-only';
+    const pad = isIconOnly ? (pg.size - s.iconSize) / 2 : null;
+
+    const bg     = pg.disabled && pg.variant !== 'link' ? '#f5f5f5' : VARIANT_BG[pg.variant];
+    const color  = pg.disabled ? '#ababab' : VARIANT_TEXT[pg.variant];
+    const border = pg.disabled && pg.variant !== 'link'
+      ? '1.5px solid #f0f0f0'
+      : (VARIANT_BORDER[pg.variant] || 'none');
+
+    const paddingStyle = isIconOnly
+      ? `padding:${pad}px`
+      : `padding:${s.paddingV}px ${s.paddingH}px`;
+
+    let inner = '';
+    if (isIconOnly) {
+      inner = `<span style="display:flex;align-items:center;width:${s.iconSize}px;height:${s.iconSize}px;">${iconSvg(s.iconSize)}</span>`;
+    } else {
+      const li = pg.leading  ? `<span style="display:flex;align-items:center;width:${s.iconSize}px;height:${s.iconSize}px;">${iconSvg(s.iconSize)}</span>` : '';
+      const ti = pg.trailing ? `<span style="display:flex;align-items:center;width:${s.iconSize}px;height:${s.iconSize}px;">${iconSvg(s.iconSize)}</span>` : '';
+      inner = `${li}Button${ti}`;
+    }
+
+    document.getElementById('pg-preview').innerHTML = `
+      <button
+        class="btn"
+        style="
+          background:${bg};color:${color};border:${border};
+          gap:${s.gap}px;${paddingStyle};
+          border-radius:${s.radius}px;font-size:${s.fontSize}px;line-height:${s.lineHeight}px;
+        "
+        ${pg.disabled ? 'disabled' : ''}
+      >${inner}</button>
+    `;
+  }
+
+  function pgSetVariant(v) {
+    pg.variant = v;
+    document.querySelectorAll('#pg-variant-pills .ctrl-pill').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    pgRender();
+  }
+
+  function pgSetSize(sz) {
+    pg.size = sz;
+    document.querySelectorAll('#pg-size-pills .ctrl-pill').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    pgRender();
+  }
+
+  function pgSetStyle(st) {
+    pg.style = st;
+    document.querySelectorAll('#pg-style-pills .ctrl-pill').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    pgRender();
+  }
+
+  function pgToggle(key) {
+    pg[key] = !pg[key];
+    const el = document.getElementById('tog-' + key);
+    el.classList.toggle('on', pg[key]);
+    pgRender();
+  }
+
+  /* ── Variant cards state ── */
+  const VARIANTS = ['primary', 'secondary', 'neutral', 'stroke', 'link', 'destructive'];
+  const vState = {};
+  VARIANTS.forEach(v => { vState[v] = { size: 48, leading: true, trailing: false }; });
+
+  function vRender(variant) {
+    const st = vState[variant];
+    const s = SIZES[st.size];
+    const li = st.leading  ? `<span style="display:flex;align-items:center;width:${s.iconSize}px;height:${s.iconSize}px;">${iconSvg(s.iconSize)}</span>` : '';
+    const ti = st.trailing ? `<span style="display:flex;align-items:center;width:${s.iconSize}px;height:${s.iconSize}px;">${iconSvg(s.iconSize)}</span>` : '';
+    const border = VARIANT_BORDER[variant] ? `border:${VARIANT_BORDER[variant]};` : '';
+    document.getElementById(`vp-${variant}`).innerHTML = `
+      <button class="btn btn-${variant}" style="gap:${s.gap}px;padding:${s.paddingV}px ${s.paddingH}px;border-radius:${s.radius}px;font-size:${s.fontSize}px;line-height:${s.lineHeight}px;${border}">
+        ${li}Button${ti}
+      </button>`;
+  }
+
+  function vSetSize(variant, size) {
+    vState[variant].size = size;
+    vRender(variant);
+    const card = event.target.closest('.variant-card');
+    card.querySelectorAll('.ctrl-pill').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+
+  function vToggle(variant, key) {
+    vState[variant][key] = !vState[variant][key];
+    document.getElementById(`vtog-${variant}-${key}`).classList.toggle('on', vState[variant][key]);
+    vRender(variant);
+  }
+
+  // Initial render
+  pgRender();
+  VARIANTS.forEach(vRender);
+</script>
 
 </body>
-
 </html>

@@ -6,6 +6,8 @@ export type BannerVariant = 'inline-link' | 'primary-cta' | 'promo' | 'warning-c
 
 type BannerProps = {
   variant?: BannerVariant;
+  cta?: boolean;
+  leftIcon?: boolean;
   onClose?: () => void;
 };
 
@@ -46,8 +48,14 @@ const cardBase: React.CSSProperties = {
 const whiteBorder: React.CSSProperties = {
   ...cardBase, background: '#fff', border: '1px solid #f0f0f0',
 };
+const btnPrimary: React.CSSProperties = {
+  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+  padding: '8px 12px', background: '#f70f79', border: 'none', borderRadius: 10,
+  cursor: 'pointer', fontFamily: FONT, fontSize: 14, fontWeight: 600,
+  color: '#fff', lineHeight: '20px',
+};
 
-export default function Banner({ variant = 'inline-link', onClose }: BannerProps) {
+export default function Banner({ variant = 'inline-link', cta = true, leftIcon = true, onClose }: BannerProps) {
 
   if (variant === 'promo') {
     return (
@@ -70,14 +78,16 @@ export default function Banner({ variant = 'inline-link', onClose }: BannerProps
     return (
       <div style={{ ...whiteBorder, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: 12 }}>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center', flex: 1, minWidth: 0 }}>
-          <IconCircle />
+          {leftIcon && <IconCircle />}
           <div style={{ flex: 1 }}>
             <span style={{ fontSize: 14, lineHeight: '18px', color: '#ababab', fontWeight: 400 }}>
               {"Find deals with Klarna's price comparison "}
             </span>
-            <span style={{ fontSize: 14, lineHeight: '18px', color: '#f70f79', fontWeight: 600 }}>
-              Status Privacy
-            </span>
+            {cta && (
+              <span style={{ fontSize: 14, lineHeight: '18px', color: '#f70f79', fontWeight: 600 }}>
+                Status Privacy
+              </span>
+            )}
           </div>
         </div>
         <CloseBtn onClick={onClose} />
@@ -90,7 +100,7 @@ export default function Banner({ variant = 'inline-link', onClose }: BannerProps
       <div style={{ ...whiteBorder, display: 'flex', flexDirection: 'column', gap: 20, padding: 12 }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', gap: 12, alignItems: 'center', flex: 1, minWidth: 0 }}>
-            <IconCircle />
+            {leftIcon && <IconCircle />}
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4 }}>
               <p style={{ fontSize: 16, fontWeight: 500, lineHeight: '20px', color: '#303030', letterSpacing: '0.032px' }}>
                 Compare prices. Save money
@@ -102,9 +112,11 @@ export default function Banner({ variant = 'inline-link', onClose }: BannerProps
           </div>
           <CloseBtn onClick={onClose} />
         </div>
-        <button style={{ width: '100%', height: 36, background: '#f70f79', border: 'none', borderRadius: 12, cursor: 'pointer', fontFamily: FONT, fontSize: 14, fontWeight: 600, color: '#fff', lineHeight: '20px' }}>
-          Primary Button
-        </button>
+        {cta && (
+          <button style={{ ...btnPrimary, width: '100%' }}>
+            Primary Button
+          </button>
+        )}
       </div>
     );
   }
@@ -112,18 +124,20 @@ export default function Banner({ variant = 'inline-link', onClose }: BannerProps
   if (variant === 'warning-cta') {
     return (
       <div style={{ ...whiteBorder, display: 'flex', flexDirection: 'column', padding: '16px 12px' }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: cta ? 16 : 0 }}>
           <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start', flex: 1, minWidth: 0 }}>
-            <WarningIcon />
+            {leftIcon && <WarningIcon />}
             <p style={{ fontSize: 16, fontWeight: 500, lineHeight: '20px', color: '#303030', letterSpacing: '0.032px', flex: 1 }}>
               We think you may have entered an invalid apartment or suite number. Please check and correct if needed.
             </p>
           </div>
           <CloseBtn onClick={onClose} />
         </div>
-        <button style={{ paddingLeft: 16, paddingRight: 16, height: 36, background: '#f70f79', border: 'none', borderRadius: 12, cursor: 'pointer', fontFamily: FONT, fontSize: 14, fontWeight: 600, color: '#fff', lineHeight: '20px', alignSelf: 'flex-start' }}>
-          Edit Address
-        </button>
+        {cta && (
+          <button style={{ ...btnPrimary, alignSelf: 'flex-start' }}>
+            Edit Address
+          </button>
+        )}
       </div>
     );
   }
@@ -132,19 +146,19 @@ export default function Banner({ variant = 'inline-link', onClose }: BannerProps
   return (
     <div style={{ ...whiteBorder, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: 12 }}>
       <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start', flex: 1, minWidth: 0 }}>
-        <IconCircle />
+        {leftIcon && <IconCircle />}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
           <p style={{ fontSize: 16, fontWeight: 500, lineHeight: '20px', color: '#303030', letterSpacing: '0.032px' }}>
             We think you may have entered an invalid apartment or suite number.
           </p>
-          <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '8px 0', display: 'flex', alignItems: 'center', gap: 2, alignSelf: 'flex-start' }}>
-            <span style={{ fontFamily: FONT, fontSize: 14, fontWeight: 600, color: '#f70f79', lineHeight: '20px' }}>
+          {cta && (
+            <button style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 0', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: FONT, fontSize: 14, fontWeight: 600, color: '#f70f79', lineHeight: '20px', alignSelf: 'flex-start' }}>
               Activate Now
-            </span>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M6 4L10 8L6 12" stroke="#f70f79" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M6 4L10 8L6 12" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          )}
         </div>
       </div>
       <CloseBtn onClick={onClose} />
