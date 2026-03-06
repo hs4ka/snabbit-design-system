@@ -1,0 +1,17 @@
+{
+  "name": "snabbit-design-system",
+  "version": "1.0.0",
+  "description": "Snabbit Design System — Foundations, tokens, and interactive component previews.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "vite": "^7.3.1"
+  }
+}

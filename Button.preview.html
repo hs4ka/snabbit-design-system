@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Button — Snabbit Design System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-primary: #ffffff;
+      --bg-tertiary: #f0f0f0;
+      --text-primary: #303030;
+      --text-tertiary: #ababab;
+      --accent-primary: #f70f79;
+      --accent-light: #fff3f8;
+      --stroke-secondary: #f0f0f0;
+      --red-dark: #e93544;
+      --font-family: "Instrument Sans", sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background: #141414;
+      color: #fff;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 216px;
+      height: 100vh;
+      background: #1a1a1a;
+      border-right: 1px solid #252525;
+      padding: 48px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      z-index: 100;
+      overflow-y: auto;
+    }
+
+    .sidebar-heading {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #484848;
+      padding: 0 12px;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-separator {
+      height: 1px;
+      background: #252525;
+      margin: 20px 4px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #666;
+      text-decoration: none;
+      transition: color 0.15s, background 0.15s;
+    }
+
+    .nav-link:hover {
+      color: #e0e0e0;
+      background: #242424;
+    }
+
+    .nav-link.active {
+      color: #fff;
+      background: #272727;
+    }
+
+    .nav-icon {
+      font-size: 15px;
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    /* ── Main ── */
+    .main {
+      margin-left: 216px;
+      flex: 1;
+      padding: 60px 80px;
+      min-height: 100vh;
+    }
+
+    /* ── Component header ── */
+    .component-header {
+      background: #272727;
+      margin: -60px -80px 60px;
+      padding: 44px 80px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .component-header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .component-breadcrumb {
+      font-size: 13px;
+      font-weight: 500;
+      color: #666;
+    }
+
+    .component-breadcrumb a {
+      color: #666;
+      text-decoration: none;
+    }
+
+    .component-breadcrumb a:hover {
+      color: #aaa;
+    }
+
+    .component-header h1 {
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+
+    .component-header-right p {
+      font-size: 14px;
+      font-weight: 500;
+      color: #828282;
+      max-width: 280px;
+      line-height: 20px;
+      text-align: right;
+    }
+
+    /* ── Sections ── */
+    .section {
+      margin-bottom: 64px;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 500;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+      color: #fff;
+    }
+
+    .divider {
+      height: 1px;
+      background: #2a2a2a;
+      margin: 48px 0;
+    }
+
+    /* ── Variant grid ── */
+    .btn-showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .btn-showcase-card {
+      background: #272727;
+      border-radius: 16px;
+      padding: 32px 24px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .btn-showcase-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #555;
+    }
+
+    /* ── Size scale ── */
+    .size-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .size-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .size-tag {
+      background: #272727;
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #555;
+      width: 36px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    /* ── Icon options ── */
+    .icon-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .icon-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #555;
+    }
+
+    /* ── Props table ── */
+    .props-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .props-table th {
+      background: #fff;
+      color: #000;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 14px 20px;
+      text-align: left;
+    }
+
+    .props-table td {
+      background: #272727;
+      padding: 0 20px;
+      height: 52px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #e0e0e0;
+      border-top: 1px solid #333;
+    }
+
+    .props-table td code {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 12px;
+      color: #f70f79;
+    }
+
+    .props-table td.prop-name {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .props-table td.prop-default {
+      color: #828282;
+    }
+
+    /* ══════════════════════════════════════════════
+       Button component styles
+    ══════════════════════════════════════════════ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-family);
+      font-weight: 600;
+      letter-spacing: 0.002em;
+      white-space: nowrap;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+
+    /* Sizes */
+    .btn-56 {
+      padding: 18px 24px;
+      font-size: 16px;
+      line-height: 20px;
+      border-radius: 16px;
+    }
+
+    .btn-48 {
+      padding: 14px 24px;
+      font-size: 16px;
+      line-height: 20px;
+      border-radius: 12px;
+    }
+
+    .btn-40 {
+      padding: 10px 12px;
+      font-size: 14px;
+      line-height: 20px;
+      border-radius: 12px;
+    }
+
+    .btn-36 {
+      padding: 8px 12px;
+      font-size: 14px;
+      line-height: 20px;
+      border-radius: 12px;
+    }
+
+    .btn-32 {
+      padding: 6px 8px;
+      font-size: 13px;
+      line-height: 20px;
+      border-radius: 8px;
+    }
+
+    .btn-28 {
+      padding: 4px 8px;
+      font-size: 13px;
+      line-height: 20px;
+      border-radius: 8px;
+    }
+
+    .btn-24 {
+      padding: 2px 8px;
+      font-size: 12px;
+      line-height: 16px;
+      border-radius: 8px;
+    }
+
+    /* Variants */
+    .btn-primary {
+      background: #f70f79;
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #d80c6a;
+    }
+
+    .btn-secondary {
+      background: #fff3f8;
+      color: #f70f79;
+    }
+
+    .btn-secondary:hover {
+      background: #fde3f0;
+    }
+
+    .btn-neutral {
+      background: #303030;
+      color: #fff;
+    }
+
+    .btn-neutral:hover {
+      background: #444;
+    }
+
+    .btn-stroke {
+      background: transparent;
+      color: #303030;
+      border: 1.5px solid #f0f0f0;
+    }
+
+    .btn-stroke:hover {
+      background: #f0f0f0;
+    }
+
+    .btn-link {
+      background: transparent;
+      color: #f70f79;
+      text-decoration: underline;
+    }
+
+    .btn-link:hover {
+      text-decoration: none;
+    }
+
+    .btn-destructive {
+      background: #e93544;
+      color: #fff;
+    }
+
+    .btn-destructive:hover {
+      background: #c42a38;
+    }
+
+    /* Disabled */
+    .btn:disabled {
+      background: #f0f0f0 !important;
+      color: #ababab !important;
+      border-color: #f0f0f0 !important;
+      cursor: not-allowed;
+    }
+
+    .btn-link:disabled {
+      background: transparent !important;
+    }
+
+    .btn-icon {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <aside class="sidebar">
+    <p class="sidebar-heading">Foundations</p>
+    <a class="nav-link" href="tokens.preview.html#color"><span class="nav-icon">⬛</span> Color</a>
+    <a class="nav-link" href="tokens.preview.html#shadow"><span class="nav-icon">◻️</span> Shadow</a>
+    <a class="nav-link" href="tokens.preview.html#typography"><span class="nav-icon">Aa</span> Typography</a>
+    <a class="nav-link" href="tokens.preview.html#radius"><span class="nav-icon">◜</span> Radius</a>
+
+    <div class="sidebar-separator"></div>
+    <p class="sidebar-heading">Components</p>
+    <a class="nav-link" href="Accordion.preview.html"><span class="nav-icon" style="font-size:13px">☰</span>
+      Accordion</a>
+    <a class="nav-link active" href="Button.preview.html"><span class="nav-icon" style="font-size:13px">▣</span>
+      Button</a>
+    <a class="nav-link" href="Checkbox.preview.html"><span class="nav-icon" style="font-size:13px">☑</span> Checkbox</a>
+    <a class="nav-link" href="TextField.preview.html"><span class="nav-icon" style="font-size:13px">▭</span> Input</a>
+    <a class="nav-link" href="Toast.preview.html"><span class="nav-icon" style="font-size:13px">◩</span> Toast</a>
+    <a class="nav-link" href="Toggle.preview.html"><span class="nav-icon" style="font-size:13px">⬭</span> Toggle</a>
+  </aside>
+
+  <main class="main">
+
+    <div class="component-header">
+      <div class="component-header-left">
+        <p class="component-breadcrumb"><a href="tokens.preview.html">Design System</a> / Components</p>
+        <h1>Button</h1>
+      </div>
+      <div class="component-header-right">
+        <p>Triggers an action or event. Available in 6 variants across 7 sizes.</p>
+      </div>
+    </div>
+
+    <!-- ─── GLOBAL CONTROLS ─── -->
+    <div class="section">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:32px;">
+        <p class="section-title" style="margin-bottom:0;">Variants</p>
+        <label style="display:flex; align-items:center; gap:10px; cursor:pointer; user-select:none;">
+          <span style="font-size:13px; font-weight:600; color:#888;">Disabled</span>
+          <span class="toggle" id="globalDisabled" onclick="toggleGlobalDisabled()">
+            <span class="toggle-thumb"></span>
+          </span>
+        </label>
+      </div>
+
+      <div class="btn-showcase-grid" id="variantGrid"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Toggle & card control styles -->
+    <style>
+      .toggle {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+        background: #333;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: background 0.2s;
+        flex-shrink: 0;
+      }
+
+      .toggle.active {
+        background: #f70f79;
+      }
+
+      .toggle-thumb {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 20px;
+        height: 20px;
+        background: #fff;
+        border-radius: 50%;
+        transition: transform 0.2s;
+        pointer-events: none;
+      }
+
+      .toggle.active .toggle-thumb {
+        transform: translateX(20px);
+      }
+
+      /* Variant card — extended layout */
+      .variant-card {
+        background: #272727;
+        border-radius: 16px;
+        padding: 24px 24px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .variant-card__preview {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 80px;
+        margin-bottom: 16px;
+      }
+
+      .variant-card__label {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #555;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .variant-card__controls {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        border-top: 1px solid #333;
+        padding-top: 16px;
+      }
+
+      .ctrl-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .ctrl-label {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: #555;
+      }
+
+      /* Size pill bar */
+      .size-pills {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+      }
+
+      .size-pill {
+        padding: 3px 8px;
+        border-radius: 6px;
+        border: none;
+        font-family: var(--font-family);
+        font-size: 11px;
+        font-weight: 600;
+        color: #666;
+        background: #1e1e1e;
+        cursor: pointer;
+        transition: background 0.15s, color 0.15s;
+      }
+
+      .size-pill:hover {
+        background: #333;
+        color: #aaa;
+      }
+
+      .size-pill.active {
+        background: #f70f79;
+        color: #fff;
+      }
+    </style>
+
+    <script>
+      /* ── Data ── */
+      const VARIANTS = [
+        { id: 'primary', label: 'Primary', cls: 'btn-primary' },
+        { id: 'secondary', label: 'Secondary', cls: 'btn-secondary' },
+        { id: 'neutral', label: 'Neutral', cls: 'btn-neutral' },
+        { id: 'stroke', label: 'Stroke', cls: 'btn-stroke' },
+        { id: 'link', label: 'Link', cls: 'btn-link' },
+        { id: 'destructive', label: 'Destructive', cls: 'btn-destructive' },
+      ];
+      const SIZES = [56, 48, 40, 36, 32, 28, 24];
+      const ICON_SIZES = { 56: 20, 48: 20, 40: 20, 36: 20, 32: 20, 28: 16, 24: 16 };
+
+      /* Per-variant state: { size, leading, trailing } */
+      const cardState = {};
+      VARIANTS.forEach(v => cardState[v.id] = { size: 48, leading: false, trailing: false });
+      let globalDisabled = false;
+
+      /* ── Icons ── */
+      function leadingSvg(sz) {
+        return `<span class="btn-icon"><svg width="${sz}" height="${sz}" viewBox="0 0 20 20" fill="none"><path d="M12.5 5L7.5 10L12.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
+      }
+      function trailingSvg(sz) {
+        return `<span class="btn-icon"><svg width="${sz}" height="${sz}" viewBox="0 0 20 20" fill="none"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
+      }
+
+      /* ── Render a single card's button ── */
+      function renderButton(vid) {
+        const s = cardState[vid];
+        const v = VARIANTS.find(x => x.id === vid);
+        const isz = ICON_SIZES[s.size];
+        const btnEl = document.getElementById('btn-' + vid);
+        btnEl.className = `btn btn-${s.size} ${v.cls}`;
+        btnEl.disabled = globalDisabled;
+        btnEl.innerHTML =
+          (s.leading ? leadingSvg(isz) : '') +
+          v.label + ' Button' +
+          (s.trailing ? trailingSvg(isz) : '');
+      }
+
+      /* ── Render all ── */
+      function renderAll() {
+        VARIANTS.forEach(v => renderButton(v.id));
+      }
+
+      /* ── Toggle handlers ── */
+      function toggleGlobalDisabled() {
+        globalDisabled = !globalDisabled;
+        document.getElementById('globalDisabled').classList.toggle('active', globalDisabled);
+        renderAll();
+      }
+
+      function setSize(vid, sz) {
+        cardState[vid].size = sz;
+        // Update pills
+        document.querySelectorAll(`#pills-${vid} .size-pill`).forEach(p => {
+          p.classList.toggle('active', +p.dataset.size === sz);
+        });
+        renderButton(vid);
+      }
+
+      function toggleCardProp(vid, prop) {
+        cardState[vid][prop] = !cardState[vid][prop];
+        document.getElementById(`toggle-${prop}-${vid}`).classList.toggle('active', cardState[vid][prop]);
+        renderButton(vid);
+      }
+
+      /* ── Build grid ── */
+      (function init() {
+        const grid = document.getElementById('variantGrid');
+        VARIANTS.forEach(v => {
+          const pills = SIZES.map(sz =>
+            `<button class="size-pill${sz === 48 ? ' active' : ''}" data-size="${sz}" onclick="setSize('${v.id}',${sz})">${sz}</button>`
+          ).join('');
+
+          grid.insertAdjacentHTML('beforeend', `
+            <div class="variant-card">
+              <div class="variant-card__preview">
+                <button class="btn btn-48 ${v.cls}" id="btn-${v.id}">${v.label} Button</button>
+              </div>
+              <div class="variant-card__label">${v.label}</div>
+              <div class="variant-card__controls">
+                <div class="ctrl-row">
+                  <span class="ctrl-label">Size</span>
+                  <div class="size-pills" id="pills-${v.id}">${pills}</div>
+                </div>
+                <div class="ctrl-row">
+                  <span class="ctrl-label">Leading Icon</span>
+                  <span class="toggle" id="toggle-leading-${v.id}" onclick="toggleCardProp('${v.id}','leading')">
+                    <span class="toggle-thumb"></span>
+                  </span>
+                </div>
+                <div class="ctrl-row">
+                  <span class="ctrl-label">Trailing Icon</span>
+                  <span class="toggle" id="toggle-trailing-${v.id}" onclick="toggleCardProp('${v.id}','trailing')">
+                    <span class="toggle-thumb"></span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          `);
+        });
+      })();
+    </script>
+
+    <div class="divider"></div>
+
+    <!-- ─── PROPS ─── -->
+    <div class="section">
+      <p class="section-title">Props</p>
+      <table class="props-table">
+        <thead>
+          <tr>
+            <th>Prop</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="prop-name"><code>variant</code></td>
+            <td>primary · secondary · neutral · stroke · link · destructive</td>
+            <td class="prop-default">"primary"</td>
+            <td>Visual style of the button</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>size</code></td>
+            <td>56 · 48 · 40 · 36 · 32 · 28 · 24</td>
+            <td class="prop-default">48</td>
+            <td>Height in px — controls padding, font size, and border radius</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>leadingIcon</code></td>
+            <td>ReactNode</td>
+            <td class="prop-default">undefined</td>
+            <td>Icon rendered before the label</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>trailingIcon</code></td>
+            <td>ReactNode</td>
+            <td class="prop-default">undefined</td>
+            <td>Icon rendered after the label</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>disabled</code></td>
+            <td>boolean</td>
+            <td class="prop-default">false</td>
+            <td>Disables interaction and applies muted styling</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>onClick</code></td>
+            <td>MouseEventHandler</td>
+            <td class="prop-default">—</td>
+            <td>Click handler — passed through to the native button element</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+</body>
+
+</html>

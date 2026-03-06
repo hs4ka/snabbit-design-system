@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Toggle — Snabbit Design System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-tertiary: #f0f0f0;
+      --accent-primary: #f70f79;
+      --font-family: "Instrument Sans", sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-family);
+      background: #141414;
+      color: #fff;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 216px;
+      height: 100vh;
+      background: #1a1a1a;
+      border-right: 1px solid #252525;
+      padding: 48px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      z-index: 100;
+      overflow-y: auto;
+    }
+
+    .sidebar-heading {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #484848;
+      padding: 0 12px;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-separator {
+      height: 1px;
+      background: #252525;
+      margin: 20px 4px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #666;
+      text-decoration: none;
+      transition: color 0.15s, background 0.15s;
+    }
+
+    .nav-link:hover { color: #e0e0e0; background: #242424; }
+    .nav-link.active { color: #fff; background: #272727; }
+
+    .nav-icon {
+      font-size: 15px;
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    /* ── Main ── */
+    .main {
+      margin-left: 216px;
+      flex: 1;
+      padding: 60px 80px;
+      min-height: 100vh;
+    }
+
+    /* ── Component header ── */
+    .component-header {
+      background: #272727;
+      margin: -60px -80px 60px;
+      padding: 44px 80px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .component-header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .component-breadcrumb {
+      font-size: 13px;
+      font-weight: 500;
+      color: #666;
+    }
+
+    .component-breadcrumb a { color: #666; text-decoration: none; }
+    .component-breadcrumb a:hover { color: #aaa; }
+
+    .component-header h1 {
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+
+    .component-header-right p {
+      font-size: 14px;
+      font-weight: 500;
+      color: #828282;
+      max-width: 280px;
+      line-height: 20px;
+      text-align: right;
+    }
+
+    /* ── Sections ── */
+    .section { margin-bottom: 64px; }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 500;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+      color: #fff;
+    }
+
+    .divider {
+      height: 1px;
+      background: #2a2a2a;
+      margin: 48px 0;
+    }
+
+    /* ── Toggle grid ── */
+    .toggle-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    /* ── Toggle card ── */
+    .toggle-card {
+      background: #272727;
+      border-radius: 16px;
+      padding: 24px 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .toggle-card__preview {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      min-height: 80px;
+      margin-bottom: 16px;
+    }
+
+    .toggle-card__label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #555;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .toggle-card__controls {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-top: 1px solid #333;
+      padding-top: 16px;
+    }
+
+    .ctrl-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .ctrl-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #555;
+    }
+
+    /* ── Props table ── */
+    .props-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .props-table th {
+      background: #fff;
+      color: #000;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 14px 20px;
+      text-align: left;
+    }
+
+    .props-table td {
+      background: #272727;
+      padding: 0 20px;
+      height: 52px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #e0e0e0;
+      border-top: 1px solid #333;
+    }
+
+    .props-table td code {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 12px;
+      color: #f70f79;
+    }
+
+    .props-table td.prop-name { color: #fff; font-weight: 600; }
+    .props-table td.prop-default { color: #828282; }
+
+    /* ══════════════════════════════════════════════
+       Toggle component styles
+    ══════════════════════════════════════════════ */
+
+    /* Container — no background, sized to Figma spec */
+    .toggle-wrap {
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0;
+      user-select: none;
+    }
+
+    .toggle-wrap.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Track — inset pill inside the container */
+    .toggle-track {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 999px;
+      background: var(--bg-tertiary);
+      transition: background 0.2s;
+      pointer-events: none;
+    }
+
+    .toggle-wrap.on .toggle-track {
+      background: var(--accent-primary);
+    }
+
+    /* Thumb */
+    .toggle-thumb {
+      position: absolute;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0px 1px 4px rgba(0,0,0,0.22), 0px 0.5px 1px rgba(0,0,0,0.08);
+      transition: left 0.2s;
+      pointer-events: none;
+    }
+
+    /* Inner dot — same color as track, creating a ring effect on the thumb */
+    .toggle-dot {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: var(--bg-tertiary);
+      pointer-events: none;
+    }
+
+    .toggle-wrap.on .toggle-dot {
+      background: var(--accent-primary);
+    }
+
+    /* Size: 24px — container 40×24, track 33.6×19.2, thumb 14.4 */
+    .toggle-24 { width: 40px; height: 24px; }
+    .toggle-24 .toggle-track { width: 33.6px; height: 19.2px; }
+    .toggle-24 .toggle-thumb { width: 14.4px; height: 14.4px; top: 4.8px; left: 5.8px; }
+    .toggle-24 .toggle-dot   { width: 4.8px; height: 4.8px; }
+    .toggle-24.on .toggle-thumb { left: 20.2px; }
+
+    /* Size: 20px — container 34×20, track 28×16, thumb 12 */
+    .toggle-20 { width: 34px; height: 20px; }
+    .toggle-20 .toggle-track { width: 28px; height: 16px; }
+    .toggle-20 .toggle-thumb { width: 12px; height: 12px; top: 4px; left: 5.17px; }
+    .toggle-20 .toggle-dot   { width: 4px; height: 4px; }
+    .toggle-20.on .toggle-thumb { left: 17.17px; }
+
+    /* Size: 16px — container 26×16, track 22.4×12.8, thumb 9.6 */
+    .toggle-16 { width: 26px; height: 16px; }
+    .toggle-16 .toggle-track { width: 22.4px; height: 12.8px; }
+    .toggle-16 .toggle-thumb { width: 9.6px; height: 9.6px; top: 3.2px; left: 3.53px; }
+    .toggle-16 .toggle-dot   { width: 3.2px; height: 3.2px; }
+    .toggle-16.on .toggle-thumb { left: 13.13px; }
+  </style>
+</head>
+
+<body>
+
+  <aside class="sidebar">
+    <p class="sidebar-heading">Foundations</p>
+    <a class="nav-link" href="tokens.preview.html#color"><span class="nav-icon">⬛</span> Color</a>
+    <a class="nav-link" href="tokens.preview.html#shadow"><span class="nav-icon">◻️</span> Shadow</a>
+    <a class="nav-link" href="tokens.preview.html#typography"><span class="nav-icon">Aa</span> Typography</a>
+    <a class="nav-link" href="tokens.preview.html#radius"><span class="nav-icon">◜</span> Radius</a>
+
+    <div class="sidebar-separator"></div>
+    <p class="sidebar-heading">Components</p>
+    <a class="nav-link" href="Accordion.preview.html"><span class="nav-icon" style="font-size:13px">☰</span> Accordion</a>
+    <a class="nav-link" href="Button.preview.html"><span class="nav-icon" style="font-size:13px">▣</span> Button</a>
+    <a class="nav-link" href="Checkbox.preview.html"><span class="nav-icon" style="font-size:13px">☑</span> Checkbox</a>
+    <a class="nav-link" href="TextField.preview.html"><span class="nav-icon" style="font-size:13px">▭</span> Input</a>
+    <a class="nav-link" href="Toast.preview.html"><span class="nav-icon" style="font-size:13px">◩</span> Toast</a>
+    <a class="nav-link active" href="Toggle.preview.html"><span class="nav-icon" style="font-size:13px">⬭</span> Toggle</a>
+  </aside>
+
+  <main class="main">
+
+    <div class="component-header">
+      <div class="component-header-left">
+        <p class="component-breadcrumb"><a href="tokens.preview.html">Design System</a> / Components</p>
+        <h1>Toggle</h1>
+      </div>
+      <div class="component-header-right">
+        <p>Binary on/off switch. Available in 3 sizes.</p>
+      </div>
+    </div>
+
+    <!-- ─── VARIANTS ─── -->
+    <div class="section">
+      <p class="section-title">Variants</p>
+      <div class="toggle-grid" id="toggleGrid"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── PROPS ─── -->
+    <div class="section">
+      <p class="section-title">Props</p>
+      <table class="props-table">
+        <thead>
+          <tr>
+            <th>Prop</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="prop-name"><code>size</code></td>
+            <td>24 · 20 · 16</td>
+            <td class="prop-default">20</td>
+            <td>Height in px — scales width and thumb proportionally</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>checked</code></td>
+            <td>boolean</td>
+            <td class="prop-default">—</td>
+            <td>Controlled on/off state</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>defaultChecked</code></td>
+            <td>boolean</td>
+            <td class="prop-default">false</td>
+            <td>Initial state for uncontrolled usage</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>onChange</code></td>
+            <td>(checked: boolean) =&gt; void</td>
+            <td class="prop-default">—</td>
+            <td>Called with the new state on click</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>disabled</code></td>
+            <td>boolean</td>
+            <td class="prop-default">false</td>
+            <td>Disables interaction and reduces opacity</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <script>
+    const SIZES = [
+      { id: 'size-24', label: '24px', sz: 24 },
+      { id: 'size-20', label: '20px', sz: 20 },
+      { id: 'size-16', label: '16px', sz: 16 },
+    ];
+
+    const cardState = {};
+    SIZES.forEach(s => cardState[s.id] = { on: true, disabled: false });
+
+    function renderToggle(sid) {
+      const cs = cardState[sid];
+      const el = document.getElementById('toggle-' + sid);
+      el.className = `toggle-wrap toggle-${SIZES.find(s => s.id === sid).sz}${cs.on ? ' on' : ''}${cs.disabled ? ' disabled' : ''}`;
+    }
+
+    function toggleState(sid) {
+      if (cardState[sid].disabled) return;
+      cardState[sid].on = !cardState[sid].on;
+      document.getElementById(`indicator-${sid}`).classList.toggle('active', cardState[sid].on);
+      renderToggle(sid);
+    }
+
+    function toggleDisabled(sid) {
+      cardState[sid].disabled = !cardState[sid].disabled;
+      document.getElementById(`toggle-disabled-${sid}`).classList.toggle('active', cardState[sid].disabled);
+      renderToggle(sid);
+    }
+
+    function toggleHtml(sizeCls) {
+      return `<div class="toggle-track"></div><div class="toggle-thumb"><div class="toggle-dot"></div></div>`;
+    }
+
+    (function init() {
+      const grid = document.getElementById('toggleGrid');
+      SIZES.forEach(s => {
+        grid.insertAdjacentHTML('beforeend', `
+          <div class="toggle-card">
+            <div class="toggle-card__preview">
+              <div class="toggle-wrap toggle-${s.sz} on" id="toggle-${s.id}" onclick="toggleState('${s.id}')">
+                ${toggleHtml(s.sz)}
+              </div>
+            </div>
+            <div class="toggle-card__label">${s.label}</div>
+            <div class="toggle-card__controls">
+              <div class="ctrl-row">
+                <span class="ctrl-label">On</span>
+                <span class="toggle-wrap toggle-20 on" id="indicator-${s.id}" onclick="toggleState('${s.id}')">
+                  ${toggleHtml(20)}
+                </span>
+              </div>
+              <div class="ctrl-row">
+                <span class="ctrl-label">Disabled</span>
+                <span class="toggle-wrap toggle-20" id="toggle-disabled-${s.id}" onclick="toggleDisabled('${s.id}')">
+                  ${toggleHtml(20)}
+                </span>
+              </div>
+            </div>
+          </div>
+        `);
+      });
+    })();
+  </script>
+
+</body>
+
+</html>

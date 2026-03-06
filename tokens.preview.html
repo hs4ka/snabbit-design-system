@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Snabbit Design System — Tokens</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary:   #ffffff;
+      --bg-secondary: #fafafa;
+      --bg-tertiary:  #f0f0f0;
+      --text-primary:   #303030;
+      --text-secondary: #828282;
+      --text-tertiary:  #ababab;
+      --accent-primary: #f70f79;
+      --accent-light:   #fff3f8;
+      --stroke-primary:   #f70f79;
+      --stroke-secondary: #f0f0f0;
+      --orange-dark: #e16614; --orange-light: #ffe6d5;
+      --blue-dark:   #3559e9; --blue-light:   #d5e2ff;
+      --red-dark:    #e93544; --red-light:    #ffd5d8;
+      --green-dark:  #178c4e; --green-light:  #d0fbe9;
+      --yellow-dark: #c99a2c; --yellow-light: #ffefcc;
+      --font-family: "Instrument Sans", sans-serif;
+      --radius-0:    0px;
+      --radius-2:    2px;
+      --radius-4:    4px;
+      --radius-8:    8px;
+      --radius-10:   10px;
+      --radius-12:   12px;
+      --radius-16:   16px;
+      --radius-20:   20px;
+      --radius-24:   24px;
+      --radius-full: 999px;
+
+      --shadow-xs:
+        0 0 0 1px rgba(51,51,51,0.04),
+        0 1px 2px 0px rgba(51,51,51,0.04),
+        0 2px 5px 0px rgba(51,51,51,0.04),
+        0 5px 9px -2px rgba(51,51,51,0.06);
+      --shadow-sm:
+        0 0 0 1px rgba(51,51,51,0.04),
+        0 1px 3px -2px rgba(51,51,51,0.16),
+        0 6px 6px -3px rgba(51,51,51,0.08),
+        0 14px 7px -7px rgba(51,51,51,0.02),
+        0 18px 9px -9px rgba(51,51,51,0.01);
+      --shadow-md:
+        0 0 0 1px rgba(51,51,51,0.04),
+        0 1px 1px 1px rgba(51,51,51,0.04),
+        0 3px 3px -2px rgba(51,51,51,0.02),
+        0 7px 7px -3px rgba(51,51,51,0.04),
+        0 14px 14px -7px rgba(51,51,51,0.04),
+        0 27px 27px -14px rgba(51,51,51,0.04),
+        0 54px 54px -27px rgba(51,51,51,0.04);
+      --shadow-lg:
+        0 0 0 1px rgba(51,51,51,0.04),
+        0 1px 1px 1px rgba(51,51,51,0.04),
+        0 3px 3px -2px rgba(51,51,51,0.02),
+        0 7px 7px -3px rgba(51,51,51,0.04),
+        0 14px 14px -7px rgba(51,51,51,0.04),
+        0 27px 27px -14px rgba(51,51,51,0.04),
+        0 54px 54px -27px rgba(51,51,51,0.04),
+        0 109px 109px -36px rgba(51,51,51,0.06);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-family);
+      background: #141414;
+      color: #fff;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 216px;
+      height: 100vh;
+      background: #1a1a1a;
+      border-right: 1px solid #252525;
+      padding: 48px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      z-index: 100;
+    }
+    .sidebar-heading {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #484848;
+      padding: 0 12px;
+      margin-bottom: 20px;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #666;
+      text-decoration: none;
+      transition: color 0.15s, background 0.15s;
+    }
+    .nav-link:hover { color: #e0e0e0; background: #242424; }
+    .nav-link.active { color: #fff; background: #272727; }
+    .nav-icon {
+      font-size: 15px;
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    /* ── Main ── */
+    .main {
+      margin-left: 216px;
+      flex: 1;
+      padding: 60px 80px;
+      min-height: 100vh;
+    }
+
+    /* ── Page header ── */
+    .page-header {
+      background: #272727;
+      margin: -60px -80px 60px;
+      padding: 44px 80px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+    .page-header h1 {
+      font-size: 72px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+    .page-header .subtitle { text-align: right; }
+    .page-header .subtitle p { font-size: 22px; font-weight: 600; }
+    .page-header .subtitle small { font-size: 13px; font-weight: 500; color: #b2b2b2; display: block; margin-top: 4px; }
+
+    /* ── Section ── */
+    .section { margin-bottom: 64px; }
+    .section-title {
+      font-size: 32px;
+      font-weight: 500;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+      color: #fff;
+    }
+
+    /* ── Color grid ── */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .color-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .color-grid.cols-5 { grid-template-columns: repeat(5, 1fr); }
+
+    .color-card {
+      border-radius: 20px;
+      overflow: hidden;
+      height: 160px;
+      position: relative;
+    }
+    .color-swatch {
+      width: 100%;
+      height: 100%;
+    }
+    .color-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .color-label .name {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+    .color-label .hex {
+      font-size: 12px;
+      font-weight: 500;
+      opacity: 0.65;
+    }
+
+    /* status pairs */
+    .status-pair {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .status-pair .color-card { height: 120px; }
+
+    /* ── Divider ── */
+    .divider { height: 1px; background: #2a2a2a; margin: 48px 0; }
+
+    /* ── Typography table ── */
+    .type-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .type-table th {
+      background: #ffffff;
+      color: #000;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 18px 24px;
+      text-align: left;
+    }
+    .type-table td {
+      background: #303030;
+      padding: 0 24px;
+      height: 60px;
+      font-size: 16px;
+      font-weight: 500;
+      color: #fff;
+      border-top: 1px solid #3d3d3d;
+    }
+    .type-table td.preview-cell { width: 42%; }
+
+    /* ── Shadow grid ── */
+    .shadow-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    .shadow-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+    .shadow-card .label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #303030;
+      text-align: center;
+    }
+    .shadow-card .token {
+      font-size: 12px;
+      font-weight: 500;
+      color: #828282;
+      text-align: center;
+    }
+    .shadow-swatch {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    /* ── Radius grid ── */
+    .radius-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+    .radius-card {
+      background: #272727;
+      border-radius: 12px;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .radius-swatch {
+      width: 80px;
+      height: 80px;
+      background: #f70f79;
+    }
+    .radius-card .label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      text-align: center;
+    }
+    .radius-card .token {
+      font-size: 11px;
+      font-weight: 500;
+      color: #828282;
+      text-align: center;
+    }
+
+    /* ── Sidebar separator ── */
+    .sidebar-separator {
+      height: 1px;
+      background: #252525;
+      margin: 20px 4px;
+    }
+
+    /* ── Variant label ── */
+    .variant-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #555;
+      margin-bottom: 12px;
+    }
+
+    /* ── Accordion ── */
+    .accordion-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+    .accordion-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .accordion-item {
+      background: #fff;
+      border: 1px solid #f0f0f0;
+      border-radius: 16px;
+      overflow: hidden;
+      font-family: var(--font-family);
+    }
+    .accordion-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      text-align: left;
+    }
+    .accordion-header-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .accordion-title {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+      color: #303030;
+    }
+    .accordion-chevron {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      transition: transform 0.22s ease;
+    }
+    .accordion-item.open .accordion-chevron { transform: rotate(180deg); }
+    .accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.25s ease;
+      padding: 0 16px;
+    }
+    .accordion-item.open .accordion-body {
+      max-height: 200px;
+      padding: 0 16px 16px;
+    }
+    .accordion-divider {
+      height: 1px;
+      background: #f0f0f0;
+      margin-bottom: 12px;
+    }
+    .accordion-text {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 16px;
+      color: #828282;
+      margin: 0;
+    }
+    .accordion-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: #fff3f8;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 12px;
+      color: #f70f79;
+      font-family: inherit;
+    }
+
+    /* ── Type examples ── */
+    .type-examples {
+      background: #303030;
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .type-examples .row { display: flex; flex-direction: column; gap: 12px; }
+    .type-examples hr { border: none; border-top: 1px solid #444; }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <p class="sidebar-heading">Foundations</p>
+    <a class="nav-link active" href="#color">
+      <span class="nav-icon">⬛</span> Color
+    </a>
+    <a class="nav-link" href="#shadow">
+      <span class="nav-icon">◻️</span> Shadow
+    </a>
+    <a class="nav-link" href="#typography">
+      <span class="nav-icon">Aa</span> Typography
+    </a>
+    <a class="nav-link" href="#radius">
+      <span class="nav-icon">◜</span> Radius
+    </a>
+
+    <div class="sidebar-separator"></div>
+    <p class="sidebar-heading">Components</p>
+
+    <a class="nav-link" href="Accordion.preview.html">
+      <span class="nav-icon" style="font-size:13px">☰</span> Accordion
+    </a>
+    <a class="nav-link" href="Button.preview.html">
+      <span class="nav-icon" style="font-size:13px">▣</span> Button
+    </a>
+    <a class="nav-link" href="Checkbox.preview.html"><span class="nav-icon" style="font-size:13px">☑</span> Checkbox</a>
+    <a class="nav-link" href="TextField.preview.html"><span class="nav-icon" style="font-size:13px">▭</span> Input</a>
+    <a class="nav-link" href="Toast.preview.html">
+      <span class="nav-icon" style="font-size:13px">◩</span> Toast
+    </a>
+    <a class="nav-link" href="Toggle.preview.html">
+      <span class="nav-icon" style="font-size:13px">⬭</span> Toggle
+    </a>
+  </aside>
+
+  <main class="main">
+
+  <div class="page-header">
+    <h1>Design Tokens</h1>
+    <div class="subtitle">
+      <p>Semantic Tokens</p>
+      <small>Token names are based on usage, not color value.</small>
+    </div>
+  </div>
+
+  <!-- ─── WHITE ─── -->
+  <div class="section" id="color">
+    <p class="section-title">White</p>
+    <div class="color-grid">
+      <div class="color-card">
+        <div class="color-swatch" style="background:var(--bg-primary)"></div>
+        <div class="color-label" style="color:#000">
+          <span class="name">Primary — <code>--bg-primary</code></span>
+          <span class="hex">#FFFFFF</span>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background:var(--bg-secondary)"></div>
+        <div class="color-label" style="color:#000">
+          <span class="name">Secondary — <code>--bg-secondary</code></span>
+          <span class="hex">#FAFAFA</span>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background:var(--bg-tertiary)"></div>
+        <div class="color-label" style="color:#000">
+          <span class="name">Tertiary — <code>--bg-tertiary</code></span>
+          <span class="hex">#F0F0F0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── BLACK ─── -->
+  <div class="section">
+    <p class="section-title">Black</p>
+    <div class="color-grid">
+      <div class="color-card">
+        <div class="color-swatch" style="background:var(--text-primary)"></div>
+        <div class="color-label" style="color:#fff">
+          <span class="name">Primary — <code>--text-primary</code></span>
+          <span class="hex">#303030</span>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background:var(--text-secondary)"></div>
+        <div class="color-label" style="color:#fff">
+          <span class="name">Secondary — <code>--text-secondary</code></span>
+          <span class="hex">#828282</span>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background:var(--text-tertiary)"></div>
+        <div class="color-label" style="color:#fff">
+          <span class="name">Tertiary — <code>--text-tertiary</code></span>
+          <span class="hex">#ABABAB</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── ACCENT ─── -->
+  <div class="section">
+    <p class="section-title">Accent Colors</p>
+    <div class="color-grid cols-2">
+      <div class="color-card">
+        <div class="color-swatch" style="background:var(--accent-primary)"></div>
+        <div class="color-label" style="color:#540026">
+          <span class="name">Accent / Primary Pink — <code>--accent-primary</code></span>
+          <span class="hex">#F70F79</span>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background:var(--accent-light)"></div>
+        <div class="color-label" style="color:#540026">
+          <span class="name">Accent / Light Pink — <code>--accent-light</code></span>
+          <span class="hex">#FFF3F8</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── STROKE ─── -->
+  <div class="section">
+    <p class="section-title">Stroke Colors</p>
+    <div class="color-grid cols-2">
+      <div class="color-card">
+        <div class="color-swatch" style="background:var(--stroke-primary)"></div>
+        <div class="color-label" style="color:#540026">
+          <span class="name">Stroke Primary — <code>--stroke-primary</code></span>
+          <span class="hex">#F70F79</span>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-swatch" style="background:var(--stroke-secondary)"></div>
+        <div class="color-label" style="color:#000">
+          <span class="name">Stroke Secondary — <code>--stroke-secondary</code></span>
+          <span class="hex">#F0F0F0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── STATUS ─── -->
+  <div class="section">
+    <p class="section-title">Status Colors</p>
+    <div class="color-grid cols-5">
+
+      <div class="status-pair">
+        <div class="color-card">
+          <div class="color-swatch" style="background:var(--orange-dark)"></div>
+          <div class="color-label" style="color:#ffe6d5">
+            <span class="name">Orange Dark</span>
+            <span class="hex">#E16614</span>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:var(--orange-light)"></div>
+          <div class="color-label" style="color:#e16614">
+            <span class="name">Orange Light</span>
+            <span class="hex">#FFE6D5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="status-pair">
+        <div class="color-card">
+          <div class="color-swatch" style="background:var(--blue-dark)"></div>
+          <div class="color-label" style="color:#d5e2ff">
+            <span class="name">Blue Dark</span>
+            <span class="hex">#3559E9</span>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:var(--blue-light)"></div>
+          <div class="color-label" style="color:#3559e9">
+            <span class="name">Blue Light</span>
+            <span class="hex">#D5E2FF</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="status-pair">
+        <div class="color-card">
+          <div class="color-swatch" style="background:var(--red-dark)"></div>
+          <div class="color-label" style="color:#ffd5d8">
+            <span class="name">Red Dark</span>
+            <span class="hex">#E93544</span>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:var(--red-light)"></div>
+          <div class="color-label" style="color:#e93544">
+            <span class="name">Red Light</span>
+            <span class="hex">#FFD5D8</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="status-pair">
+        <div class="color-card">
+          <div class="color-swatch" style="background:var(--green-dark)"></div>
+          <div class="color-label" style="color:#d0fbe9">
+            <span class="name">Green Dark</span>
+            <span class="hex">#178C4E</span>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:var(--green-light)"></div>
+          <div class="color-label" style="color:#178c4e">
+            <span class="name">Green Light</span>
+            <span class="hex">#D0FBE9</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="status-pair">
+        <div class="color-card">
+          <div class="color-swatch" style="background:var(--yellow-dark)"></div>
+          <div class="color-label" style="color:#ffefcc">
+            <span class="name">Yellow Dark</span>
+            <span class="hex">#C99A2C</span>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:var(--yellow-light)"></div>
+          <div class="color-label" style="color:#c99a2c">
+            <span class="name">Yellow Light</span>
+            <span class="hex">#FFEFCC</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── SHADOWS ─── -->
+  <div class="section" id="shadow">
+    <p class="section-title">Shadows</p>
+    <div class="shadow-grid">
+      <div class="shadow-card">
+        <div class="shadow-swatch" style="box-shadow:var(--shadow-xs)"></div>
+        <div>
+          <p class="label">X-Small</p>
+          <p class="token"><code>--shadow-xs</code></p>
+        </div>
+      </div>
+      <div class="shadow-card">
+        <div class="shadow-swatch" style="box-shadow:var(--shadow-sm)"></div>
+        <div>
+          <p class="label">Small</p>
+          <p class="token"><code>--shadow-sm</code></p>
+        </div>
+      </div>
+      <div class="shadow-card">
+        <div class="shadow-swatch" style="box-shadow:var(--shadow-md)"></div>
+        <div>
+          <p class="label">Medium</p>
+          <p class="token"><code>--shadow-md</code></p>
+        </div>
+      </div>
+      <div class="shadow-card">
+        <div class="shadow-swatch" style="box-shadow:var(--shadow-lg)"></div>
+        <div>
+          <p class="label">Large</p>
+          <p class="token"><code>--shadow-lg</code></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── TYPOGRAPHY TABLE ─── -->
+  <div class="section" id="typography">
+    <p class="section-title">Typography</p>
+    <table class="type-table">
+      <thead>
+        <tr>
+          <th>Token</th>
+          <th>Weight</th>
+          <th>Size</th>
+          <th>Line Height</th>
+          <th>Letter Spacing</th>
+          <th class="preview-cell">Preview</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>bold24</code></td>
+          <td>Bold 700</td>
+          <td>24</td>
+          <td>30</td>
+          <td>0</td>
+          <td class="preview-cell" style="font-size:24px;font-weight:700;line-height:30px;letter-spacing:0">Aa</td>
+        </tr>
+        <tr>
+          <td><code>bold20</code></td>
+          <td>Bold 700</td>
+          <td>20</td>
+          <td>26</td>
+          <td>0</td>
+          <td class="preview-cell" style="font-size:20px;font-weight:700;line-height:26px;letter-spacing:0">Aa</td>
+        </tr>
+        <tr>
+          <td><code>bold16</code></td>
+          <td>Bold 700</td>
+          <td>16</td>
+          <td>20</td>
+          <td>0.2</td>
+          <td class="preview-cell" style="font-size:16px;font-weight:700;line-height:20px;letter-spacing:0.002em">Aa</td>
+        </tr>
+        <tr>
+          <td><code>bold14</code></td>
+          <td>Bold 700</td>
+          <td>14</td>
+          <td>20</td>
+          <td>0.2</td>
+          <td class="preview-cell" style="font-size:14px;font-weight:700;line-height:20px;letter-spacing:0.002em">Aa</td>
+        </tr>
+        <tr>
+          <td><code>semibold16</code></td>
+          <td>Semibold 600</td>
+          <td>16</td>
+          <td>20</td>
+          <td>0.2</td>
+          <td class="preview-cell" style="font-size:16px;font-weight:600;line-height:20px;letter-spacing:0.002em">Aa</td>
+        </tr>
+        <tr>
+          <td><code>semibold14</code></td>
+          <td>Semibold 600</td>
+          <td>14</td>
+          <td>20</td>
+          <td>0</td>
+          <td class="preview-cell" style="font-size:14px;font-weight:600;line-height:20px;letter-spacing:0">Aa</td>
+        </tr>
+        <tr>
+          <td><code>semibold13</code></td>
+          <td>Semibold 600</td>
+          <td>13</td>
+          <td>16</td>
+          <td>0</td>
+          <td class="preview-cell" style="font-size:13px;font-weight:600;line-height:16px;letter-spacing:0">Aa</td>
+        </tr>
+        <tr>
+          <td><code>medium14</code></td>
+          <td>Medium 500</td>
+          <td>14</td>
+          <td>20</td>
+          <td>0</td>
+          <td class="preview-cell" style="font-size:14px;font-weight:500;line-height:20px;letter-spacing:0">Aa</td>
+        </tr>
+        <tr>
+          <td><code>medium12</code></td>
+          <td>Medium 500</td>
+          <td>12</td>
+          <td>16</td>
+          <td>0</td>
+          <td class="preview-cell" style="font-size:12px;font-weight:500;line-height:16px;letter-spacing:0">Aa</td>
+        </tr>
+        <tr>
+          <td><code>medium11</code></td>
+          <td>Medium 500</td>
+          <td>11</td>
+          <td>14</td>
+          <td>0</td>
+          <td class="preview-cell" style="font-size:11px;font-weight:500;line-height:14px;letter-spacing:0">Aa</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"></div>
+
+  
+
+  <!-- ─── TYPOGRAPHY EXAMPLES ─── -->
+  <div class="section">
+    <p class="section-title">Example</p>
+    <div class="type-examples">
+      <p style="font-size:24px;font-weight:700;line-height:30px">A vexed demogorgon quickly jumps over the big hazy Hawkins field.</p>
+      <hr />
+      <p style="font-size:20px;font-weight:700;line-height:26px">A vexed demogorgon quickly jumps over the big hazy Hawkins field.</p>
+      <hr />
+      <p style="font-size:16px;font-weight:700;line-height:20px;letter-spacing:0.002em">A vexed demogorgon quickly jumps over the big hazy Hawkins field.</p>
+      <hr />
+      <p style="font-size:14px;font-weight:700;line-height:20px;letter-spacing:0.002em">A vexed demogorgon quickly jumps over the big hazy Hawkins field.</p>
+      <hr />
+      <p style="font-size:16px;font-weight:600;line-height:20px;letter-spacing:0.002em">A vexed demogorgon quickly jumps over the big hazy Hawkins field.</p>
+      <hr />
+      <p style="font-size:14px;font-weight:600;line-height:20px">A vexed demogorgon quickly jumps over the big hazy Hawkins field.</p>
+      <hr />
+      <p style="font-size:13px;font-weight:600;line-height:16px">A vexed demogorgon quickly jumps over the big hazy Hawkins field.</p>
+      <hr />
+      <p style="font-size:14px;font-weight:500;line-height:20px">A vexed demogorgon quickly jumps over the big hazy Hawkins field.</p>
+      <hr />
+      <p style="font-size:12px;font-weight:500;line-height:16px">A vexed demogorgon quickly jumps over the big hazy Hawkins field.</p>
+      <hr />
+      <p style="font-size:11px;font-weight:500;line-height:14px">A vexed demogorgon quickly jumps over the big hazy Hawkins field.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <!-- ─── RADIUS ─── -->
+  <div class="section" id="radius">
+    <p class="section-title">Radius</p>
+    <div class="radius-grid">
+
+      <div class="radius-card">
+        <div class="radius-swatch" style="border-radius:var(--radius-0)"></div>
+        <div>
+          <p class="label">0px</p>
+          <p class="token"><code>--radius-0</code></p>
+        </div>
+      </div>
+
+      <div class="radius-card">
+        <div class="radius-swatch" style="border-radius:var(--radius-2)"></div>
+        <div>
+          <p class="label">2px</p>
+          <p class="token"><code>--radius-2</code></p>
+        </div>
+      </div>
+
+      <div class="radius-card">
+        <div class="radius-swatch" style="border-radius:var(--radius-4)"></div>
+        <div>
+          <p class="label">4px</p>
+          <p class="token"><code>--radius-4</code></p>
+        </div>
+      </div>
+
+      <div class="radius-card">
+        <div class="radius-swatch" style="border-radius:var(--radius-8)"></div>
+        <div>
+          <p class="label">8px</p>
+          <p class="token"><code>--radius-8</code></p>
+        </div>
+      </div>
+
+      <div class="radius-card">
+        <div class="radius-swatch" style="border-radius:var(--radius-10)"></div>
+        <div>
+          <p class="label">10px</p>
+          <p class="token"><code>--radius-10</code></p>
+        </div>
+      </div>
+
+      <div class="radius-card">
+        <div class="radius-swatch" style="border-radius:var(--radius-12)"></div>
+        <div>
+          <p class="label">12px</p>
+          <p class="token"><code>--radius-12</code></p>
+        </div>
+      </div>
+
+      <div class="radius-card">
+        <div class="radius-swatch" style="border-radius:var(--radius-16)"></div>
+        <div>
+          <p class="label">16px</p>
+          <p class="token"><code>--radius-16</code></p>
+        </div>
+      </div>
+
+      <div class="radius-card">
+        <div class="radius-swatch" style="border-radius:var(--radius-20)"></div>
+        <div>
+          <p class="label">20px</p>
+          <p class="token"><code>--radius-20</code></p>
+        </div>
+      </div>
+
+      <div class="radius-card">
+        <div class="radius-swatch" style="border-radius:var(--radius-24)"></div>
+        <div>
+          <p class="label">24px</p>
+          <p class="token"><code>--radius-24</code></p>
+        </div>
+      </div>
+
+      <div class="radius-card">
+        <div class="radius-swatch" style="border-radius:var(--radius-full)"></div>
+        <div>
+          <p class="label">Full (999px)</p>
+          <p class="token"><code>--radius-full</code></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  
+
+  </main>
+
+  <script>
+    const sections = document.querySelectorAll('#color, #shadow, #typography, #radius');
+    const links = document.querySelectorAll('.nav-link');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          links.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -60% 0px' });
+
+    sections.forEach(s => observer.observe(s));
+  </script>
+
+</body>
+</html>

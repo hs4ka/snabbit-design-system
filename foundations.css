@@ -1,0 +1,144 @@
+/* ─────────────────────────────────────────────
+   Snabbit Design System — Foundations
+   Source: Figma file BrCo1KNl2tkj2yW6GUjife
+   Semantic tokens: names are based on usage, not color value.
+   ───────────────────────────────────────────── */
+
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&display=swap");
+
+/* ── Color Tokens ────────────────────────────── */
+
+:root {
+  /* Background */
+  --bg-primary:   #ffffff;
+  --bg-secondary: #fafafa;
+  --bg-tertiary:  #f0f0f0;
+
+  /* Text */
+  --text-primary:   #303030;
+  --text-secondary: #828282;
+  --text-tertiary:  #ababab;
+
+  /* Accent */
+  --accent-primary: #f70f79;
+  --accent-light:   #fff3f8;
+
+  /* Stroke */
+  --stroke-primary:   #f70f79;
+  --stroke-secondary: #f0f0f0;
+
+  /* Status — Orange */
+  --orange-dark:  #e16614;
+  --orange-light: #ffe6d5;
+
+  /* Status — Blue */
+  --blue-dark:  #3559e9;
+  --blue-light: #d5e2ff;
+
+  /* Status — Red */
+  --red-dark:  #e93544;
+  --red-light: #ffd5d8;
+
+  /* Status — Green */
+  --green-dark:  #178c4e;
+  --green-light: #d0fbe9;
+
+  /* Status — Yellow */
+  --yellow-dark:  #c99a2c;
+  --yellow-light: #ffefcc;
+
+  /* ── Typography ────────────────────────────── */
+
+  --font-family: "Instrument Sans", sans-serif;
+
+  /* Font weights */
+  --font-weight-bold:     700;
+  --font-weight-semibold: 600;
+  --font-weight-medium:   500;
+
+  /* Font sizes */
+  --font-size-11: 11px;
+  --font-size-12: 12px;
+  --font-size-13: 13px;
+  --font-size-14: 14px;
+  --font-size-16: 16px;
+  --font-size-20: 20px;
+  --font-size-24: 24px;
+
+  /* Line heights */
+  --line-height-14: 14px;
+  --line-height-16: 16px;
+  --line-height-20: 20px;
+  --line-height-26: 26px;
+  --line-height-30: 30px;
+
+  /* Letter spacing */
+  --letter-spacing-default: 0.002em; /* 0.2% — Figma: 0.2 */
+  --letter-spacing-none:    0;
+
+  /* ── Radii ─────────────────────────────────── */
+
+  --radius-0:    0px;
+  --radius-2:    2px;
+  --radius-4:    4px;
+  --radius-8:    8px;
+  --radius-10:   10px;
+  --radius-12:   12px;
+  --radius-16:   16px;
+  --radius-20:   20px;
+  --radius-24:   24px;
+  --radius-full: 999px;
+
+  /* ── Shadows ────────────────────────────────── */
+  /* Figma: Extra Small / Small / Medium / Large   */
+
+  --shadow-xs:
+    0 0 0 1px rgba(51, 51, 51, 0.04),
+    0 1px 2px 0px rgba(51, 51, 51, 0.04),
+    0 2px 5px 0px rgba(51, 51, 51, 0.04),
+    0 5px 9px -2px rgba(51, 51, 51, 0.06);
+
+  --shadow-sm:
+    0 0 0 1px rgba(51, 51, 51, 0.04),
+    0 1px 3px -2px rgba(51, 51, 51, 0.16),
+    0 6px 6px -3px rgba(51, 51, 51, 0.08),
+    0 14px 7px -7px rgba(51, 51, 51, 0.02),
+    0 18px 9px -9px rgba(51, 51, 51, 0.01);
+
+  --shadow-md:
+    0 0 0 1px rgba(51, 51, 51, 0.04),
+    0 1px 1px 1px rgba(51, 51, 51, 0.04),
+    0 3px 3px -2px rgba(51, 51, 51, 0.02),
+    0 7px 7px -3px rgba(51, 51, 51, 0.04),
+    0 14px 14px -7px rgba(51, 51, 51, 0.04),
+    0 27px 27px -14px rgba(51, 51, 51, 0.04),
+    0 54px 54px -27px rgba(51, 51, 51, 0.04);
+
+  --shadow-lg:
+    0 0 0 1px rgba(51, 51, 51, 0.04),
+    0 1px 1px 1px rgba(51, 51, 51, 0.04),
+    0 3px 3px -2px rgba(51, 51, 51, 0.02),
+    0 7px 7px -3px rgba(51, 51, 51, 0.04),
+    0 14px 14px -7px rgba(51, 51, 51, 0.04),
+    0 27px 27px -14px rgba(51, 51, 51, 0.04),
+    0 54px 54px -27px rgba(51, 51, 51, 0.04),
+    0 109px 109px -36px rgba(51, 51, 51, 0.06);
+}
+
+/* ── Base Reset ──────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

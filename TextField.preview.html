@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Input — Snabbit Design System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&family=Outfit:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent: #f70f79;
+      --error: #fb3748;
+      --border-default: #ababab;
+      --text-primary: #303030;
+      --text-tertiary: #ababab;
+      --text-secondary: #828282;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: "Instrument Sans", sans-serif;
+      background: #141414;
+      color: #fff;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed; top: 0; left: 0;
+      width: 216px; height: 100vh;
+      background: #1a1a1a; border-right: 1px solid #252525;
+      padding: 48px 16px;
+      display: flex; flex-direction: column; gap: 2px;
+      z-index: 100; overflow-y: auto;
+    }
+    .sidebar-heading {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: #484848;
+      padding: 0 12px; margin-bottom: 8px;
+    }
+    .sidebar-separator { height: 1px; background: #252525; margin: 20px 4px; }
+    .nav-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: 8px;
+      font-size: 14px; font-weight: 500; color: #666;
+      text-decoration: none; transition: color 0.15s, background 0.15s;
+    }
+    .nav-link:hover { color: #e0e0e0; background: #242424; }
+    .nav-link.active { color: #fff; background: #272727; }
+    .nav-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+
+    /* ── Main ── */
+    .main { margin-left: 216px; flex: 1; padding: 60px 80px; min-height: 100vh; }
+
+    /* ── Component header ── */
+    .component-header {
+      background: #272727; margin: -60px -80px 60px; padding: 44px 80px;
+      display: flex; align-items: flex-end; justify-content: space-between;
+    }
+    .component-header-left { display: flex; flex-direction: column; gap: 10px; }
+    .component-breadcrumb { font-size: 13px; font-weight: 500; color: #666; }
+    .component-breadcrumb a { color: #666; text-decoration: none; }
+    .component-breadcrumb a:hover { color: #aaa; }
+    .component-header h1 { font-size: 56px; font-weight: 700; line-height: 1; letter-spacing: -2px; }
+    .component-header-right p {
+      font-size: 14px; font-weight: 500; color: #828282;
+      max-width: 280px; line-height: 20px; text-align: right;
+    }
+
+    /* ── Sections ── */
+    .section { margin-bottom: 64px; }
+    .section-title { font-size: 32px; font-weight: 500; letter-spacing: -1px; margin-bottom: 24px; color: #fff; }
+    .divider { height: 1px; background: #2a2a2a; margin: 48px 0; }
+
+    /* ── State grid ── */
+    .state-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .state-card {
+      background: #272727; border-radius: 16px; padding: 32px 24px 24px;
+      display: flex; flex-direction: column; align-items: center; gap: 20px;
+    }
+    .state-card__preview { width: 100%; display: flex; justify-content: center; }
+    .state-card__label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: #555;
+    }
+
+    /* ── Size rows ── */
+    .size-row {
+      background: #272727; border-radius: 16px;
+      padding: 28px 32px; margin-bottom: 12px;
+      display: flex; align-items: center; gap: 32px;
+    }
+    .size-row__label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: #555; width: 40px; flex-shrink: 0;
+    }
+    .size-row__content { flex: 1; }
+
+    /* ── Props table ── */
+    .props-table { width: 100%; border-collapse: collapse; border-radius: 16px; overflow: hidden; }
+    .props-table th {
+      background: #fff; color: #000; font-size: 13px; font-weight: 600;
+      padding: 14px 20px; text-align: left;
+    }
+    .props-table td {
+      background: #272727; padding: 0 20px; height: 52px;
+      font-size: 13px; font-weight: 500; color: #e0e0e0;
+      border-top: 1px solid #333;
+    }
+    .props-table td code {
+      background: #1a1a1a; border: 1px solid #333; border-radius: 4px;
+      padding: 2px 6px; font-size: 12px; color: #f70f79;
+    }
+    .props-table td.prop-name { color: #fff; font-weight: 600; }
+    .props-table td.prop-default { color: #828282; }
+
+    /* ══════════════════════════════════════════════
+       TextField component styles
+    ══════════════════════════════════════════════ */
+
+    .tf-wrapper {
+      display: flex; flex-direction: column; gap: 6px;
+      width: 361px; font-family: 'Outfit', sans-serif;
+    }
+
+    .tf-field-wrap { position: relative; }
+
+    /* Floating label */
+    .tf-label-float {
+      position: absolute; top: -8.2px; left: 14.8px;
+      background: white; padding: 0 4px; z-index: 1;
+      display: none; align-items: center;
+      font-size: 10px; font-weight: 400; line-height: 12px;
+      white-space: nowrap; font-family: 'Outfit', sans-serif;
+    }
+
+    /* Field box */
+    .tf-box {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 16px; background: white; border: 1.2px solid;
+      box-sizing: border-box; gap: 8px; font-family: 'Outfit', sans-serif;
+    }
+
+    .tf-left { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; overflow: hidden; }
+    .tf-right { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+
+    .tf-flag { overflow: hidden; background: #f0f0f0; flex-shrink: 0; }
+    .tf-flag img { width: 100%; height: 100%; display: block; }
+
+    .tf-text { font-weight: 500; white-space: nowrap; font-family: 'Outfit', sans-serif; }
+
+    .tf-edit-cta {
+      font-size: 12px; font-weight: 500; line-height: 16px;
+      color: #f70f79; letter-spacing: 0.48px; text-transform: uppercase;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    /* Hint row */
+    .tf-hint-row {
+      display: flex; align-items: center; gap: 2px; padding-left: 16px;
+      font-size: 11px; font-weight: 400; line-height: 12px;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    /* Interactive input */
+    .tf-input {
+      flex: 1; border: none; outline: none; background: transparent;
+      font-family: 'Outfit', sans-serif; font-weight: 500;
+      min-width: 0; color: inherit;
+    }
+    .tf-input::placeholder { color: #ababab; font-family: 'Outfit', sans-serif; font-weight: 500; }
+
+    /* ── Sizes ── */
+    .tf-sz-56 .tf-box { height: 56px; border-radius: 12px; }
+    .tf-sz-56 .tf-text, .tf-sz-56 .tf-input { font-size: 16px; line-height: 24px; }
+    .tf-sz-56 .tf-flag { width: 22.4px; height: 16px; border-radius: 1.6px; }
+
+    .tf-sz-48 .tf-box { height: 48px; border-radius: 12px; }
+    .tf-sz-48 .tf-text, .tf-sz-48 .tf-input { font-size: 16px; line-height: 24px; }
+    .tf-sz-48 .tf-flag { width: 22.4px; height: 16px; border-radius: 1.6px; }
+
+    .tf-sz-36 .tf-box { height: 36px; border-radius: 8px; }
+    .tf-sz-36 .tf-text, .tf-sz-36 .tf-input { font-size: 12px; line-height: 16px; }
+    .tf-sz-36 .tf-flag { width: 19.6px; height: 14px; border-radius: 1.4px; }
+
+    /* ── Static state classes ── */
+    /* Default */
+    .tf-s-default .tf-box        { border-color: #ababab; }
+    .tf-s-default .tf-text       { color: #ababab; }
+    .tf-s-default .tf-hint-row   { color: #ababab; }
+
+    /* Focused */
+    .tf-s-focused .tf-label-float { display: flex; color: #f70f79; }
+    .tf-s-focused .tf-box         { border-color: #f70f79; }
+    .tf-s-focused .tf-text        { color: #303030; }
+    .tf-s-focused .tf-hint-row    { color: #f70f79; }
+
+    /* Filled */
+    .tf-s-filled .tf-label-float { display: flex; color: #ababab; }
+    .tf-s-filled .tf-box         { border-color: #ababab; }
+    .tf-s-filled .tf-text        { color: #303030; }
+    .tf-s-filled .tf-hint-row    { color: #828282; }
+
+    /* Error */
+    .tf-s-error .tf-label-float { display: flex; color: #fb3748; }
+    .tf-s-error .tf-box         { border-color: #fb3748; }
+    .tf-s-error .tf-text        { color: #fb3748; }
+    .tf-s-error .tf-hint-row    { color: #fb3748; }
+
+    /* ── Interactive state (live inputs) ── */
+    .tf-live .tf-box          { border-color: #ababab; }
+    .tf-live .tf-input        { color: #ababab; }
+    .tf-live .tf-hint-row     { color: #ababab; }
+
+    .tf-live:focus-within .tf-label-float { display: flex; color: #f70f79; }
+    .tf-live:focus-within .tf-box         { border-color: #f70f79; }
+    .tf-live:focus-within .tf-input       { color: #303030; }
+    .tf-live:focus-within .tf-hint-row    { color: #f70f79; }
+
+    .tf-live.filled .tf-label-float { display: flex; color: #ababab; }
+    .tf-live.filled .tf-box         { border-color: #ababab; }
+    .tf-live.filled .tf-input       { color: #303030; }
+    .tf-live.filled .tf-hint-row    { color: #828282; }
+
+    /* filled + focused: focus wins */
+    .tf-live.filled:focus-within .tf-label-float { color: #f70f79; }
+    .tf-live.filled:focus-within .tf-box         { border-color: #f70f79; }
+    .tf-live.filled:focus-within .tf-hint-row    { color: #f70f79; }
+
+    /* ── Show / hide label overrides ── */
+    .tf-show-label .tf-label-float { display: flex !important; }
+    .tf-hide-label .tf-label-float { display: none !important; }
+
+    /* ── Extras panel ── */
+    .tf-has-extras .tf-field-wrap { padding-bottom: 28px; }
+    .tf-has-extras .tf-box { position: relative; z-index: 1; }
+    .tf-extras-panel {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 52px;
+      background: #f3f3f3; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;
+      display: flex; align-items: flex-end; padding: 8px 16px;
+    }
+    .tf-extras-text {
+      font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 400;
+      line-height: 12px; color: #ababab; white-space: nowrap;
+    }
+
+    /* ── Playground card ── */
+    .pg-card {
+      background: #272727; border-radius: 16px; padding: 40px 40px 28px;
+      display: flex; flex-direction: column; align-items: center; gap: 0;
+    }
+    .pg-preview {
+      width: 100%; display: flex; justify-content: center;
+      padding-bottom: 32px;
+    }
+    .pg-card__label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: #555; margin-bottom: 20px;
+    }
+    .pg-controls {
+      width: 100%; display: flex; flex-direction: column; gap: 14px;
+      border-top: 1px solid #333; padding-top: 20px;
+    }
+    .ctrl-row {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .ctrl-label {
+      font-size: 12px; font-weight: 500; color: #555; text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .ctrl-separator { height: 1px; background: #333; margin: 2px 0; }
+
+    /* Size / state pill bar */
+    .size-pills { display: flex; gap: 4px; flex-wrap: wrap; }
+    .size-pill {
+      padding: 4px 10px; border-radius: 6px; border: none; cursor: pointer;
+      background: #333; color: #777; font-size: 12px; font-weight: 600;
+      font-family: "Instrument Sans", sans-serif;
+      transition: background 0.15s, color 0.15s;
+    }
+    .size-pill:hover { background: #3a3a3a; color: #aaa; }
+    .size-pill.active { background: #f70f79; color: #fff; }
+
+    /* Icon wrapper spans — keep them centred in the flex row */
+    #pg-chevron, #pg-eye { display: inline-flex; align-items: center; }
+
+    /* Control toggle */
+    .ctrl-toggle {
+      position: relative; display: inline-block;
+      width: 44px; height: 24px; background: #333;
+      border-radius: 12px; cursor: pointer; transition: background 0.2s; flex-shrink: 0;
+    }
+    .ctrl-toggle.on { background: #f70f79; }
+    .ctrl-toggle-thumb {
+      position: absolute; top: 2px; left: 2px;
+      width: 20px; height: 20px; background: #fff;
+      border-radius: 50%; transition: transform 0.2s; pointer-events: none;
+    }
+    .ctrl-toggle.on .ctrl-toggle-thumb { transform: translateX(20px); }
+
+    /* ── Toggle (used in field right side) ── */
+    .toggle-wrap { position: relative; cursor: pointer; flex-shrink: 0; user-select: none; }
+    .toggle-track {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 999px; background: #f0f0f0; transition: background 0.2s; pointer-events: none;
+    }
+    .toggle-wrap.on .toggle-track { background: #f70f79; }
+    .toggle-thumb {
+      position: absolute; border-radius: 50%; background: #fff;
+      box-shadow: 0px 1px 4px rgba(0,0,0,0.22), 0px 0.5px 1px rgba(0,0,0,0.08);
+      transition: left 0.2s; pointer-events: none;
+    }
+    .toggle-dot {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      border-radius: 50%; background: #f0f0f0; pointer-events: none;
+    }
+    .toggle-wrap.on .toggle-dot { background: #f70f79; }
+    .toggle-20 { width: 34px; height: 20px; }
+    .toggle-20 .toggle-track { width: 28px; height: 16px; }
+    .toggle-20 .toggle-thumb { width: 12px; height: 12px; top: 4px; left: 5.17px; }
+    .toggle-20 .toggle-dot   { width: 4px; height: 4px; }
+    .toggle-20.on .toggle-thumb { left: 17.17px; }
+  </style>
+</head>
+
+<body>
+
+  <aside class="sidebar">
+    <p class="sidebar-heading">Foundations</p>
+    <a class="nav-link" href="tokens.preview.html#color"><span class="nav-icon">⬛</span> Color</a>
+    <a class="nav-link" href="tokens.preview.html#shadow"><span class="nav-icon">◻️</span> Shadow</a>
+    <a class="nav-link" href="tokens.preview.html#typography"><span class="nav-icon">Aa</span> Typography</a>
+    <a class="nav-link" href="tokens.preview.html#radius"><span class="nav-icon">◜</span> Radius</a>
+    <div class="sidebar-separator"></div>
+    <p class="sidebar-heading">Components</p>
+    <a class="nav-link" href="Accordion.preview.html"><span class="nav-icon" style="font-size:13px">☰</span> Accordion</a>
+    <a class="nav-link" href="Button.preview.html"><span class="nav-icon" style="font-size:13px">▣</span> Button</a>
+    <a class="nav-link" href="Checkbox.preview.html"><span class="nav-icon" style="font-size:13px">☑</span> Checkbox</a>
+    <a class="nav-link active" href="TextField.preview.html"><span class="nav-icon" style="font-size:13px">▭</span> Input</a>
+    <a class="nav-link" href="Toast.preview.html"><span class="nav-icon" style="font-size:13px">◩</span> Toast</a>
+    <a class="nav-link" href="Toggle.preview.html"><span class="nav-icon" style="font-size:13px">⬭</span> Toggle</a>
+  </aside>
+
+  <main class="main">
+
+    <div class="component-header">
+      <div class="component-header-left">
+        <p class="component-breadcrumb"><a href="tokens.preview.html">Design System</a> / Components</p>
+        <h1>Input</h1>
+      </div>
+      <div class="component-header-right">
+        <p>Text field for user input. 3 sizes, 4 states.</p>
+      </div>
+    </div>
+
+    <!-- ─── PLAYGROUND ─── -->
+    <div class="section">
+      <p class="section-title">Playground</p>
+      <div class="pg-card">
+
+        <!-- Preview -->
+        <div class="pg-preview">
+          <div class="tf-wrapper tf-sz-56 tf-live tf-show-label" id="pg-wrapper">
+            <div class="tf-field-wrap">
+              <div class="tf-label-float">Label Text</div>
+              <div class="tf-extras-panel" id="pg-extras-panel" style="display:none">
+                <span class="tf-extras-text">Enter name as per your Govt ID</span>
+              </div>
+              <div class="tf-box">
+                <div class="tf-left">
+                  <div class="tf-flag" id="pg-flag"><img src="assets/flag-in.svg" alt="IN"></div>
+                  <input class="tf-input" id="pg-input" placeholder="Enter details" />
+                </div>
+                <div class="tf-right">
+                  <span id="pg-chevron"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4.5 7L8 10.5L11.5 7" stroke="#ababab" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  <span id="pg-eye" style="display:none"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8C2 8 4 4 8 4s6 4 6 4-2 4-6 4-6-4-6-4z" stroke="#ababab" stroke-width="1.2" stroke-linejoin="round"/><circle cx="8" cy="8" r="1.8" stroke="#ababab" stroke-width="1.2"/></svg></span>
+                  <span class="tf-edit-cta" id="pg-edit" style="display:none">EDIT</span>
+                  <div class="toggle-wrap toggle-20" id="pg-toggle" style="display:none"><div class="toggle-track"></div><div class="toggle-thumb"><div class="toggle-dot"></div></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="tf-hint-row" id="pg-hint">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="flex-shrink:0"><circle cx="6" cy="6" r="5.5" stroke="currentColor"/><rect x="5.4" y="5" width="1.2" height="3.5" rx="0.6" fill="currentColor"/><circle cx="6" cy="3.75" r="0.65" fill="currentColor"/></svg>
+              <span>This is a hint text to help user.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pg-card__label">Input Field</div>
+
+        <!-- Controls -->
+        <div class="pg-controls">
+
+          <!-- Size -->
+          <div class="ctrl-row">
+            <span class="ctrl-label">Size</span>
+            <div class="size-pills" id="pg-size-pills">
+              <button class="size-pill active" data-sz="56" onclick="pgSetSize(56)">56</button>
+              <button class="size-pill" data-sz="48" onclick="pgSetSize(48)">48</button>
+              <button class="size-pill" data-sz="36" onclick="pgSetSize(36)">36</button>
+            </div>
+          </div>
+
+          <!-- State -->
+          <div class="ctrl-row">
+            <span class="ctrl-label">State</span>
+            <div class="size-pills" id="pg-state-pills">
+              <button class="size-pill active" data-st="default" onclick="pgSetState('default')">Default</button>
+              <button class="size-pill" data-st="focused" onclick="pgSetState('focused')">Focused</button>
+              <button class="size-pill" data-st="filled" onclick="pgSetState('filled')">Filled</button>
+              <button class="size-pill" data-st="error" onclick="pgSetState('error')">Error</button>
+            </div>
+          </div>
+
+          <div class="ctrl-separator"></div>
+
+          <!-- Hint -->
+          <div class="ctrl-row">
+            <span class="ctrl-label">Hint</span>
+            <span class="ctrl-toggle" id="tog-hint" onclick="pgToggle('hint')"><span class="ctrl-toggle-thumb"></span></span>
+          </div>
+
+          <!-- Chevron -->
+          <div class="ctrl-row">
+            <span class="ctrl-label">Chevron</span>
+            <span class="ctrl-toggle on" id="tog-chevron" onclick="pgToggle('chevron')"><span class="ctrl-toggle-thumb"></span></span>
+          </div>
+
+          <!-- Eye Icon -->
+          <div class="ctrl-row">
+            <span class="ctrl-label">Eye Icon</span>
+            <span class="ctrl-toggle" id="tog-eye" onclick="pgToggle('eye')"><span class="ctrl-toggle-thumb"></span></span>
+          </div>
+
+          <!-- Edit CTA -->
+          <div class="ctrl-row">
+            <span class="ctrl-label">Edit CTA</span>
+            <span class="ctrl-toggle" id="tog-edit" onclick="pgToggle('edit')"><span class="ctrl-toggle-thumb"></span></span>
+          </div>
+
+          <!-- Country Flag -->
+          <div class="ctrl-row">
+            <span class="ctrl-label">Country Flag</span>
+            <span class="ctrl-toggle on" id="tog-flag" onclick="pgToggle('flag')"><span class="ctrl-toggle-thumb"></span></span>
+          </div>
+
+          <!-- Toggle -->
+          <div class="ctrl-row">
+            <span class="ctrl-label">Toggle</span>
+            <span class="ctrl-toggle" id="tog-toggle" onclick="pgToggle('toggle')"><span class="ctrl-toggle-thumb"></span></span>
+          </div>
+
+          <!-- Show Label -->
+          <div class="ctrl-row">
+            <span class="ctrl-label">Show Label</span>
+            <span class="ctrl-toggle on" id="tog-label" onclick="pgToggle('label')"><span class="ctrl-toggle-thumb"></span></span>
+          </div>
+
+          <!-- Extras -->
+          <div class="ctrl-row">
+            <span class="ctrl-label">Extras</span>
+            <span class="ctrl-toggle" id="tog-extras" onclick="pgToggle('extras')"><span class="ctrl-toggle-thumb"></span></span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── STATES ─── -->
+    <div class="section">
+      <p class="section-title">States</p>
+      <div class="state-grid">
+
+        <!-- Default -->
+        <div class="state-card">
+          <div class="state-card__preview">
+            <div class="tf-wrapper tf-sz-56 tf-s-default">
+              <div class="tf-field-wrap">
+                <div class="tf-label-float">Label Text</div>
+                <div class="tf-box">
+                  <div class="tf-left">
+                    <div class="tf-flag"><img src="assets/flag-in.svg" alt="IN"></div>
+                    <span class="tf-text">Enter details</span>
+                  </div>
+                  <div class="tf-right">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4.5 7L8 10.5L11.5 7" stroke="#ababab" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8C2 8 4 4 8 4s6 4 6 4-2 4-6 4-6-4-6-4z" stroke="#ababab" stroke-width="1.2" stroke-linejoin="round"/><circle cx="8" cy="8" r="1.8" stroke="#ababab" stroke-width="1.2"/></svg>
+                    <span class="tf-edit-cta">EDIT</span>
+                    <div class="toggle-wrap toggle-20 on"><div class="toggle-track"></div><div class="toggle-thumb"><div class="toggle-dot"></div></div></div>
+                  </div>
+                </div>
+              </div>
+              <div class="tf-hint-row">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="flex-shrink:0"><circle cx="6" cy="6" r="5.5" stroke="currentColor"/><rect x="5.4" y="5" width="1.2" height="3.5" rx="0.6" fill="currentColor"/><circle cx="6" cy="3.75" r="0.65" fill="currentColor"/></svg>
+                <span>This is a hint text to help user.</span>
+              </div>
+            </div>
+          </div>
+          <div class="state-card__label">Default</div>
+        </div>
+
+        <!-- Focused -->
+        <div class="state-card">
+          <div class="state-card__preview">
+            <div class="tf-wrapper tf-sz-56 tf-s-focused">
+              <div class="tf-field-wrap">
+                <div class="tf-label-float">Label Text</div>
+                <div class="tf-box">
+                  <div class="tf-left">
+                    <div class="tf-flag"><img src="assets/flag-in.svg" alt="IN"></div>
+                    <span class="tf-text">Enter details</span>
+                  </div>
+                  <div class="tf-right">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4.5 7L8 10.5L11.5 7" stroke="#ababab" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8C2 8 4 4 8 4s6 4 6 4-2 4-6 4-6-4-6-4z" stroke="#ababab" stroke-width="1.2" stroke-linejoin="round"/><circle cx="8" cy="8" r="1.8" stroke="#ababab" stroke-width="1.2"/></svg>
+                    <span class="tf-edit-cta">EDIT</span>
+                    <div class="toggle-wrap toggle-20 on"><div class="toggle-track"></div><div class="toggle-thumb"><div class="toggle-dot"></div></div></div>
+                  </div>
+                </div>
+              </div>
+              <div class="tf-hint-row">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="flex-shrink:0"><circle cx="6" cy="6" r="5.5" stroke="currentColor"/><rect x="5.4" y="5" width="1.2" height="3.5" rx="0.6" fill="currentColor"/><circle cx="6" cy="3.75" r="0.65" fill="currentColor"/></svg>
+                <span>This is a hint text to help user.</span>
+              </div>
+            </div>
+          </div>
+          <div class="state-card__label">Focused</div>
+        </div>
+
+        <!-- Filled -->
+        <div class="state-card">
+          <div class="state-card__preview">
+            <div class="tf-wrapper tf-sz-56 tf-s-filled">
+              <div class="tf-field-wrap">
+                <div class="tf-label-float">Label Text</div>
+                <div class="tf-box">
+                  <div class="tf-left">
+                    <div class="tf-flag"><img src="assets/flag-in.svg" alt="IN"></div>
+                    <span class="tf-text">Enter details</span>
+                  </div>
+                  <div class="tf-right">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4.5 7L8 10.5L11.5 7" stroke="#ababab" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8C2 8 4 4 8 4s6 4 6 4-2 4-6 4-6-4-6-4z" stroke="#ababab" stroke-width="1.2" stroke-linejoin="round"/><circle cx="8" cy="8" r="1.8" stroke="#ababab" stroke-width="1.2"/></svg>
+                    <span class="tf-edit-cta">EDIT</span>
+                    <div class="toggle-wrap toggle-20 on"><div class="toggle-track"></div><div class="toggle-thumb"><div class="toggle-dot"></div></div></div>
+                  </div>
+                </div>
+              </div>
+              <div class="tf-hint-row">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="flex-shrink:0"><circle cx="6" cy="6" r="5.5" stroke="currentColor"/><rect x="5.4" y="5" width="1.2" height="3.5" rx="0.6" fill="currentColor"/><circle cx="6" cy="3.75" r="0.65" fill="currentColor"/></svg>
+                <span>This is a hint text to help user.</span>
+              </div>
+            </div>
+          </div>
+          <div class="state-card__label">Filled</div>
+        </div>
+
+        <!-- Error -->
+        <div class="state-card">
+          <div class="state-card__preview">
+            <div class="tf-wrapper tf-sz-56 tf-s-error">
+              <div class="tf-field-wrap">
+                <div class="tf-label-float">Label Text</div>
+                <div class="tf-box">
+                  <div class="tf-left">
+                    <div class="tf-flag"><img src="assets/flag-in.svg" alt="IN"></div>
+                    <span class="tf-text">Enter details</span>
+                  </div>
+                  <div class="tf-right">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4.5 7L8 10.5L11.5 7" stroke="#ababab" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8C2 8 4 4 8 4s6 4 6 4-2 4-6 4-6-4-6-4z" stroke="#ababab" stroke-width="1.2" stroke-linejoin="round"/><circle cx="8" cy="8" r="1.8" stroke="#ababab" stroke-width="1.2"/></svg>
+                    <span class="tf-edit-cta">EDIT</span>
+                    <div class="toggle-wrap toggle-20 on"><div class="toggle-track"></div><div class="toggle-thumb"><div class="toggle-dot"></div></div></div>
+                  </div>
+                </div>
+              </div>
+              <div class="tf-hint-row">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="flex-shrink:0"><circle cx="6" cy="6" r="5.5" stroke="currentColor"/><rect x="5.4" y="5" width="1.2" height="3.5" rx="0.6" fill="currentColor"/><circle cx="6" cy="3.75" r="0.65" fill="currentColor"/></svg>
+                <span>This is a hint text to help user.</span>
+              </div>
+            </div>
+          </div>
+          <div class="state-card__label">Error</div>
+        </div>
+
+      </div>
+
+      <!-- Extras variant — full width -->
+      <div class="state-card" style="margin-top:16px;">
+        <div class="state-card__preview">
+          <div class="tf-wrapper tf-sz-56 tf-s-focused tf-has-extras">
+            <div class="tf-field-wrap">
+              <div class="tf-label-float">Label Text</div>
+              <div class="tf-extras-panel">
+                <span class="tf-extras-text">Enter name as per your Govt ID</span>
+              </div>
+              <div class="tf-box">
+                <div class="tf-left">
+                  <span class="tf-text">Enter details</span>
+                </div>
+                <div class="tf-right">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8C2 8 4 4 8 4s6 4 6 4-2 4-6 4-6-4-6-4z" stroke="#ababab" stroke-width="1.2" stroke-linejoin="round"/><circle cx="8" cy="8" r="1.8" stroke="#ababab" stroke-width="1.2"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="state-card__label">Extras</div>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── SIZES ─── -->
+    <div class="section">
+      <p class="section-title">Sizes</p>
+
+      <!-- 56px -->
+      <div class="size-row">
+        <div class="size-row__label">56px</div>
+        <div class="size-row__content">
+          <div class="tf-wrapper tf-sz-56 tf-live">
+            <div class="tf-field-wrap">
+              <div class="tf-label-float">Label Text</div>
+              <div class="tf-box">
+                <div class="tf-left">
+                  <div class="tf-flag"><img src="assets/flag-in.svg" alt="IN"></div>
+                  <input class="tf-input" placeholder="Enter details" />
+                </div>
+                <div class="tf-right">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4.5 7L8 10.5L11.5 7" stroke="#ababab" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="tf-hint-row">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="flex-shrink:0"><circle cx="6" cy="6" r="5.5" stroke="currentColor"/><rect x="5.4" y="5" width="1.2" height="3.5" rx="0.6" fill="currentColor"/><circle cx="6" cy="3.75" r="0.65" fill="currentColor"/></svg>
+              <span>This is a hint text to help user.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 48px -->
+      <div class="size-row">
+        <div class="size-row__label">48px</div>
+        <div class="size-row__content">
+          <div class="tf-wrapper tf-sz-48 tf-live">
+            <div class="tf-field-wrap">
+              <div class="tf-label-float">Label Text</div>
+              <div class="tf-box">
+                <div class="tf-left">
+                  <div class="tf-flag"><img src="assets/flag-in.svg" alt="IN"></div>
+                  <input class="tf-input" placeholder="Enter details" />
+                </div>
+                <div class="tf-right">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4.5 7L8 10.5L11.5 7" stroke="#ababab" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="tf-hint-row">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="flex-shrink:0"><circle cx="6" cy="6" r="5.5" stroke="currentColor"/><rect x="5.4" y="5" width="1.2" height="3.5" rx="0.6" fill="currentColor"/><circle cx="6" cy="3.75" r="0.65" fill="currentColor"/></svg>
+              <span>This is a hint text to help user.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 36px -->
+      <div class="size-row">
+        <div class="size-row__label">36px</div>
+        <div class="size-row__content">
+          <div class="tf-wrapper tf-sz-36 tf-live">
+            <div class="tf-field-wrap">
+              <div class="tf-label-float">Label Text</div>
+              <div class="tf-box">
+                <div class="tf-left">
+                  <div class="tf-flag"><img src="assets/flag-in.svg" alt="IN"></div>
+                  <input class="tf-input" placeholder="Enter details" />
+                </div>
+                <div class="tf-right">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4.5 7L8 10.5L11.5 7" stroke="#ababab" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="tf-hint-row">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="flex-shrink:0"><circle cx="6" cy="6" r="5.5" stroke="currentColor"/><rect x="5.4" y="5" width="1.2" height="3.5" rx="0.6" fill="currentColor"/><circle cx="6" cy="3.75" r="0.65" fill="currentColor"/></svg>
+              <span>This is a hint text to help user.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── PROPS ─── -->
+    <div class="section">
+      <p class="section-title">Props</p>
+      <table class="props-table">
+        <thead>
+          <tr>
+            <th>Prop</th><th>Type</th><th>Default</th><th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="prop-name"><code>size</code></td>
+            <td>36 · 48 · 56</td>
+            <td class="prop-default">56</td>
+            <td>Height in px — scales font and flag proportionally</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>label</code></td>
+            <td>string</td>
+            <td class="prop-default">"Label Text"</td>
+            <td>Floating label text shown when focused, filled, or error</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>placeholder</code></td>
+            <td>string</td>
+            <td class="prop-default">"Enter details"</td>
+            <td>Placeholder text shown when the input is empty</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>hint</code></td>
+            <td>string</td>
+            <td class="prop-default">—</td>
+            <td>Helper text shown below the field with an icon</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>value</code></td>
+            <td>string</td>
+            <td class="prop-default">—</td>
+            <td>Controlled input value</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>defaultValue</code></td>
+            <td>string</td>
+            <td class="prop-default">""</td>
+            <td>Initial value for uncontrolled usage</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>onChange</code></td>
+            <td>(value: string) =&gt; void</td>
+            <td class="prop-default">—</td>
+            <td>Called with new value on every keystroke</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>error</code></td>
+            <td>boolean</td>
+            <td class="prop-default">false</td>
+            <td>Puts the field in error state (red border, red text)</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>showFlag</code></td>
+            <td>boolean</td>
+            <td class="prop-default">false</td>
+            <td>Show India flag prefix on the left</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>showChevron</code></td>
+            <td>boolean</td>
+            <td class="prop-default">true</td>
+            <td>Show dropdown chevron on the right</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>showEyeIcon</code></td>
+            <td>boolean</td>
+            <td class="prop-default">false</td>
+            <td>Show eye icon for password visibility toggle</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>showEdit</code></td>
+            <td>boolean</td>
+            <td class="prop-default">false</td>
+            <td>Show pink EDIT CTA on the right</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <script>
+    // ── Sizes section: mark filled when typed ──
+    document.querySelectorAll('.tf-live input').forEach(input => {
+      input.addEventListener('input', function () {
+        this.closest('.tf-wrapper').classList.toggle('filled', this.value.length > 0);
+      });
+    });
+
+    // ── Playground state ──
+    const pgState = {
+      size: 56,
+      state: 'default',
+      hint: false,
+      chevron: true,
+      eye: false,
+      edit: false,
+      flag: true,
+      toggle: false,
+      label: true,
+      extras: false,
+    };
+
+    function pgSetSize(sz) {
+      const w = document.getElementById('pg-wrapper');
+      w.classList.remove('tf-sz-56', 'tf-sz-48', 'tf-sz-36');
+      w.classList.add('tf-sz-' + sz);
+      pgState.size = sz;
+      document.querySelectorAll('#pg-size-pills .size-pill').forEach(p =>
+        p.classList.toggle('active', +p.dataset.sz === sz));
+    }
+
+    const STATE_CLASSES = ['tf-live', 'filled', 'tf-s-focused', 'tf-s-filled', 'tf-s-error'];
+
+    function pgSetState(st) {
+      const w = document.getElementById('pg-wrapper');
+      const inp = document.getElementById('pg-input');
+      w.classList.remove(...STATE_CLASSES);
+
+      if (st === 'default') {
+        w.classList.add('tf-live');
+        inp.value = '';
+        inp.removeAttribute('disabled');
+      } else if (st === 'focused') {
+        w.classList.add('tf-s-focused');
+        inp.value = '';
+        inp.removeAttribute('disabled');
+      } else if (st === 'filled') {
+        w.classList.add('tf-s-filled');
+        inp.value = 'Sample text';
+        inp.removeAttribute('disabled');
+      } else if (st === 'error') {
+        w.classList.add('tf-s-error');
+        inp.value = '';
+        inp.removeAttribute('disabled');
+      }
+
+      pgState.state = st;
+      document.querySelectorAll('#pg-state-pills .size-pill').forEach(p =>
+        p.classList.toggle('active', p.dataset.st === st));
+    }
+
+    function pgToggle(prop) {
+      pgState[prop] = !pgState[prop];
+      const btn = document.getElementById('tog-' + prop);
+      btn.classList.toggle('on', pgState[prop]);
+
+      if (prop === 'hint') {
+        document.getElementById('pg-hint').style.display = pgState.hint ? 'flex' : 'none';
+      } else if (prop === 'chevron') {
+        document.getElementById('pg-chevron').style.display = pgState.chevron ? 'inline-flex' : 'none';
+      } else if (prop === 'eye') {
+        document.getElementById('pg-eye').style.display = pgState.eye ? 'inline-flex' : 'none';
+      } else if (prop === 'edit') {
+        document.getElementById('pg-edit').style.display = pgState.edit ? '' : 'none';
+      } else if (prop === 'flag') {
+        document.getElementById('pg-flag').style.display = pgState.flag ? '' : 'none';
+      } else if (prop === 'toggle') {
+        document.getElementById('pg-toggle').style.display = pgState.toggle ? '' : 'none';
+      } else if (prop === 'label') {
+        const w = document.getElementById('pg-wrapper');
+        w.classList.toggle('tf-show-label', pgState.label);
+        w.classList.toggle('tf-hide-label', !pgState.label);
+      } else if (prop === 'extras') {
+        const w = document.getElementById('pg-wrapper');
+        const panel = document.getElementById('pg-extras-panel');
+        w.classList.toggle('tf-has-extras', pgState.extras);
+        panel.style.display = pgState.extras ? 'flex' : 'none';
+      }
+    }
+
+    // ── In-field toggle click (decorative) ──
+    document.addEventListener('click', function(e) {
+      const wrap = e.target.closest('#pg-toggle');
+      if (wrap) wrap.classList.toggle('on');
+    });
+  </script>
+
+</body>
+</html>

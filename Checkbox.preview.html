@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkbox — Snabbit Design System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-tertiary: #f0f0f0;
+      --accent-primary: #f70f79;
+      --font-family: "Instrument Sans", sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-family);
+      background: #141414;
+      color: #fff;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 216px;
+      height: 100vh;
+      background: #1a1a1a;
+      border-right: 1px solid #252525;
+      padding: 48px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      z-index: 100;
+      overflow-y: auto;
+    }
+
+    .sidebar-heading {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #484848;
+      padding: 0 12px;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-separator {
+      height: 1px;
+      background: #252525;
+      margin: 20px 4px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #666;
+      text-decoration: none;
+      transition: color 0.15s, background 0.15s;
+    }
+
+    .nav-link:hover { color: #e0e0e0; background: #242424; }
+    .nav-link.active { color: #fff; background: #272727; }
+
+    .nav-icon {
+      font-size: 15px;
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    /* ── Main ── */
+    .main {
+      margin-left: 216px;
+      flex: 1;
+      padding: 60px 80px;
+      min-height: 100vh;
+    }
+
+    /* ── Component header ── */
+    .component-header {
+      background: #272727;
+      margin: -60px -80px 60px;
+      padding: 44px 80px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .component-header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .component-breadcrumb {
+      font-size: 13px;
+      font-weight: 500;
+      color: #666;
+    }
+
+    .component-breadcrumb a { color: #666; text-decoration: none; }
+    .component-breadcrumb a:hover { color: #aaa; }
+
+    .component-header h1 {
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+
+    .component-header-right p {
+      font-size: 14px;
+      font-weight: 500;
+      color: #828282;
+      max-width: 280px;
+      line-height: 20px;
+      text-align: right;
+    }
+
+    /* ── Sections ── */
+    .section { margin-bottom: 64px; }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 500;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+      color: #fff;
+    }
+
+    .divider {
+      height: 1px;
+      background: #2a2a2a;
+      margin: 48px 0;
+    }
+
+    /* ── Checkbox grid ── */
+    .cb-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    /* ── Checkbox card ── */
+    .cb-card {
+      background: #272727;
+      border-radius: 16px;
+      padding: 24px 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .cb-card__preview {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 80px;
+      margin-bottom: 16px;
+    }
+
+    .cb-card__label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #555;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .cb-card__controls {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-top: 1px solid #333;
+      padding-top: 16px;
+    }
+
+    .ctrl-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .ctrl-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #555;
+    }
+
+    /* ── Props table ── */
+    .props-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .props-table th {
+      background: #fff;
+      color: #000;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 14px 20px;
+      text-align: left;
+    }
+
+    .props-table td {
+      background: #272727;
+      padding: 0 20px;
+      height: 52px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #e0e0e0;
+      border-top: 1px solid #333;
+    }
+
+    .props-table td code {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 12px;
+      color: #f70f79;
+    }
+
+    .props-table td.prop-name { color: #fff; font-weight: 600; }
+    .props-table td.prop-default { color: #828282; }
+
+    /* ══════════════════════════════════════════════
+       Checkbox component styles
+    ══════════════════════════════════════════════ */
+
+    .cb-wrap {
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0;
+      user-select: none;
+      overflow: hidden;
+    }
+
+    .cb-wrap.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Background square — inset pill */
+    .cb-bg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--bg-tertiary);
+      transition: background 0.15s;
+      pointer-events: none;
+    }
+
+    .cb-wrap.on .cb-bg {
+      background: var(--accent-primary);
+    }
+
+    /* White inner box (default hollow effect) */
+    .cb-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      pointer-events: none;
+    }
+
+    .cb-wrap.on .cb-box {
+      display: none;
+    }
+
+    /* Checkmark */
+    .cb-check {
+      position: absolute;
+      top: 34.84%;
+      left: 27.34%;
+      right: 27.35%;
+      bottom: 32.2%;
+      display: none;
+      pointer-events: none;
+    }
+
+    .cb-wrap.on .cb-check {
+      display: block;
+    }
+
+    .cb-check img {
+      position: absolute;
+      display: block;
+      width: 100%;
+      height: 100%;
+      max-width: none;
+    }
+
+    /* Size: 24px */
+    .cb-24 { width: 24px; height: 24px; }
+    .cb-24 .cb-bg  { width: 19.2px; height: 19.2px; border-radius: 4.8px; }
+    .cb-24 .cb-box { width: 15.6px; height: 15.6px; border-radius: 3.12px; }
+
+    /* Size: 20px */
+    .cb-20 { width: 20px; height: 20px; }
+    .cb-20 .cb-bg  { width: 16px; height: 16px; border-radius: 4px; }
+    .cb-20 .cb-box { width: 13px; height: 13px; border-radius: 2.6px; }
+
+    /* Size: 16px */
+    .cb-16 { width: 16px; height: 16px; }
+    .cb-16 .cb-bg  { width: 12.8px; height: 12.8px; border-radius: 3.2px; }
+    .cb-16 .cb-box { width: 10.4px; height: 10.4px; border-radius: 2.08px; }
+
+    /* ── Toggle (used as controls) ── */
+    .toggle-wrap {
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0;
+      user-select: none;
+    }
+    .toggle-wrap.disabled { opacity: 0.5; cursor: not-allowed; }
+    .toggle-track {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 999px;
+      background: var(--bg-tertiary);
+      transition: background 0.2s;
+      pointer-events: none;
+    }
+    .toggle-wrap.on .toggle-track { background: var(--accent-primary); }
+    .toggle-thumb {
+      position: absolute;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0px 1px 4px rgba(0,0,0,0.22), 0px 0.5px 1px rgba(0,0,0,0.08);
+      transition: left 0.2s;
+      pointer-events: none;
+    }
+    .toggle-dot {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: var(--bg-tertiary);
+      pointer-events: none;
+    }
+    .toggle-wrap.on .toggle-dot { background: var(--accent-primary); }
+    .toggle-20 { width: 34px; height: 20px; }
+    .toggle-20 .toggle-track { width: 28px; height: 16px; }
+    .toggle-20 .toggle-thumb { width: 12px; height: 12px; top: 4px; left: 5.17px; }
+    .toggle-20 .toggle-dot   { width: 4px; height: 4px; }
+    .toggle-20.on .toggle-thumb { left: 17.17px; }
+  </style>
+</head>
+
+<body>
+
+  <aside class="sidebar">
+    <p class="sidebar-heading">Foundations</p>
+    <a class="nav-link" href="tokens.preview.html#color"><span class="nav-icon">⬛</span> Color</a>
+    <a class="nav-link" href="tokens.preview.html#shadow"><span class="nav-icon">◻️</span> Shadow</a>
+    <a class="nav-link" href="tokens.preview.html#typography"><span class="nav-icon">Aa</span> Typography</a>
+    <a class="nav-link" href="tokens.preview.html#radius"><span class="nav-icon">◜</span> Radius</a>
+
+    <div class="sidebar-separator"></div>
+    <p class="sidebar-heading">Components</p>
+    <a class="nav-link" href="Accordion.preview.html"><span class="nav-icon" style="font-size:13px">☰</span> Accordion</a>
+    <a class="nav-link" href="Button.preview.html"><span class="nav-icon" style="font-size:13px">▣</span> Button</a>
+    <a class="nav-link active" href="Checkbox.preview.html"><span class="nav-icon" style="font-size:13px">☑</span> Checkbox</a>
+    <a class="nav-link" href="TextField.preview.html"><span class="nav-icon" style="font-size:13px">▭</span> Input</a>
+    <a class="nav-link" href="Toast.preview.html"><span class="nav-icon" style="font-size:13px">◩</span> Toast</a>
+    <a class="nav-link" href="Toggle.preview.html"><span class="nav-icon" style="font-size:13px">⬭</span> Toggle</a>
+  </aside>
+
+  <main class="main">
+
+    <div class="component-header">
+      <div class="component-header-left">
+        <p class="component-breadcrumb"><a href="tokens.preview.html">Design System</a> / Components</p>
+        <h1>Checkbox</h1>
+      </div>
+      <div class="component-header-right">
+        <p>Binary checked/unchecked input. Available in 3 sizes.</p>
+      </div>
+    </div>
+
+    <!-- ─── VARIANTS ─── -->
+    <div class="section">
+      <p class="section-title">Variants</p>
+      <div class="cb-grid" id="cbGrid"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── PROPS ─── -->
+    <div class="section">
+      <p class="section-title">Props</p>
+      <table class="props-table">
+        <thead>
+          <tr>
+            <th>Prop</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="prop-name"><code>size</code></td>
+            <td>16 · 20 · 24</td>
+            <td class="prop-default">16</td>
+            <td>Container size in px — scales all internal dimensions proportionally</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>checked</code></td>
+            <td>boolean</td>
+            <td class="prop-default">—</td>
+            <td>Controlled checked state</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>defaultChecked</code></td>
+            <td>boolean</td>
+            <td class="prop-default">false</td>
+            <td>Initial state for uncontrolled usage</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>onChange</code></td>
+            <td>(checked: boolean) =&gt; void</td>
+            <td class="prop-default">—</td>
+            <td>Called with the new state on click</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>disabled</code></td>
+            <td>boolean</td>
+            <td class="prop-default">false</td>
+            <td>Disables interaction and reduces opacity</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <script>
+    const SIZES = [
+      { id: 'size-24', label: '24px', sz: 24 },
+      { id: 'size-20', label: '20px', sz: 20 },
+      { id: 'size-16', label: '16px', sz: 16 },
+    ];
+
+    const cardState = {};
+    SIZES.forEach(s => cardState[s.id] = { on: false, disabled: false });
+
+    const CHECK_ICONS = { 16: 'assets/checkbox-check-16.svg', 20: 'assets/checkbox-check-20.svg', 24: 'assets/checkbox-check-24.svg' };
+    const TOGGLE_HTML = `<div class="toggle-track"></div><div class="toggle-thumb"><div class="toggle-dot"></div></div>`;
+
+    function checkboxHtml(sz) {
+      return `<div class="cb-bg"></div><div class="cb-box"></div><div class="cb-check"><img src="${CHECK_ICONS[sz]}" alt=""></div>`;
+    }
+
+    function renderCheckbox(sid) {
+      const cs = cardState[sid];
+      const s = SIZES.find(s => s.id === sid);
+      const el = document.getElementById('cb-' + sid);
+      el.className = `cb-wrap cb-${s.sz}${cs.on ? ' on' : ''}${cs.disabled ? ' disabled' : ''}`;
+    }
+
+    function toggleChecked(sid) {
+      if (cardState[sid].disabled) return;
+      cardState[sid].on = !cardState[sid].on;
+      document.getElementById(`indicator-${sid}`).classList.toggle('on', cardState[sid].on);
+      renderCheckbox(sid);
+    }
+
+    function toggleDisabled(sid) {
+      cardState[sid].disabled = !cardState[sid].disabled;
+      document.getElementById(`toggle-disabled-${sid}`).classList.toggle('on', cardState[sid].disabled);
+      renderCheckbox(sid);
+    }
+
+    (function init() {
+      const grid = document.getElementById('cbGrid');
+      SIZES.forEach(s => {
+        grid.insertAdjacentHTML('beforeend', `
+          <div class="cb-card">
+            <div class="cb-card__preview">
+              <div class="cb-wrap cb-${s.sz}" id="cb-${s.id}" onclick="toggleChecked('${s.id}')">
+                ${checkboxHtml(s.sz)}
+              </div>
+            </div>
+            <div class="cb-card__label">${s.label}</div>
+            <div class="cb-card__controls">
+              <div class="ctrl-row">
+                <span class="ctrl-label">Checked</span>
+                <span class="toggle-wrap toggle-20" id="indicator-${s.id}" onclick="toggleChecked('${s.id}')">
+                  ${TOGGLE_HTML}
+                </span>
+              </div>
+              <div class="ctrl-row">
+                <span class="ctrl-label">Disabled</span>
+                <span class="toggle-wrap toggle-20" id="toggle-disabled-${s.id}" onclick="toggleDisabled('${s.id}')">
+                  ${TOGGLE_HTML}
+                </span>
+              </div>
+            </div>
+          </div>
+        `);
+      });
+    })();
+  </script>
+
+</body>
+
+</html>

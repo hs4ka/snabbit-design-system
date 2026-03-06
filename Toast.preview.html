@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Toast — Snabbit Design System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-primary: #ffffff;
+      --bg-tertiary: #f0f0f0;
+      --text-primary: #303030;
+      --text-secondary: #828282;
+      --text-tertiary: #ababab;
+      --accent-primary: #f70f79;
+      --stroke-secondary: #f0f0f0;
+      --font-family: "Instrument Sans", sans-serif;
+
+      /* Toast state colors */
+      --red-dark: #e93544;
+      --red-light: #ffd5d8;
+      --green-dark: #178c4e;
+      --green-light: #d0fbe9;
+      --blue-dark: #3559e9;
+      --blue-light: #d5e2ff;
+      --orange-dark: #e16614;
+      --orange-light: #ffe6d5;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background: #141414;
+      color: #fff;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 216px;
+      height: 100vh;
+      background: #1a1a1a;
+      border-right: 1px solid #252525;
+      padding: 48px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      z-index: 100;
+      overflow-y: auto;
+    }
+
+    .sidebar-heading {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #484848;
+      padding: 0 12px;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-separator {
+      height: 1px;
+      background: #252525;
+      margin: 20px 4px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #666;
+      text-decoration: none;
+      transition: color 0.15s, background 0.15s;
+    }
+
+    .nav-link:hover {
+      color: #e0e0e0;
+      background: #242424;
+    }
+
+    .nav-link.active {
+      color: #fff;
+      background: #272727;
+    }
+
+    .nav-icon {
+      font-size: 15px;
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    /* ── Main ── */
+    .main {
+      margin-left: 216px;
+      flex: 1;
+      padding: 60px 80px;
+      min-height: 100vh;
+    }
+
+    /* ── Component header ── */
+    .component-header {
+      background: #272727;
+      margin: -60px -80px 60px;
+      padding: 44px 80px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .component-header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .component-breadcrumb {
+      font-size: 13px;
+      font-weight: 500;
+      color: #666;
+    }
+
+    .component-breadcrumb a {
+      color: #666;
+      text-decoration: none;
+    }
+
+    .component-breadcrumb a:hover {
+      color: #aaa;
+    }
+
+    .component-header h1 {
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+
+    .component-header-right p {
+      font-size: 14px;
+      font-weight: 500;
+      color: #828282;
+      max-width: 280px;
+      line-height: 20px;
+      text-align: right;
+    }
+
+    /* ── Sections ── */
+    .section {
+      margin-bottom: 64px;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 500;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+      color: #fff;
+    }
+
+    .divider {
+      height: 1px;
+      background: #2a2a2a;
+      margin: 48px 0;
+    }
+
+    /* ── Toast grid ── */
+    .toast-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    /* ── Toast card ── */
+    .toast-card {
+      background: #272727;
+      border-radius: 16px;
+      padding: 24px 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .toast-card__preview {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 80px;
+      margin-bottom: 16px;
+    }
+
+    .toast-card__label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #555;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .toast-card__controls {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-top: 1px solid #333;
+      padding-top: 16px;
+    }
+
+    .ctrl-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .ctrl-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #555;
+    }
+
+    /* ── Size pill bar ── */
+    .size-pills {
+      display: flex;
+      gap: 4px;
+    }
+
+    .size-pill {
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: none;
+      font-family: var(--font-family);
+      font-size: 11px;
+      font-weight: 600;
+      color: #666;
+      background: #1e1e1e;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .size-pill:hover {
+      background: #333;
+      color: #aaa;
+    }
+
+    .size-pill.active {
+      background: #f70f79;
+      color: #fff;
+    }
+
+    /* ── Toggle ── */
+    .toggle {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+      background: #333;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .toggle.active {
+      background: #f70f79;
+    }
+
+    .toggle-thumb {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.2s;
+      pointer-events: none;
+    }
+
+    .toggle.active .toggle-thumb {
+      transform: translateX(20px);
+    }
+
+    /* ── Props table ── */
+    .props-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .props-table th {
+      background: #fff;
+      color: #000;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 14px 20px;
+      text-align: left;
+    }
+
+    .props-table td {
+      background: #272727;
+      padding: 0 20px;
+      height: 52px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #e0e0e0;
+      border-top: 1px solid #333;
+    }
+
+    .props-table td code {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 12px;
+      color: #f70f79;
+    }
+
+    .props-table td.prop-name {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .props-table td.prop-default {
+      color: #828282;
+    }
+
+    /* ══════════════════════════════════════════════
+       Toast component styles
+    ══════════════════════════════════════════════ */
+    .toast {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 361px;
+      padding: 0 12px;
+      border-radius: 10px;
+      box-shadow: 0px 16px 32px -12px rgba(14, 18, 27, 0.1);
+      font-family: var(--font-family);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .toast-inner {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .toast-title {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 19px;
+      white-space: nowrap;
+    }
+
+    .toast-btn {
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-family);
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 20px;
+      letter-spacing: 0.026px;
+      color: #fff;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Sizes */
+    .toast-52 {
+      height: 52px;
+    }
+
+    .toast-40 {
+      height: 40px;
+    }
+
+    /* States */
+    .toast-error {
+      background: var(--red-light);
+    }
+
+    .toast-error .toast-title {
+      color: var(--red-dark);
+    }
+
+    .toast-success {
+      background: var(--green-light);
+    }
+
+    .toast-success .toast-title {
+      color: var(--green-dark);
+    }
+
+    .toast-information {
+      background: var(--blue-light);
+    }
+
+    .toast-information .toast-title {
+      color: var(--blue-dark);
+    }
+
+    .toast-warning {
+      background: var(--orange-light);
+    }
+
+    .toast-warning .toast-title {
+      color: var(--orange-dark);
+    }
+
+    .toast-feature {
+      background: var(--text-tertiary, #ababab);
+    }
+
+    .toast-feature .toast-title {
+      color: #fff;
+    }
+
+    /* Action buttons */
+    .toast-btn-okay {
+      background: #303030;
+      border-radius: 8px;
+    }
+
+    .toast-btn-undo {
+      background: transparent;
+      text-decoration: underline;
+      padding: 0 !important;
+    }
+
+    /* Size-specific button padding */
+    .toast-52 .toast-btn-okay {
+      padding: 4px 6px;
+    }
+
+    .toast-40 .toast-btn-okay {
+      padding: 2px 12px;
+    }
+
+    /* ══════════════════════════════════════════════
+       Offer Toast styles
+    ══════════════════════════════════════════════ */
+    .offer-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .offer-card {
+      background: #272727;
+      border-radius: 16px;
+      padding: 24px 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      overflow: hidden;
+    }
+
+    .offer-card__previews {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      min-height: 140px;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .offer-card__label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #555;
+      text-align: center;
+    }
+
+    /* Offer toast base */
+    .offer-toast {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 353px;
+      border: 1px solid transparent;
+      overflow: hidden;
+      font-family: var(--font-family);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .offer-toast--64 {
+      height: 64px;
+      padding: 12px 16px;
+      border-radius: 16px;
+    }
+
+    .offer-toast--40 {
+      height: 40px;
+      padding: 0 12px;
+      border-radius: 10px;
+    }
+
+    /* State backgrounds */
+    .offer-toast--offer {
+      background: url(assets/offer-bg.png) right center / auto 100% no-repeat,
+                  linear-gradient(90deg, #deffd6 26.794%, #c0f9ba 79.537%);
+      border-color: rgba(23,140,78,0.1);
+    }
+
+    .offer-toast--coupon {
+      background: url(assets/coupon-bg.png) right center / auto 100% no-repeat,
+                  #ebfff4;
+      border-color: #d0fbe9;
+    }
+
+    .offer-toast--recharge {
+      background: linear-gradient(90deg, #fff0f6 26.794%, #ffdfec 79.537%);
+      border-color: rgba(247,15,121,0.1);
+    }
+
+    /* Text */
+    .offer-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .offer-label {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 16px;
+      color: #178c4e;
+    }
+
+    .offer-main {
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 19px;
+      color: #303030;
+      letter-spacing: 0.02px;
+      white-space: nowrap;
+    }
+
+    .offer-main--sm {
+      font-weight: 500;
+    }
+
+    .offer-main--recharge {
+      font-weight: 600;
+    }
+
+    .offer-sub {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 16px;
+      color: #303030;
+    }
+
+    .offer-amount--green { color: #178c4e; }
+    .offer-amount--pink  { color: #f70f79; }
+  </style>
+</head>
+
+<body>
+
+  <aside class="sidebar">
+    <p class="sidebar-heading">Foundations</p>
+    <a class="nav-link" href="tokens.preview.html#color"><span class="nav-icon">⬛</span> Color</a>
+    <a class="nav-link" href="tokens.preview.html#shadow"><span class="nav-icon">◻️</span> Shadow</a>
+    <a class="nav-link" href="tokens.preview.html#typography"><span class="nav-icon">Aa</span> Typography</a>
+    <a class="nav-link" href="tokens.preview.html#radius"><span class="nav-icon">◜</span> Radius</a>
+
+    <div class="sidebar-separator"></div>
+    <p class="sidebar-heading">Components</p>
+    <a class="nav-link" href="Accordion.preview.html"><span class="nav-icon" style="font-size:13px">☰</span>
+      Accordion</a>
+    <a class="nav-link" href="Button.preview.html"><span class="nav-icon" style="font-size:13px">▣</span> Button</a>
+    <a class="nav-link" href="Checkbox.preview.html"><span class="nav-icon" style="font-size:13px">☑</span> Checkbox</a>
+    <a class="nav-link" href="TextField.preview.html"><span class="nav-icon" style="font-size:13px">▭</span> Input</a>
+    <a class="nav-link active" href="Toast.preview.html"><span class="nav-icon" style="font-size:13px">◩</span>
+      Toast</a>
+    <a class="nav-link" href="Toggle.preview.html"><span class="nav-icon" style="font-size:13px">⬭</span> Toggle</a>
+  </aside>
+
+  <main class="main">
+
+    <div class="component-header">
+      <div class="component-header-left">
+        <p class="component-breadcrumb"><a href="tokens.preview.html">Design System</a> / Components</p>
+        <h1>Toast</h1>
+      </div>
+      <div class="component-header-right">
+        <p>Brief feedback messages. Available in 5 states across 2 sizes.</p>
+      </div>
+    </div>
+
+    <!-- ─── VARIANTS ─── -->
+    <div class="section">
+      <p class="section-title">Variants</p>
+      <div class="toast-grid" id="toastGrid"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── OFFER TOAST ─── -->
+    <div class="section">
+      <p class="section-title">Offer Toast</p>
+      <div class="offer-grid">
+
+        <!-- Offer -->
+        <div class="offer-card">
+          <div class="offer-card__previews">
+            <div class="offer-toast offer-toast--64 offer-toast--offer">
+              <img src="assets/offer-icon.png" width="40" height="40" style="flex-shrink:0" alt="offer" />
+              <div class="offer-text">
+                <div class="offer-main">Congrats, <span class="offer-amount offer-amount--green">₹1000</span> added to your wallet</div>
+                <div class="offer-sub">You got this booking for free</div>
+              </div>
+            </div>
+            <div class="offer-toast offer-toast--40 offer-toast--offer">
+              <img src="assets/offer-icon.png" width="24" height="24" style="flex-shrink:0" alt="offer" />
+              <div class="offer-text">
+                <div class="offer-main offer-main--sm">Congrats, <span class="offer-amount offer-amount--green">₹1000</span> added to your wallet</div>
+              </div>
+            </div>
+          </div>
+          <div class="offer-card__label">Offer</div>
+        </div>
+
+        <!-- Coupon -->
+        <div class="offer-card">
+          <div class="offer-card__previews">
+            <div class="offer-toast offer-toast--64 offer-toast--coupon">
+              <img src="assets/coupon-icon.png" width="40" height="40" style="flex-shrink:0" alt="coupon" />
+              <div class="offer-text">
+                <div class="offer-label">Coupon Applied</div>
+                <div class="offer-main offer-main--sm">Add ₹200 and get ₹100 extra</div>
+              </div>
+            </div>
+            <div class="offer-toast offer-toast--40 offer-toast--coupon">
+              <img src="assets/coupon-icon.png" width="24" height="24" style="flex-shrink:0" alt="coupon" />
+              <div class="offer-text">
+                <div class="offer-main offer-main--sm">Add ₹200 and get ₹100 extra</div>
+              </div>
+            </div>
+          </div>
+          <div class="offer-card__label">Coupon</div>
+        </div>
+
+        <!-- Recharge -->
+        <div class="offer-card">
+          <div class="offer-card__previews">
+            <div class="offer-toast offer-toast--64 offer-toast--recharge">
+              <img src="assets/recharge-icon.png" width="40" height="40" style="flex-shrink:0" alt="recharge" />
+              <div class="offer-text">
+                <div class="offer-main offer-main--recharge"><span class="offer-amount offer-amount--pink">₹500</span> added to your wallet</div>
+              </div>
+            </div>
+            <div class="offer-toast offer-toast--40 offer-toast--recharge">
+              <img src="assets/recharge-icon.png" width="24" height="24" style="flex-shrink:0" alt="recharge" />
+              <div class="offer-text">
+                <div class="offer-main offer-main--sm"><span class="offer-amount offer-amount--pink">₹500</span> added to your wallet</div>
+              </div>
+            </div>
+          </div>
+          <div class="offer-card__label">Recharge</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── PROPS ─── -->
+    <div class="section">
+      <p class="section-title">Props</p>
+      <table class="props-table">
+        <thead>
+          <tr>
+            <th>Prop</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="prop-name"><code>state</code></td>
+            <td>error · success · information · warning · feature</td>
+            <td class="prop-default">"error"</td>
+            <td>Visual style and icon for the toast</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>size</code></td>
+            <td>52 · 40</td>
+            <td class="prop-default">52</td>
+            <td>Height in px — controls button padding</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>title</code></td>
+            <td>string</td>
+            <td class="prop-default">"Insert your alert title here!"</td>
+            <td>Message text displayed in the toast</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>leadingIcon</code></td>
+            <td>boolean</td>
+            <td class="prop-default">true</td>
+            <td>Show or hide the state icon</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>showAction</code></td>
+            <td>boolean</td>
+            <td class="prop-default">true</td>
+            <td>Show or hide the action button</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>actionLabel</code></td>
+            <td>string</td>
+            <td class="prop-default">—</td>
+            <td>Overrides the default label ("Okay" or "Undo")</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>onAction</code></td>
+            <td>() =&gt; void</td>
+            <td class="prop-default">—</td>
+            <td>Click handler for the action button</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <script>
+    const STATES = [
+      {
+        id: 'error',
+        label: 'Error',
+        icon: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#E93544"/><path d="M8 4.5V9M8 11.5H8.01" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+        action: 'okay',
+      },
+      {
+        id: 'success',
+        label: 'Success',
+        icon: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#178C4E"/><path d="M5 8.5L7 10.5L11 6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        action: 'okay',
+      },
+      {
+        id: 'information',
+        label: 'Information',
+        icon: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#3559E9"/><path d="M8 7V11M8 5H8.01" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+        action: 'okay',
+      },
+      {
+        id: 'warning',
+        label: 'Warning',
+        icon: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2.5L14 13.5H2L8 2.5Z" fill="#E16614"/><path d="M8 7V9.5M8 11.5H8.01" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>`,
+        action: 'okay',
+      },
+      {
+        id: 'feature',
+        label: 'Feature',
+        icon: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="white" fill-opacity="0.25"/><path d="M8 5V9M8 11H8.01" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+        action: 'undo',
+      },
+    ];
+
+    const cardState = {};
+    STATES.forEach(s => cardState[s.id] = { size: 52, icon: true, action: true });
+
+    function renderToast(sid) {
+      const state = STATES.find(x => x.id === sid);
+      const cs = cardState[sid];
+      const isUndo = state.action === 'undo';
+      const btnLabel = isUndo ? 'Undo' : 'Okay';
+      const btnCls = isUndo ? 'toast-btn toast-btn-undo' : 'toast-btn toast-btn-okay';
+
+      document.getElementById('toast-' + sid).outerHTML; // trigger read
+
+      const el = document.getElementById('toast-' + sid);
+      el.className = `toast toast-${cs.size} toast-${sid}`;
+      el.innerHTML = `
+        <div class="toast-inner">
+          ${cs.icon ? state.icon : ''}
+          <span class="toast-title">Insert your alert title here!</span>
+        </div>
+        ${cs.action ? `<button class="${btnCls}">${btnLabel}</button>` : ''}
+      `;
+    }
+
+    function renderAll() {
+      STATES.forEach(s => renderToast(s.id));
+    }
+
+    function setToastSize(sid, sz) {
+      cardState[sid].size = sz;
+      document.querySelectorAll(`#pills-${sid} .size-pill`).forEach(p => {
+        p.classList.toggle('active', +p.dataset.size === sz);
+      });
+      renderToast(sid);
+    }
+
+    function toggleToastProp(sid, prop) {
+      cardState[sid][prop] = !cardState[sid][prop];
+      document.getElementById(`toggle-${prop}-${sid}`).classList.toggle('active', cardState[sid][prop]);
+      renderToast(sid);
+    }
+
+    (function init() {
+      const grid = document.getElementById('toastGrid');
+      STATES.forEach(state => {
+        const isUndo = state.action === 'undo';
+        const btnLabel = isUndo ? 'Undo' : 'Okay';
+        const btnCls = isUndo ? 'toast-btn toast-btn-undo' : 'toast-btn toast-btn-okay';
+
+        const pills = [52, 40].map(sz =>
+          `<button class="size-pill${sz === 52 ? ' active' : ''}" data-size="${sz}" onclick="setToastSize('${state.id}',${sz})">${sz}</button>`
+        ).join('');
+
+        grid.insertAdjacentHTML('beforeend', `
+          <div class="toast-card">
+            <div class="toast-card__preview">
+              <div class="toast toast-52 toast-${state.id}" id="toast-${state.id}">
+                <div class="toast-inner">
+                  ${state.icon}
+                  <span class="toast-title">Insert your alert title here!</span>
+                </div>
+                <button class="${btnCls}">${btnLabel}</button>
+              </div>
+            </div>
+            <div class="toast-card__label">${state.label}</div>
+            <div class="toast-card__controls">
+              <div class="ctrl-row">
+                <span class="ctrl-label">Size</span>
+                <div class="size-pills" id="pills-${state.id}">${pills}</div>
+              </div>
+              <div class="ctrl-row">
+                <span class="ctrl-label">Leading Icon</span>
+                <span class="toggle active" id="toggle-icon-${state.id}" onclick="toggleToastProp('${state.id}','icon')">
+                  <span class="toggle-thumb"></span>
+                </span>
+              </div>
+              <div class="ctrl-row">
+                <span class="ctrl-label">Show Action</span>
+                <span class="toggle active" id="toggle-action-${state.id}" onclick="toggleToastProp('${state.id}','action')">
+                  <span class="toggle-thumb"></span>
+                </span>
+              </div>
+            </div>
+          </div>
+        `);
+      });
+    })();
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accordion — Snabbit Design System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary:       #ffffff;
+      --bg-secondary:     #fafafa;
+      --bg-tertiary:      #f0f0f0;
+      --text-primary:     #303030;
+      --text-secondary:   #828282;
+      --text-tertiary:    #ababab;
+      --accent-primary:   #f70f79;
+      --accent-light:     #fff3f8;
+      --stroke-primary:   #f70f79;
+      --stroke-secondary: #f0f0f0;
+      --font-family:      "Instrument Sans", sans-serif;
+      --radius-8:         8px;
+      --radius-16:        16px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-family);
+      background: #141414;
+      color: #fff;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 216px;
+      height: 100vh;
+      background: #1a1a1a;
+      border-right: 1px solid #252525;
+      padding: 48px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      z-index: 100;
+      overflow-y: auto;
+    }
+    .sidebar-heading {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #484848;
+      padding: 0 12px;
+      margin-bottom: 8px;
+    }
+    .sidebar-separator {
+      height: 1px;
+      background: #252525;
+      margin: 20px 4px;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #666;
+      text-decoration: none;
+      transition: color 0.15s, background 0.15s;
+    }
+    .nav-link:hover { color: #e0e0e0; background: #242424; }
+    .nav-link.active { color: #fff; background: #272727; }
+    .nav-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+
+    /* ── Main ── */
+    .main {
+      margin-left: 216px;
+      flex: 1;
+      padding: 60px 80px;
+      min-height: 100vh;
+    }
+
+    /* ── Component header ── */
+    .component-header {
+      background: #272727;
+      margin: -60px -80px 60px;
+      padding: 44px 80px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+    .component-header-left { display: flex; flex-direction: column; gap: 10px; }
+    .component-breadcrumb {
+      font-size: 13px;
+      font-weight: 500;
+      color: #666;
+      letter-spacing: 0.02em;
+    }
+    .component-breadcrumb a { color: #666; text-decoration: none; }
+    .component-breadcrumb a:hover { color: #aaa; }
+    .component-header h1 {
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+    .component-header-right { text-align: right; }
+    .component-header-right p { font-size: 14px; font-weight: 500; color: #828282; max-width: 280px; line-height: 20px; }
+
+    /* ── Sections ── */
+    .section { margin-bottom: 64px; }
+    .section-title {
+      font-size: 32px;
+      font-weight: 500;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+      color: #fff;
+    }
+    .divider { height: 1px; background: #2a2a2a; margin: 48px 0; }
+
+    /* ── Variant label ── */
+    .variant-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #555;
+      margin-bottom: 12px;
+    }
+
+    /* ── Accordion component ── */
+    .accordion-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+    }
+    .accordion-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .accordion-item {
+      background: #fff;
+      border: 1px solid #f0f0f0;
+      border-radius: var(--radius-16);
+      overflow: hidden;
+      font-family: var(--font-family);
+    }
+    .accordion-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      text-align: left;
+    }
+    .accordion-header-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .accordion-title {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+      color: #303030;
+    }
+    .accordion-chevron {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      transition: transform 0.22s ease;
+    }
+    .accordion-item.open .accordion-chevron { transform: rotate(180deg); }
+    .accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.25s ease;
+      padding: 0 16px;
+    }
+    .accordion-item.open .accordion-body {
+      max-height: 200px;
+      padding: 0 16px 16px;
+    }
+    .accordion-divider { height: 1px; background: #f0f0f0; margin-bottom: 12px; }
+    .accordion-text {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 16px;
+      color: #828282;
+      margin: 0;
+    }
+    .accordion-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: #fff3f8;
+      border-radius: var(--radius-8);
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 12px;
+      color: #f70f79;
+      font-family: inherit;
+    }
+
+    /* ── Props table ── */
+    .props-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .props-table th {
+      background: #ffffff;
+      color: #000;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 14px 20px;
+      text-align: left;
+    }
+    .props-table td {
+      background: #272727;
+      padding: 0 20px;
+      height: 52px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #e0e0e0;
+      border-top: 1px solid #333;
+    }
+    .props-table td code {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 12px;
+      color: #f70f79;
+    }
+    .props-table td.prop-name { color: #fff; font-weight: 600; }
+    .props-table td.prop-default { color: #828282; }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <p class="sidebar-heading">Foundations</p>
+    <a class="nav-link" href="tokens.preview.html#color">
+      <span class="nav-icon">⬛</span> Color
+    </a>
+    <a class="nav-link" href="tokens.preview.html#shadow">
+      <span class="nav-icon">◻️</span> Shadow
+    </a>
+    <a class="nav-link" href="tokens.preview.html#typography">
+      <span class="nav-icon">Aa</span> Typography
+    </a>
+    <a class="nav-link" href="tokens.preview.html#radius">
+      <span class="nav-icon">◜</span> Radius
+    </a>
+
+    <div class="sidebar-separator"></div>
+    <p class="sidebar-heading">Components</p>
+
+    <a class="nav-link active" href="Accordion.preview.html">
+      <span class="nav-icon" style="font-size:13px">☰</span> Accordion
+    </a>
+    <a class="nav-link" href="Button.preview.html">
+      <span class="nav-icon" style="font-size:13px">▣</span> Button
+    </a>
+    <a class="nav-link" href="Checkbox.preview.html"><span class="nav-icon" style="font-size:13px">☑</span> Checkbox</a>
+    <a class="nav-link" href="TextField.preview.html"><span class="nav-icon" style="font-size:13px">▭</span> Input</a>
+    <a class="nav-link" href="Toast.preview.html">
+      <span class="nav-icon" style="font-size:13px">◩</span> Toast
+    </a>
+    <a class="nav-link" href="Toggle.preview.html">
+      <span class="nav-icon" style="font-size:13px">⬭</span> Toggle
+    </a>
+  </aside>
+
+  <main class="main">
+
+    <div class="component-header">
+      <div class="component-header-left">
+        <p class="component-breadcrumb">
+          <a href="tokens.preview.html">Design System</a> / Components
+        </p>
+        <h1>Accordion</h1>
+      </div>
+      <div class="component-header-right">
+        <p>Collapsible content panel to progressively reveal information on demand.</p>
+      </div>
+    </div>
+
+    <!-- ─── VARIANTS ─── -->
+    <div class="section">
+      <p class="section-title">Variants</p>
+      <div class="accordion-columns">
+
+        <!-- Default -->
+        <div>
+          <p class="variant-label">Default</p>
+          <div class="accordion-group">
+
+            <div class="accordion-item">
+              <button class="accordion-header" onclick="toggleAccordion(this)">
+                <span class="accordion-title">How can I make a booking?</span>
+                <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="#303030" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <div class="accordion-body">
+                <div class="accordion-divider"></div>
+                <p class="accordion-text">Just select a service, pick when you want it, add your details, and tap Confirm.</p>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header" onclick="toggleAccordion(this)">
+                <span class="accordion-title">What areas do you cover?</span>
+                <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="#303030" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <div class="accordion-body">
+                <div class="accordion-divider"></div>
+                <p class="accordion-text">We currently cover all major cities and are expanding to new regions every month.</p>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header" onclick="toggleAccordion(this)">
+                <span class="accordion-title">Is there a cancellation fee?</span>
+                <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="#303030" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <div class="accordion-body">
+                <div class="accordion-divider"></div>
+                <p class="accordion-text">You can cancel for free up to 24 hours before your booking starts.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- With Icon -->
+        <div>
+          <p class="variant-label">With Icon</p>
+          <div class="accordion-group">
+
+            <div class="accordion-item open">
+              <button class="accordion-header" onclick="toggleAccordion(this)">
+                <span class="accordion-header-icon">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3" stroke="#303030" stroke-width="1.5"/><path d="M4 18c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="#303030" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </span>
+                <span class="accordion-title">How can I make a booking?</span>
+                <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="#303030" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <div class="accordion-body">
+                <div class="accordion-divider"></div>
+                <p class="accordion-text">Just select a service, pick when you want it, add your details, and tap Confirm.</p>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header" onclick="toggleAccordion(this)">
+                <span class="accordion-header-icon">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="4" y="3" width="12" height="14" rx="2" stroke="#303030" stroke-width="1.5"/><path d="M7 7h6M7 10h6M7 13h4" stroke="#303030" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </span>
+                <span class="accordion-title">What areas do you cover?</span>
+                <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="#303030" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <div class="accordion-body">
+                <div class="accordion-divider"></div>
+                <p class="accordion-text">We currently cover all major cities and are expanding to new regions every month.</p>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header" onclick="toggleAccordion(this)">
+                <span class="accordion-header-icon">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#303030" stroke-width="1.5"/><path d="M10 6v4l2.5 2.5" stroke="#303030" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </span>
+                <span class="accordion-title">Is there a cancellation fee?</span>
+                <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="#303030" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <div class="accordion-body">
+                <div class="accordion-divider"></div>
+                <p class="accordion-text">You can cancel for free up to 24 hours before your booking starts.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- With CTA -->
+        <div>
+          <p class="variant-label">With CTA</p>
+          <div class="accordion-group">
+
+            <div class="accordion-item open">
+              <button class="accordion-header" onclick="toggleAccordion(this)">
+                <span class="accordion-header-icon">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3" stroke="#303030" stroke-width="1.5"/><path d="M4 18c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="#303030" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </span>
+                <span class="accordion-title">How can I make a booking?</span>
+                <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="#303030" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <div class="accordion-body">
+                <div class="accordion-divider"></div>
+                <p class="accordion-text">Just select a service, pick when you want it, add your details, and tap Confirm.</p>
+                <button class="accordion-cta">
+                  Schedule
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M4.5 2.5L9 6.5L4.5 10.5" stroke="#F70F79" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header" onclick="toggleAccordion(this)">
+                <span class="accordion-header-icon">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="4" y="3" width="12" height="14" rx="2" stroke="#303030" stroke-width="1.5"/><path d="M7 7h6M7 10h6M7 13h4" stroke="#303030" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </span>
+                <span class="accordion-title">What areas do you cover?</span>
+                <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="#303030" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <div class="accordion-body">
+                <div class="accordion-divider"></div>
+                <p class="accordion-text">We currently cover all major cities and are expanding to new regions every month.</p>
+                <button class="accordion-cta">
+                  View map
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M4.5 2.5L9 6.5L4.5 10.5" stroke="#F70F79" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header" onclick="toggleAccordion(this)">
+                <span class="accordion-header-icon">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#303030" stroke-width="1.5"/><path d="M10 6v4l2.5 2.5" stroke="#303030" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </span>
+                <span class="accordion-title">Is there a cancellation fee?</span>
+                <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="#303030" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <div class="accordion-body">
+                <div class="accordion-divider"></div>
+                <p class="accordion-text">You can cancel for free up to 24 hours before your booking starts.</p>
+                <button class="accordion-cta">
+                  Learn more
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M4.5 2.5L9 6.5L4.5 10.5" stroke="#F70F79" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── PROPS ─── -->
+    <div class="section">
+      <p class="section-title">Props</p>
+      <table class="props-table">
+        <thead>
+          <tr>
+            <th>Prop</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="prop-name"><code>title</code></td>
+            <td>string</td>
+            <td class="prop-default">"How can I make a booking?"</td>
+            <td>Header text shown in the collapsed and expanded state</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>body</code></td>
+            <td>string</td>
+            <td class="prop-default">"Just select a service…"</td>
+            <td>Body text revealed when the accordion is open</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>icon</code></td>
+            <td>ReactNode</td>
+            <td class="prop-default">undefined</td>
+            <td>Optional leading icon displayed before the title</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>cta</code></td>
+            <td>&#123; label, onClick? &#125;</td>
+            <td class="prop-default">undefined</td>
+            <td>Optional call-to-action button shown at the bottom of the expanded body</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>defaultOpen</code></td>
+            <td>boolean</td>
+            <td class="prop-default">false</td>
+            <td>Controls whether the accordion starts in the open state</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <script>
+    function toggleAccordion(headerEl) {
+      headerEl.closest('.accordion-item').classList.toggle('open');
+    }
+  </script>
+
+</body>
+</html>
