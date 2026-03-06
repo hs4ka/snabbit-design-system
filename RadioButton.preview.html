@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Toggle — Snabbit Design System</title>
+  <title>Radio Button — Snabbit Design System</title>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&display=swap"
     rel="stylesheet" />
   <style>
@@ -154,33 +154,31 @@
       margin: 48px 0;
     }
 
-    /* ── Toggle grid ── */
-    .toggle-grid {
+    /* ── Radio grid ── */
+    .rb-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 16px;
     }
 
-    /* ── Toggle card ── */
-    .toggle-card {
+    /* ── Radio card ── */
+    .rb-card {
       background: #f5f5f5;
       border-radius: 16px;
       padding: 24px 24px 20px;
       display: flex;
       flex-direction: column;
-      gap: 0;
     }
 
-    .toggle-card__preview {
+    .rb-card__preview {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 24px;
       min-height: 80px;
       margin-bottom: 16px;
     }
 
-    .toggle-card__label {
+    .rb-card__label {
       font-size: 11px;
       font-weight: 600;
       letter-spacing: 0.08em;
@@ -190,7 +188,7 @@
       margin-bottom: 20px;
     }
 
-    .toggle-card__controls {
+    .rb-card__controls {
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -252,39 +250,76 @@
     .props-table td.prop-default { color: #828282; }
 
     /* ══════════════════════════════════════════════
-       Toggle component styles
+       Radio Button component styles
     ══════════════════════════════════════════════ */
 
-    /* Container — no background, sized to Figma spec */
-    .toggle-wrap {
+    .rb-wrap {
       position: relative;
       cursor: pointer;
       flex-shrink: 0;
       user-select: none;
     }
 
-    .toggle-wrap.disabled {
+    .rb-wrap.disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
 
-    /* Track — inset pill inside the container */
+    /* Colored ring / fill — inset 10% */
+    .rb-bg {
+      position: absolute;
+      inset: 10%;
+      border-radius: 50%;
+      background: var(--bg-tertiary);
+      transition: background 0.15s;
+      pointer-events: none;
+    }
+
+    .rb-wrap.on:not(.disabled) .rb-bg {
+      background: var(--accent-primary);
+    }
+
+    /* White center — creates ring or dot visual */
+    .rb-box {
+      position: absolute;
+      border-radius: 50%;
+      background: #fff;
+      pointer-events: none;
+      transition: inset 0.15s;
+    }
+
+    /* Default: inset 17.5% — thin border ring */
+    .rb-box { inset: 17.5%; }
+
+    /* Selected / Disabled Selected: inset 30% — center dot */
+    .rb-wrap.on .rb-box { inset: 30%; }
+
+    /* Disabled (unselected): hide box — shows solid grey disc */
+    .rb-wrap.disabled:not(.on) .rb-box { display: none; }
+
+    /* Sizes */
+    .rb-16 { width: 16px; height: 16px; }
+    .rb-20 { width: 20px; height: 20px; }
+    .rb-24 { width: 24px; height: 24px; }
+
+    /* ── Toggle (used as controls) ── */
+    .toggle-wrap {
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0;
+      user-select: none;
+    }
+    .toggle-wrap.disabled { opacity: 0.5; cursor: not-allowed; }
     .toggle-track {
       position: absolute;
-      top: 50%;
-      left: 50%;
+      top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       border-radius: 999px;
       background: var(--bg-tertiary);
       transition: background 0.2s;
       pointer-events: none;
     }
-
-    .toggle-wrap.on .toggle-track {
-      background: var(--accent-primary);
-    }
-
-    /* Thumb */
+    .toggle-wrap.on .toggle-track { background: var(--accent-primary); }
     .toggle-thumb {
       position: absolute;
       border-radius: 50%;
@@ -293,42 +328,20 @@
       transition: left 0.2s;
       pointer-events: none;
     }
-
-    /* Inner dot — same color as track, creating a ring effect on the thumb */
     .toggle-dot {
       position: absolute;
-      top: 50%;
-      left: 50%;
+      top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       border-radius: 50%;
       background: var(--bg-tertiary);
       pointer-events: none;
     }
-
-    .toggle-wrap.on .toggle-dot {
-      background: var(--accent-primary);
-    }
-
-    /* Size: 24px — container 40×24, track 33.6×19.2, thumb 14.4 */
-    .toggle-24 { width: 40px; height: 24px; }
-    .toggle-24 .toggle-track { width: 33.6px; height: 19.2px; }
-    .toggle-24 .toggle-thumb { width: 14.4px; height: 14.4px; top: 4.8px; left: 5.8px; }
-    .toggle-24 .toggle-dot   { width: 4.8px; height: 4.8px; }
-    .toggle-24.on .toggle-thumb { left: 20.2px; }
-
-    /* Size: 20px — container 34×20, track 28×16, thumb 12 */
+    .toggle-wrap.on .toggle-dot { background: var(--accent-primary); }
     .toggle-20 { width: 34px; height: 20px; }
     .toggle-20 .toggle-track { width: 28px; height: 16px; }
     .toggle-20 .toggle-thumb { width: 12px; height: 12px; top: 4px; left: 5.17px; }
     .toggle-20 .toggle-dot   { width: 4px; height: 4px; }
     .toggle-20.on .toggle-thumb { left: 17.17px; }
-
-    /* Size: 16px — container 26×16, track 22.4×12.8, thumb 9.6 */
-    .toggle-16 { width: 26px; height: 16px; }
-    .toggle-16 .toggle-track { width: 22.4px; height: 12.8px; }
-    .toggle-16 .toggle-thumb { width: 9.6px; height: 9.6px; top: 3.2px; left: 3.53px; }
-    .toggle-16 .toggle-dot   { width: 3.2px; height: 3.2px; }
-    .toggle-16.on .toggle-thumb { left: 13.13px; }
   </style>
 </head>
 
@@ -349,10 +362,10 @@
     <a class="nav-link" href="Button.preview.html"><span class="nav-icon" style="font-size:13px">▣</span> Button</a>
     <a class="nav-link" href="Checkbox.preview.html"><span class="nav-icon" style="font-size:13px">☑</span> Checkbox</a>
     <a class="nav-link" href="TextField.preview.html"><span class="nav-icon" style="font-size:13px">▭</span> Input</a>
-    <a class="nav-link" href="RadioButton.preview.html"><span class="nav-icon" style="font-size:13px">◉</span> Radio</a>
+    <a class="nav-link active"" href="RadioButton.preview.html"><span class="nav-icon" style="font-size:13px">◉</span> Radio</a>
     <a class="nav-link" href="Tabs.preview.html"><span class="nav-icon" style="font-size:13px">▤</span> Tabs</a>
     <a class="nav-link" href="Toast.preview.html"><span class="nav-icon" style="font-size:13px">◩</span> Toast</a>
-    <a class="nav-link active"" href="Toggle.preview.html"><span class="nav-icon" style="font-size:13px">⬭</span> Toggle</a>
+    <a class="nav-link" href="Toggle.preview.html"><span class="nav-icon" style="font-size:13px">⬭</span> Toggle</a>
   </aside>
 
   <main class="main">
@@ -360,17 +373,17 @@
     <div class="component-header">
       <div class="component-header-left">
         <p class="component-breadcrumb"><a href="tokens.preview.html">Design System</a> / Components</p>
-        <h1>Toggle</h1>
+        <h1>Radio Button</h1>
       </div>
       <div class="component-header-right">
-        <p>Binary on/off switch. Available in 3 sizes.</p>
+        <p>Single-select circular input. Available in 3 sizes with 4 states.</p>
       </div>
     </div>
 
     <!-- ─── VARIANTS ─── -->
     <div class="section">
       <p class="section-title">Variants</p>
-      <div class="toggle-grid" id="toggleGrid"></div>
+      <div class="rb-grid" id="rbGrid"></div>
     </div>
 
     <div class="divider"></div>
@@ -390,27 +403,27 @@
         <tbody>
           <tr>
             <td class="prop-name"><code>size</code></td>
-            <td>24 · 20 · 16</td>
-            <td class="prop-default">20</td>
-            <td>Height in px — scales width and thumb proportionally</td>
+            <td>16 · 20 · 24</td>
+            <td class="prop-default">16</td>
+            <td>Container size in px — scales all internal dimensions proportionally</td>
           </tr>
           <tr>
-            <td class="prop-name"><code>checked</code></td>
+            <td class="prop-name"><code>selected</code></td>
             <td>boolean</td>
             <td class="prop-default">—</td>
-            <td>Controlled on/off state</td>
+            <td>Controlled selected state</td>
           </tr>
           <tr>
-            <td class="prop-name"><code>defaultChecked</code></td>
+            <td class="prop-name"><code>defaultSelected</code></td>
             <td>boolean</td>
             <td class="prop-default">false</td>
             <td>Initial state for uncontrolled usage</td>
           </tr>
           <tr>
             <td class="prop-name"><code>onChange</code></td>
-            <td>(checked: boolean) =&gt; void</td>
+            <td>(selected: boolean) =&gt; void</td>
             <td class="prop-default">—</td>
-            <td>Called with the new state on click</td>
+            <td>Called when the radio is selected</td>
           </tr>
           <tr>
             <td class="prop-name"><code>disabled</code></td>
@@ -432,53 +445,53 @@
     ];
 
     const cardState = {};
-    SIZES.forEach(s => cardState[s.id] = { on: true, disabled: false });
+    SIZES.forEach(s => cardState[s.id] = { on: false, disabled: false });
 
-    function renderToggle(sid) {
+    const TOGGLE_HTML = `<div class="toggle-track"></div><div class="toggle-thumb"><div class="toggle-dot"></div></div>`;
+
+    function renderRadio(sid) {
       const cs = cardState[sid];
-      const el = document.getElementById('toggle-' + sid);
-      el.className = `toggle-wrap toggle-${SIZES.find(s => s.id === sid).sz}${cs.on ? ' on' : ''}${cs.disabled ? ' disabled' : ''}`;
+      const s = SIZES.find(s => s.id === sid);
+      const el = document.getElementById('rb-' + sid);
+      el.className = `rb-wrap rb-${s.sz}${cs.on ? ' on' : ''}${cs.disabled ? ' disabled' : ''}`;
     }
 
-    function toggleState(sid) {
+    function toggleSelected(sid) {
       if (cardState[sid].disabled) return;
       cardState[sid].on = !cardState[sid].on;
-      document.getElementById(`indicator-${sid}`).classList.toggle('active', cardState[sid].on);
-      renderToggle(sid);
+      document.getElementById(`indicator-${sid}`).classList.toggle('on', cardState[sid].on);
+      renderRadio(sid);
     }
 
     function toggleDisabled(sid) {
       cardState[sid].disabled = !cardState[sid].disabled;
-      document.getElementById(`toggle-disabled-${sid}`).classList.toggle('active', cardState[sid].disabled);
-      renderToggle(sid);
-    }
-
-    function toggleHtml(sizeCls) {
-      return `<div class="toggle-track"></div><div class="toggle-thumb"><div class="toggle-dot"></div></div>`;
+      document.getElementById(`toggle-disabled-${sid}`).classList.toggle('on', cardState[sid].disabled);
+      renderRadio(sid);
     }
 
     (function init() {
-      const grid = document.getElementById('toggleGrid');
+      const grid = document.getElementById('rbGrid');
       SIZES.forEach(s => {
         grid.insertAdjacentHTML('beforeend', `
-          <div class="toggle-card">
-            <div class="toggle-card__preview">
-              <div class="toggle-wrap toggle-${s.sz} on" id="toggle-${s.id}" onclick="toggleState('${s.id}')">
-                ${toggleHtml(s.sz)}
+          <div class="rb-card">
+            <div class="rb-card__preview">
+              <div class="rb-wrap rb-${s.sz}" id="rb-${s.id}" onclick="toggleSelected('${s.id}')">
+                <div class="rb-bg"></div>
+                <div class="rb-box"></div>
               </div>
             </div>
-            <div class="toggle-card__label">${s.label}</div>
-            <div class="toggle-card__controls">
+            <div class="rb-card__label">${s.label}</div>
+            <div class="rb-card__controls">
               <div class="ctrl-row">
-                <span class="ctrl-label">On</span>
-                <span class="toggle-wrap toggle-20 on" id="indicator-${s.id}" onclick="toggleState('${s.id}')">
-                  ${toggleHtml(20)}
+                <span class="ctrl-label">Selected</span>
+                <span class="toggle-wrap toggle-20" id="indicator-${s.id}" onclick="toggleSelected('${s.id}')">
+                  ${TOGGLE_HTML}
                 </span>
               </div>
               <div class="ctrl-row">
                 <span class="ctrl-label">Disabled</span>
                 <span class="toggle-wrap toggle-20" id="toggle-disabled-${s.id}" onclick="toggleDisabled('${s.id}')">
-                  ${toggleHtml(20)}
+                  ${TOGGLE_HTML}
                 </span>
               </div>
             </div>

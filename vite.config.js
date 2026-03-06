@@ -14,6 +14,8 @@ export default defineConfig({
         textfield: resolve(__dirname, 'TextField.preview.html'),
         toast: resolve(__dirname, 'Toast.preview.html'),
         toggle: resolve(__dirname, 'Toggle.preview.html'),
+        radiobutton: resolve(__dirname, 'RadioButton.preview.html'),
+        tabs: resolve(__dirname, 'Tabs.preview.html'),
       },
     },
   },

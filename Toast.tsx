@@ -11,7 +11,7 @@ const stateConfig: Record<ToastState, { bg: string; text: string; action: 'okay'
   success:     { bg: colors.status.green.light,  text: colors.status.green.dark,  action: 'okay' },
   information: { bg: colors.status.blue.light,   text: colors.status.blue.dark,   action: 'okay' },
   warning:     { bg: colors.status.orange.light, text: colors.status.orange.dark, action: 'okay' },
-  feature:     { bg: colors.text.tertiary,       text: '#fff',                    action: 'undo' },
+  feature:     { bg: colors.text.tertiary,       text: '#fff',                    action: 'okay' },
 };
 
 // ── Icons ──────────────────────────────────────────────
@@ -88,11 +88,7 @@ export default function Toast({
 }: ToastProps) {
   const config = stateConfig[state];
   const Icon = icons[state];
-  const isFeature = config.action === 'undo';
-  const label = actionLabel ?? (isFeature ? 'Undo' : 'Okay');
-
-  const btnPy = size === 52 ? 4 : 2;
-  const btnPx = isFeature ? 0 : (size === 52 ? 6 : 12);
+  const label = actionLabel ?? 'Okay';
 
   return (
     <div style={{
@@ -122,19 +118,16 @@ export default function Toast({
         <button
           onClick={onAction}
           style={{
-            paddingTop: btnPy, paddingBottom: btnPy,
-            paddingLeft: btnPx, paddingRight: btnPx,
-            background: isFeature ? 'transparent' : colors.text.primary,
+            padding: '4px 6px',
+            background: colors.text.primary,
             border: 'none',
-            borderRadius: isFeature ? 0 : radius[8],
+            borderRadius: radius[8],
             cursor: 'pointer',
             fontFamily,
-            fontSize: 13,
-            fontWeight: 500,
-            lineHeight: '20px',
-            letterSpacing: '0.026px',
+            fontSize: 12,
+            fontWeight: 600,
+            lineHeight: '16px',
             color: '#fff',
-            textDecoration: isFeature ? 'underline' : 'none',
             whiteSpace: 'nowrap',
           }}
         >

@@ -430,12 +430,11 @@
     }
 
     .toast-feature .toast-title {
-      color: #303030;
+      color: #ffffff;
     }
 
     /* Action buttons — 24px neutral */
-    .toast-btn-okay,
-    .toast-btn-undo {
+    .toast-btn-okay {
       display: inline-flex; align-items: center; justify-content: center;
       background: #303030; color: #ffffff;
       border: none; border-radius: 8px; cursor: pointer;
@@ -579,14 +578,16 @@
     <a class="nav-link" href="tokens.preview.html#radius"><span class="nav-icon">◜</span> Radius</a>
 
     <div class="sidebar-separator"></div>
+    
     <p class="sidebar-heading">Components</p>
     <a class="nav-link" href="Accordion.preview.html"><span class="nav-icon" style="font-size:13px">☰</span> Accordion</a>
     <a class="nav-link" href="Banner.preview.html"><span class="nav-icon" style="font-size:13px">◫</span> Banner</a>
     <a class="nav-link" href="Button.preview.html"><span class="nav-icon" style="font-size:13px">▣</span> Button</a>
     <a class="nav-link" href="Checkbox.preview.html"><span class="nav-icon" style="font-size:13px">☑</span> Checkbox</a>
     <a class="nav-link" href="TextField.preview.html"><span class="nav-icon" style="font-size:13px">▭</span> Input</a>
-    <a class="nav-link active" href="Toast.preview.html"><span class="nav-icon" style="font-size:13px">◩</span>
-      Toast</a>
+    <a class="nav-link" href="RadioButton.preview.html"><span class="nav-icon" style="font-size:13px">◉</span> Radio</a>
+    <a class="nav-link" href="Tabs.preview.html"><span class="nav-icon" style="font-size:13px">▤</span> Tabs</a>
+    <a class="nav-link active"" href="Toast.preview.html"><span class="nav-icon" style="font-size:13px">◩</span> Toast</a>
     <a class="nav-link" href="Toggle.preview.html"><span class="nav-icon" style="font-size:13px">⬭</span> Toggle</a>
   </aside>
 
@@ -770,7 +771,7 @@
         id: 'feature',
         label: 'Feature',
         icon: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="white" fill-opacity="0.25"/><path d="M8 5V9M8 11H8.01" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>`,
-        action: 'undo',
+        action: 'okay',
       },
     ];
 
@@ -780,9 +781,7 @@
     function renderToast(sid) {
       const state = STATES.find(x => x.id === sid);
       const cs = cardState[sid];
-      const isUndo = state.action === 'undo';
-      const btnLabel = isUndo ? 'Undo' : 'Okay';
-      const btnCls = isUndo ? 'toast-btn toast-btn-undo' : 'toast-btn toast-btn-okay';
+      const btnCls = 'toast-btn toast-btn-okay';
 
       document.getElementById('toast-' + sid).outerHTML; // trigger read
 
@@ -793,7 +792,7 @@
           ${cs.icon ? state.icon : ''}
           <span class="toast-title">Insert your alert title here!</span>
         </div>
-        ${cs.action ? `<button class="${btnCls}">${btnLabel}</button>` : ''}
+        ${cs.action ? `<button class="${btnCls}">Okay</button>` : ''}
       `;
     }
 
@@ -818,9 +817,7 @@
     (function init() {
       const grid = document.getElementById('toastGrid');
       STATES.forEach(state => {
-        const isUndo = state.action === 'undo';
-        const btnLabel = isUndo ? 'Undo' : 'Okay';
-        const btnCls = isUndo ? 'toast-btn toast-btn-undo' : 'toast-btn toast-btn-okay';
+          const btnCls = 'toast-btn toast-btn-okay';
 
         const pills = [52, 40].map(sz =>
           `<button class="size-pill${sz === 52 ? ' active' : ''}" data-size="${sz}" onclick="setToastSize('${state.id}',${sz})">${sz}</button>`
@@ -834,7 +831,7 @@
                   ${state.icon}
                   <span class="toast-title">Insert your alert title here!</span>
                 </div>
-                <button class="${btnCls}">${btnLabel}</button>
+                <button class="${btnCls}">Okay</button>
               </div>
             </div>
             <div class="toast-card__label">${state.label}</div>
