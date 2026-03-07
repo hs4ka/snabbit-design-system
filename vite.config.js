@@ -16,6 +16,8 @@ export default defineConfig({
         toggle: resolve(__dirname, 'Toggle.preview.html'),
         radiobutton: resolve(__dirname, 'RadioButton.preview.html'),
         tabs: resolve(__dirname, 'Tabs.preview.html'),
+        progressbar: resolve(__dirname, 'ProgressBar.preview.html'),
+        tag: resolve(__dirname, 'Tag.preview.html'),
       },
     },
   },
