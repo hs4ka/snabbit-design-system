@@ -165,38 +165,6 @@
       justify-content: center;
     }
 
-    /* ── Variants grid ── */
-    .variants-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 16px;
-    }
-
-    .variant-card {
-      background: #f5f5f5;
-      border-radius: 16px;
-      padding: 24px 16px 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .variant-card__preview {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .variant-card__label {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #ababab;
-      text-align: center;
-    }
-
     /* ── Props table ── */
     .props-table {
       width: 100%;
@@ -237,7 +205,7 @@
     .props-table td.prop-default { color: #828282; }
 
     /* ══════════════════════════════════════════════
-       Tabs component styles
+       Tabs component styles — Text variant
     ══════════════════════════════════════════════ */
 
     .tabs {
@@ -285,6 +253,77 @@
     .tab-item.active .tab-indicator {
       background: #f70f79;
     }
+
+    /* ══════════════════════════════════════════════
+       Tabs component styles — Icon variant
+    ══════════════════════════════════════════════ */
+
+    .tabs-icon {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 393px;
+      padding: 0 16px;
+      border-bottom: 1px solid #f0f0f0;
+      font-family: var(--font-outfit);
+    }
+
+    .tab-icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      width: 64px;
+    }
+
+    .tab-icon-circle {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .tab-icon-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .tab-icon-label {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      color: #828282;
+      white-space: nowrap;
+      transition: color 0.15s;
+    }
+
+    .tab-icon-item.active .tab-icon-label {
+      color: #f70f79;
+    }
+
+    .tab-icon-indicator {
+      height: 4px;
+      width: 100%;
+      border-radius: 2px;
+      background: transparent;
+      transition: background 0.15s;
+    }
+
+    .tab-icon-item.active .tab-icon-indicator {
+      background: #f70f79;
+    }
   </style>
 </head>
 
@@ -305,8 +344,10 @@
     <a class="nav-link" href="Button.preview.html"><span class="nav-icon" style="font-size:13px">▣</span> Button</a>
     <a class="nav-link" href="Checkbox.preview.html"><span class="nav-icon" style="font-size:13px">☑</span> Checkbox</a>
     <a class="nav-link" href="TextField.preview.html"><span class="nav-icon" style="font-size:13px">▭</span> Input</a>
+    <a class="nav-link" href="ProgressBar.preview.html"><span class="nav-icon" style="font-size:13px">◌</span> Progress</a>
     <a class="nav-link" href="RadioButton.preview.html"><span class="nav-icon" style="font-size:13px">◉</span> Radio</a>
-    <a class="nav-link active"" href="Tabs.preview.html"><span class="nav-icon" style="font-size:13px">▤</span> Tabs</a>
+    <a class="nav-link active" href="Tabs.preview.html"><span class="nav-icon" style="font-size:13px">▤</span> Tabs</a>
+    <a class="nav-link" href="Tag.preview.html"><span class="nav-icon" style="font-size:13px">◈</span> Tag</a>
     <a class="nav-link" href="Toast.preview.html"><span class="nav-icon" style="font-size:13px">◩</span> Toast</a>
     <a class="nav-link" href="Toggle.preview.html"><span class="nav-icon" style="font-size:13px">⬭</span> Toggle</a>
   </aside>
@@ -319,13 +360,13 @@
         <h1>Tabs</h1>
       </div>
       <div class="component-header-right">
-        <p>Horizontal navigation bar for switching between views. 5 tabs, single active state.</p>
+        <p>Horizontal navigation bar. Text variant (5 tabs) and Icon variant (icon + label).</p>
       </div>
     </div>
 
-    <!-- ─── PLAYGROUND ─── -->
+    <!-- ─── TEXT PLAYGROUND ─── -->
     <div class="section">
-      <p class="section-title">Playground</p>
+      <p class="section-title">Text Tabs</p>
       <div class="playground-card">
         <div class="tabs" id="playgroundTabs"></div>
       </div>
@@ -333,10 +374,12 @@
 
     <div class="divider"></div>
 
-    <!-- ─── VARIANTS ─── -->
+    <!-- ─── ICON PLAYGROUND ─── -->
     <div class="section">
-      <p class="section-title">Variants</p>
-      <div class="variants-grid" id="variantsGrid"></div>
+      <p class="section-title">Icon Tabs</p>
+      <div class="playground-card">
+        <div class="tabs-icon" id="playgroundIconTabs"></div>
+      </div>
     </div>
 
     <div class="divider"></div>
@@ -355,20 +398,32 @@
         </thead>
         <tbody>
           <tr>
+            <td class="prop-name"><code>variant</code></td>
+            <td>'text' · 'icon'</td>
+            <td class="prop-default">'text'</td>
+            <td>Text-only tabs (361px) or icon + label tabs (393px)</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>tabs</code></td>
+            <td>TabItem[]</td>
+            <td class="prop-default">TEXT_TABS</td>
+            <td>Array of <code>{ id, label, icon? }</code> — icon used in icon variant</td>
+          </tr>
+          <tr>
             <td class="prop-name"><code>activeTab</code></td>
-            <td>'bookings' · 'account' · 'payments' · 'feedback' · 'safety'</td>
+            <td>string</td>
             <td class="prop-default">—</td>
-            <td>Controlled active tab</td>
+            <td>Controlled active tab id</td>
           </tr>
           <tr>
             <td class="prop-name"><code>defaultTab</code></td>
-            <td>'bookings' · 'account' · 'payments' · 'feedback' · 'safety'</td>
-            <td class="prop-default">'bookings'</td>
+            <td>string</td>
+            <td class="prop-default">first tab id</td>
             <td>Initial tab for uncontrolled usage</td>
           </tr>
           <tr>
             <td class="prop-name"><code>onChange</code></td>
-            <td>(tab: TabId) =&gt; void</td>
+            <td>(tab: string) =&gt; void</td>
             <td class="prop-default">—</td>
             <td>Called with the new tab id when switching</td>
           </tr>
@@ -387,6 +442,18 @@
       { id: 'safety',    label: 'Safety' },
     ];
 
+    // Isometric calendar icons from Figma (48×48px inside 56px circle)
+    const ICON_SINGLE    = `<img src="https://www.figma.com/api/mcp/asset/22eb14f8-b5c1-4d00-b63f-35c823a707d0" style="width:48px;height:48px;object-fit:contain;display:block;" alt="Single">`;
+    const ICON_MULTIPLE  = `<img src="https://www.figma.com/api/mcp/asset/4a4d569c-5996-4948-8832-f753bfb71ee8" style="width:48px;height:48px;object-fit:contain;display:block;" alt="Multiple">`;
+    const ICON_RECURRING = `<img src="https://www.figma.com/api/mcp/asset/86bcdf8c-115e-416e-ae5d-f772f654525c" style="width:42px;height:42px;object-fit:contain;display:block;" alt="Recurring">`;
+
+    const ICON_TABS = [
+      { id: 'single',    label: 'Single',    icon: ICON_SINGLE },
+      { id: 'multiple',  label: 'Multiple',  icon: ICON_MULTIPLE },
+      { id: 'recurring', label: 'Recurring', icon: ICON_RECURRING },
+    ];
+
+    // ── Text tabs ──
     function buildTabs(container, activeId, onSelect) {
       container.innerHTML = '';
       TABS.forEach(tab => {
@@ -398,7 +465,25 @@
       });
     }
 
-    // Playground
+    // ── Icon tabs ──
+    function buildIconTabs(container, activeId, onSelect) {
+      container.innerHTML = '';
+      ICON_TABS.forEach(tab => {
+        const btn = document.createElement('button');
+        btn.className = 'tab-icon-item' + (tab.id === activeId ? ' active' : '');
+        btn.innerHTML = `
+          <div class="tab-icon-circle">${tab.icon}</div>
+          <div class="tab-icon-body">
+            <span class="tab-icon-label">${tab.label}</span>
+            <div class="tab-icon-indicator"></div>
+          </div>
+        `;
+        btn.addEventListener('click', () => onSelect(tab.id));
+        container.appendChild(btn);
+      });
+    }
+
+    // Text playground
     let playgroundActive = 'bookings';
     const playgroundEl = document.getElementById('playgroundTabs');
     function renderPlayground() {
@@ -409,22 +494,17 @@
     }
     renderPlayground();
 
-    // Variants — one card per tab showing that tab as active
-    const variantsGrid = document.getElementById('variantsGrid');
-    TABS.forEach(tab => {
-      const card = document.createElement('div');
-      card.className = 'variant-card';
-      card.innerHTML = `
-        <div class="variant-card__preview">
-          <div class="tabs" id="variant-tabs-${tab.id}"></div>
-        </div>
-        <div class="variant-card__label">${tab.label}</div>
-      `;
-      variantsGrid.appendChild(card);
+    // Icon playground
+    let iconActive = 'single';
+    const iconPlaygroundEl = document.getElementById('playgroundIconTabs');
+    function renderIconPlayground() {
+      buildIconTabs(iconPlaygroundEl, iconActive, id => {
+        iconActive = id;
+        renderIconPlayground();
+      });
+    }
+    renderIconPlayground();
 
-      const tabsEl = document.getElementById(`variant-tabs-${tab.id}`);
-      buildTabs(tabsEl, tab.id, () => {});
-    });
   </script>
 
 </body>

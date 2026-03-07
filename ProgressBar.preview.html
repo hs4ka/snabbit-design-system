@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Progress Bar — Snabbit Design System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&family=Outfit:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent-primary: #f70f79;
+      --font-ui: "Instrument Sans", sans-serif;
+      --font-outfit: "Outfit", sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-ui);
+      background: #ffffff;
+      color: #303030;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed; top: 0; left: 0; width: 216px; height: 100vh;
+      background: #fafafa; border-right: 1px solid #ebebeb;
+      padding: 48px 16px; display: flex; flex-direction: column;
+      gap: 2px; z-index: 100; overflow-y: auto;
+    }
+    .sidebar-heading {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: #ababab; padding: 0 12px; margin-bottom: 8px;
+    }
+    .sidebar-separator { height: 1px; background: #ebebeb; margin: 20px 4px; }
+    .nav-link {
+      display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+      border-radius: 8px; font-size: 14px; font-weight: 500; color: #ababab;
+      text-decoration: none; transition: color 0.15s, background 0.15s;
+    }
+    .nav-link:hover { color: #303030; background: #ebebeb; }
+    .nav-link.active { color: #303030; background: #f0f0f0; }
+    .nav-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+
+    /* ── Main ── */
+    .main { margin-left: 216px; flex: 1; padding: 60px 80px; min-height: 100vh; }
+
+    /* ── Component header ── */
+    .component-header {
+      background: #f5f5f5; margin: -60px -80px 60px; padding: 44px 80px;
+      display: flex; align-items: flex-end; justify-content: space-between;
+    }
+    .component-header-left { display: flex; flex-direction: column; gap: 10px; }
+    .component-breadcrumb { font-size: 13px; font-weight: 500; color: #ababab; }
+    .component-breadcrumb a { color: #ababab; text-decoration: none; }
+    .component-breadcrumb a:hover { color: #303030; }
+    .component-header h1 { font-size: 56px; font-weight: 700; line-height: 1; letter-spacing: -2px; }
+    .component-header-right p {
+      font-size: 14px; font-weight: 500; color: #828282;
+      max-width: 280px; line-height: 20px; text-align: right;
+    }
+
+    /* ── Sections ── */
+    .section { margin-bottom: 64px; }
+    .section-title { font-size: 32px; font-weight: 500; letter-spacing: -1px; margin-bottom: 24px; color: #303030; }
+    .divider { height: 1px; background: #e8e8e8; margin: 48px 0; }
+
+    /* ── Playground ── */
+    .playground-card {
+      background: #f5f5f5; border-radius: 16px; padding: 48px 40px;
+      display: flex; flex-direction: column; align-items: center; gap: 32px;
+    }
+    .playground-preview {
+      display: flex; align-items: center; justify-content: center; min-height: 100px;
+    }
+    .playground-controls { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 400px; }
+    .ctrl-group { display: flex; flex-direction: column; gap: 10px; }
+    .ctrl-group-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #ababab; }
+
+    /* Slider */
+    .value-slider {
+      -webkit-appearance: none; width: 100%; height: 4px;
+      border-radius: 2px; background: #f0f0f0; outline: none; cursor: pointer;
+    }
+    .value-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%;
+      background: #f70f79; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+    .slider-row { display: flex; align-items: center; gap: 12px; }
+    .slider-value {
+      font-family: var(--font-outfit); font-size: 13px; font-weight: 600;
+      color: #f70f79; min-width: 40px; text-align: right;
+    }
+
+    /* Size pills */
+    .pills { display: flex; gap: 8px; flex-wrap: wrap; }
+    .pill {
+      padding: 6px 14px; border-radius: 100px; font-size: 13px; font-weight: 600;
+      background: #ebebeb; color: #ababab; border: none; cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .pill.active { background: #303030; color: #fff; }
+
+    /* ── Matrix grid ── */
+    .matrix {
+      display: grid;
+      grid-template-columns: 80px repeat(5, 1fr);
+      gap: 0;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #f0f0f0;
+    }
+    .matrix-cell {
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px 16px; background: #fff;
+      border-bottom: 1px solid #f0f0f0;
+      border-right: 1px solid #f0f0f0;
+    }
+    .matrix-cell:nth-child(6n) { border-right: none; }
+    .matrix-row-last .matrix-cell { border-bottom: none; }
+    .matrix-header {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+      text-transform: uppercase; color: #ababab; background: #fafafa;
+    }
+    .matrix-size-label {
+      font-size: 12px; font-weight: 600; color: #ababab; background: #fafafa;
+      justify-content: flex-start; padding-left: 20px;
+    }
+
+    /* ── Horizontal bar ── */
+    .hbar-track {
+      width: 320px; height: 6px; background: #f0f0f0;
+      border-radius: 999px; overflow: hidden; flex-shrink: 0;
+    }
+    .hbar-fill {
+      height: 100%; background: #f70f79; border-radius: 999px;
+      transition: width 0.2s;
+    }
+
+    /* Horizontal variants grid */
+    .hbar-variants {
+      display: flex; flex-direction: column; gap: 0;
+      border-radius: 16px; overflow: hidden;
+      border: 1px solid #f0f0f0;
+    }
+    .hbar-row {
+      display: flex; align-items: center; gap: 24px;
+      padding: 20px 28px; background: #fff;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .hbar-row:last-child { border-bottom: none; }
+    .hbar-row-label {
+      font-size: 12px; font-weight: 600; color: #ababab;
+      min-width: 40px; text-align: right; flex-shrink: 0;
+    }
+
+    /* ── Props table ── */
+    .props-table { width: 100%; border-collapse: collapse; border-radius: 16px; overflow: hidden; }
+    .props-table th { background: #fff; color: #828282; font-size: 13px; font-weight: 600; padding: 14px 20px; text-align: left; }
+    .props-table td { background: #fff; padding: 0 20px; height: 52px; font-size: 13px; font-weight: 500; color: #303030; border-top: 1px solid #e8e8e8; }
+    .props-table td code { background: #f5f5f5; border: 1px solid #e8e8e8; border-radius: 4px; padding: 2px 6px; font-size: 12px; color: #f70f79; }
+    .props-table td.prop-name { color: #303030; font-weight: 600; }
+    .props-table td.prop-default { color: #828282; }
+  </style>
+</head>
+
+<body>
+
+  <aside class="sidebar">
+    <p class="sidebar-heading">Foundations</p>
+    <a class="nav-link" href="tokens.preview.html#color"><span class="nav-icon">⬛</span> Color</a>
+    <a class="nav-link" href="tokens.preview.html#shadow"><span class="nav-icon">◻️</span> Shadow</a>
+    <a class="nav-link" href="tokens.preview.html#typography"><span class="nav-icon">Aa</span> Typography</a>
+    <a class="nav-link" href="tokens.preview.html#radius"><span class="nav-icon">◜</span> Radius</a>
+
+    <div class="sidebar-separator"></div>
+    <p class="sidebar-heading">Components</p>
+    <a class="nav-link" href="Accordion.preview.html"><span class="nav-icon" style="font-size:13px">☰</span> Accordion</a>
+    <a class="nav-link" href="Banner.preview.html"><span class="nav-icon" style="font-size:13px">◫</span> Banner</a>
+    <a class="nav-link" href="Button.preview.html"><span class="nav-icon" style="font-size:13px">▣</span> Button</a>
+    <a class="nav-link" href="Checkbox.preview.html"><span class="nav-icon" style="font-size:13px">☑</span> Checkbox</a>
+    <a class="nav-link" href="TextField.preview.html"><span class="nav-icon" style="font-size:13px">▭</span> Input</a>
+    <a class="nav-link active" href="ProgressBar.preview.html"><span class="nav-icon" style="font-size:13px">◌</span> Progress</a>
+    <a class="nav-link" href="RadioButton.preview.html"><span class="nav-icon" style="font-size:13px">◉</span> Radio</a>
+    <a class="nav-link" href="Tabs.preview.html"><span class="nav-icon" style="font-size:13px">▤</span> Tabs</a>
+    <a class="nav-link" href="Tag.preview.html"><span class="nav-icon" style="font-size:13px">◈</span> Tag</a>
+    <a class="nav-link" href="Toast.preview.html"><span class="nav-icon" style="font-size:13px">◩</span> Toast</a>
+    <a class="nav-link" href="Toggle.preview.html"><span class="nav-icon" style="font-size:13px">⬭</span> Toggle</a>
+  </aside>
+
+  <main class="main">
+
+    <div class="component-header">
+      <div class="component-header-left">
+        <p class="component-breadcrumb"><a href="tokens.preview.html">Design System</a> / Components</p>
+        <h1>Progress Bar</h1>
+      </div>
+      <div class="component-header-right">
+        <p>Circular (5 sizes, 48–80px) and horizontal (320×6px) progress indicators. Any value 0–100.</p>
+      </div>
+    </div>
+
+    <!-- ─── PLAYGROUND ─── -->
+    <div class="section">
+      <p class="section-title">Playground</p>
+      <div class="playground-card">
+        <div class="playground-preview">
+          <div id="playgroundRing"></div>
+        </div>
+        <div class="playground-controls">
+          <div class="ctrl-group">
+            <span class="ctrl-group-label">Value</span>
+            <div class="slider-row">
+              <input type="range" class="value-slider" id="valueSlider" min="0" max="100" value="50" />
+              <span class="slider-value" id="sliderLabel">50%</span>
+            </div>
+          </div>
+          <div class="ctrl-group">
+            <span class="ctrl-group-label">Size</span>
+            <div class="pills" id="sizePills"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── SIZE × PERCENTAGE MATRIX ─── -->
+    <div class="section">
+      <p class="section-title">All Variants</p>
+      <div class="matrix" id="variantMatrix"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── HORIZONTAL PLAYGROUND ─── -->
+    <div class="section">
+      <p class="section-title">Horizontal</p>
+      <div class="playground-card">
+        <div class="playground-preview" style="width: 320px;">
+          <div class="hbar-track">
+            <div class="hbar-fill" id="hbarFill" style="width: 50%"></div>
+          </div>
+        </div>
+        <div class="playground-controls">
+          <div class="ctrl-group">
+            <span class="ctrl-group-label">Value</span>
+            <div class="slider-row">
+              <input type="range" class="value-slider" id="hbarSlider" min="0" max="100" value="50" />
+              <span class="slider-value" id="hbarLabel">50%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── HORIZONTAL VARIANTS ─── -->
+    <div class="section">
+      <p class="section-title">Horizontal Variants</p>
+      <div class="hbar-variants">
+        <div class="hbar-row">
+          <span class="hbar-row-label">0%</span>
+          <div class="hbar-track"><div class="hbar-fill" style="width:0%"></div></div>
+        </div>
+        <div class="hbar-row">
+          <span class="hbar-row-label">25%</span>
+          <div class="hbar-track"><div class="hbar-fill" style="width:25%"></div></div>
+        </div>
+        <div class="hbar-row">
+          <span class="hbar-row-label">50%</span>
+          <div class="hbar-track"><div class="hbar-fill" style="width:50%"></div></div>
+        </div>
+        <div class="hbar-row">
+          <span class="hbar-row-label">75%</span>
+          <div class="hbar-track"><div class="hbar-fill" style="width:75%"></div></div>
+        </div>
+        <div class="hbar-row">
+          <span class="hbar-row-label">100%</span>
+          <div class="hbar-track"><div class="hbar-fill" style="width:100%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── PROPS ─── -->
+    <div class="section">
+      <p class="section-title">Props</p>
+      <table class="props-table">
+        <thead>
+          <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="prop-name"><code>size</code></td>
+            <td>48 · 56 · 64 · 72 · 80</td>
+            <td class="prop-default">80</td>
+            <td>Diameter in px — also controls stroke width and font size</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>value</code></td>
+            <td>number (0–100)</td>
+            <td class="prop-default">0</td>
+            <td>Fill percentage. Clamped to [0, 100]</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>showLabel</code></td>
+            <td>boolean</td>
+            <td class="prop-default">true (≥56px) / false (48px)</td>
+            <td>Show or hide the percentage text in the center — circular only</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="section-title" style="margin-top: 40px;">HorizontalProgressBar Props</p>
+      <table class="props-table">
+        <thead>
+          <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="prop-name"><code>value</code></td>
+            <td>number (0–100)</td>
+            <td class="prop-default">0</td>
+            <td>Fill percentage. Clamped to [0, 100]</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>width</code></td>
+            <td>number</td>
+            <td class="prop-default">320</td>
+            <td>Track width in px</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <script>
+    // ── SVG ring helper ──────────────────────────────────────────
+    const SIZE_CFG = {
+      80: { strokeWidth: 8,   radius: 36,    fontSize: 14, lineHeight: 20, showLabel: true  },
+      72: { strokeWidth: 7,   radius: 32.5,  fontSize: 14, lineHeight: 20, showLabel: true  },
+      64: { strokeWidth: 6,   radius: 29,    fontSize: 14, lineHeight: 20, showLabel: true  },
+      56: { strokeWidth: 5.5, radius: 25.25, fontSize: 12, lineHeight: 16, showLabel: true  },
+      48: { strokeWidth: 5,   radius: 21.5,  fontSize: 12, lineHeight: 16, showLabel: false },
+    };
+
+    function buildRing(size, value, showLabel) {
+      const cfg = SIZE_CFG[size];
+      const pct = Math.min(100, Math.max(0, value));
+      const circ = 2 * Math.PI * cfg.radius;
+      const offset = circ * (1 - pct / 100);
+      const half = size / 2;
+      const doShow = showLabel !== undefined ? showLabel : cfg.showLabel;
+
+      const fill = pct > 0
+        ? `<circle cx="${half}" cy="${half}" r="${cfg.radius}" fill="none"
+             stroke="#f70f79" stroke-width="${cfg.strokeWidth}" stroke-linecap="round"
+             stroke-dasharray="${circ}" stroke-dashoffset="${offset}"/>`
+        : '';
+
+      const label = doShow
+        ? `<span style="position:absolute;top:50%;left:12px;right:12px;transform:translateY(-50%);
+             text-align:center;font-family:'Outfit',sans-serif;font-size:${cfg.fontSize}px;
+             font-weight:500;line-height:${cfg.lineHeight}px;color:#303030;
+             letter-spacing:-0.006em;pointer-events:none">${Math.round(pct)}%</span>`
+        : '';
+
+      return `<div style="position:relative;width:${size}px;height:${size}px;flex-shrink:0">
+        <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"
+          style="display:block;transform:rotate(-90deg)">
+          <circle cx="${half}" cy="${half}" r="${cfg.radius}" fill="none"
+            stroke="#f0f0f0" stroke-width="${cfg.strokeWidth}" stroke-linecap="round"/>
+          ${fill}
+        </svg>
+        ${label}
+      </div>`;
+    }
+
+    // ── Playground ──────────────────────────────────────────────
+    const SIZES = [80, 72, 64, 56, 48];
+    let pgSize = 80;
+    let pgValue = 50;
+
+    function renderPlayground() {
+      document.getElementById('playgroundRing').innerHTML = buildRing(pgSize, pgValue);
+    }
+
+    // Size pills
+    const pillsEl = document.getElementById('sizePills');
+    SIZES.forEach(sz => {
+      const btn = document.createElement('button');
+      btn.className = 'pill' + (sz === pgSize ? ' active' : '');
+      btn.textContent = sz + 'px';
+      btn.addEventListener('click', () => {
+        pgSize = sz;
+        pillsEl.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        renderPlayground();
+      });
+      pillsEl.appendChild(btn);
+    });
+
+    // Slider
+    const slider = document.getElementById('valueSlider');
+    const sliderLabel = document.getElementById('sliderLabel');
+    slider.addEventListener('input', () => {
+      pgValue = +slider.value;
+      sliderLabel.textContent = pgValue + '%';
+      renderPlayground();
+    });
+
+    renderPlayground();
+
+    // ── Horizontal playground ──────────────────────────────────
+    const hbarSlider = document.getElementById('hbarSlider');
+    const hbarLabel = document.getElementById('hbarLabel');
+    const hbarFill = document.getElementById('hbarFill');
+    hbarSlider.addEventListener('input', () => {
+      const v = +hbarSlider.value;
+      hbarFill.style.width = v + '%';
+      hbarLabel.textContent = v + '%';
+    });
+
+    // ── Matrix ──────────────────────────────────────────────────
+    const PCTS = [0, 25, 50, 75, 100];
+    const matrix = document.getElementById('variantMatrix');
+
+    // Header row
+    matrix.innerHTML += `<div class="matrix-cell matrix-header">Size</div>`;
+    PCTS.forEach(p => {
+      matrix.innerHTML += `<div class="matrix-cell matrix-header">${p}%</div>`;
+    });
+
+    // Data rows
+    SIZES.forEach((sz, rowIdx) => {
+      const isLast = rowIdx === SIZES.length - 1;
+      const rowClass = isLast ? ' matrix-row-last' : '';
+      matrix.innerHTML += `<div class="matrix-cell matrix-size-label${rowClass}">${sz}px</div>`;
+      PCTS.forEach(pct => {
+        matrix.innerHTML += `<div class="matrix-cell${rowClass}">${buildRing(sz, pct)}</div>`;
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tag — Snabbit Design System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&family=Outfit:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-ui: "Instrument Sans", sans-serif;
+      --font-outfit: "Outfit", sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-ui);
+      background: #ffffff;
+      color: #303030;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed; top: 0; left: 0; width: 216px; height: 100vh;
+      background: #fafafa; border-right: 1px solid #ebebeb;
+      padding: 48px 16px; display: flex; flex-direction: column;
+      gap: 2px; z-index: 100; overflow-y: auto;
+    }
+    .sidebar-heading {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: #ababab; padding: 0 12px; margin-bottom: 8px;
+    }
+    .sidebar-separator { height: 1px; background: #ebebeb; margin: 20px 4px; }
+    .nav-link {
+      display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+      border-radius: 8px; font-size: 14px; font-weight: 500; color: #ababab;
+      text-decoration: none; transition: color 0.15s, background 0.15s;
+    }
+    .nav-link:hover { color: #303030; background: #ebebeb; }
+    .nav-link.active { color: #303030; background: #f0f0f0; }
+    .nav-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+
+    /* ── Main ── */
+    .main { margin-left: 216px; flex: 1; padding: 60px 80px; min-height: 100vh; }
+
+    /* ── Component header ── */
+    .component-header {
+      background: #f5f5f5; margin: -60px -80px 60px; padding: 44px 80px;
+      display: flex; align-items: flex-end; justify-content: space-between;
+    }
+    .component-header-left { display: flex; flex-direction: column; gap: 10px; }
+    .component-breadcrumb { font-size: 13px; font-weight: 500; color: #ababab; }
+    .component-breadcrumb a { color: #ababab; text-decoration: none; }
+    .component-breadcrumb a:hover { color: #303030; }
+    .component-header h1 { font-size: 56px; font-weight: 700; line-height: 1; letter-spacing: -2px; }
+    .component-header-right p {
+      font-size: 14px; font-weight: 500; color: #828282;
+      max-width: 280px; line-height: 20px; text-align: right;
+    }
+
+    /* ── Sections ── */
+    .section { margin-bottom: 64px; }
+    .section-title { font-size: 32px; font-weight: 500; letter-spacing: -1px; margin-bottom: 24px; color: #303030; }
+    .divider { height: 1px; background: #e8e8e8; margin: 48px 0; }
+
+    /* ── Playground ── */
+    .playground-card {
+      background: #f5f5f5; border-radius: 16px; padding: 48px 40px;
+      display: flex; flex-direction: column; align-items: center; gap: 32px;
+    }
+    .playground-preview {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 48px; gap: 12px; flex-wrap: wrap;
+    }
+    .playground-controls {
+      display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 480px;
+    }
+    .ctrl-group { display: flex; flex-direction: column; gap: 10px; }
+    .ctrl-group-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: #ababab;
+    }
+    .pills { display: flex; gap: 8px; flex-wrap: wrap; }
+    .pill {
+      padding: 6px 14px; border-radius: 100px; font-size: 13px; font-weight: 600;
+      background: #ebebeb; color: #ababab; border: none; cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .pill.active { background: #303030; color: #fff; }
+
+    /* Toggle control */
+    .toggle-row { display: flex; align-items: center; gap: 12px; }
+    .toggle-wrap {
+      position: relative; cursor: pointer; flex-shrink: 0;
+      width: 34px; height: 20px; user-select: none;
+    }
+    .toggle-track {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 28px; height: 16px; border-radius: 999px;
+      background: #f0f0f0; transition: background 0.2s; pointer-events: none;
+    }
+    .toggle-wrap.on .toggle-track { background: #f70f79; }
+    .toggle-thumb {
+      position: absolute; width: 12px; height: 12px; border-radius: 50%;
+      background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.22);
+      top: 4px; left: 5px; transition: left 0.2s; pointer-events: none;
+    }
+    .toggle-wrap.on .toggle-thumb { left: 17px; }
+    .toggle-label { font-size: 13px; font-weight: 500; color: #303030; }
+
+    /* ── Variants grid ── */
+    .variants-grid {
+      display: grid;
+      grid-template-columns: 90px repeat(3, 1fr);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #f0f0f0;
+      margin-bottom: 24px;
+    }
+    .grid-cell {
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px 16px; background: #fff;
+      border-bottom: 1px solid #f0f0f0;
+      border-right: 1px solid #f0f0f0;
+      gap: 8px; flex-wrap: wrap;
+    }
+    .grid-cell:nth-child(4n) { border-right: none; }
+    .grid-row-last .grid-cell { border-bottom: none; }
+    .grid-header {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+      text-transform: uppercase; color: #ababab; background: #fafafa;
+    }
+    .grid-label {
+      font-size: 12px; font-weight: 600; color: #ababab; background: #fafafa;
+      justify-content: flex-start; padding-left: 20px;
+    }
+    .variants-section-title {
+      font-size: 18px; font-weight: 600; color: #303030;
+      margin-bottom: 16px; margin-top: 32px;
+    }
+
+    /* ── Props table ── */
+    .props-table { width: 100%; border-collapse: collapse; border-radius: 16px; overflow: hidden; }
+    .props-table th { background: #fff; color: #828282; font-size: 13px; font-weight: 600; padding: 14px 20px; text-align: left; }
+    .props-table td { background: #fff; padding: 0 20px; height: 52px; font-size: 13px; font-weight: 500; color: #303030; border-top: 1px solid #e8e8e8; }
+    .props-table td code { background: #f5f5f5; border: 1px solid #e8e8e8; border-radius: 4px; padding: 2px 6px; font-size: 12px; color: #f70f79; }
+    .props-table td.prop-name { color: #303030; font-weight: 600; }
+    .props-table td.prop-default { color: #828282; }
+  </style>
+</head>
+
+<body>
+
+  <aside class="sidebar">
+    <p class="sidebar-heading">Foundations</p>
+    <a class="nav-link" href="tokens.preview.html#color"><span class="nav-icon">⬛</span> Color</a>
+    <a class="nav-link" href="tokens.preview.html#shadow"><span class="nav-icon">◻️</span> Shadow</a>
+    <a class="nav-link" href="tokens.preview.html#typography"><span class="nav-icon">Aa</span> Typography</a>
+    <a class="nav-link" href="tokens.preview.html#radius"><span class="nav-icon">◜</span> Radius</a>
+
+    <div class="sidebar-separator"></div>
+    <p class="sidebar-heading">Components</p>
+    <a class="nav-link" href="Accordion.preview.html"><span class="nav-icon" style="font-size:13px">☰</span> Accordion</a>
+    <a class="nav-link" href="Banner.preview.html"><span class="nav-icon" style="font-size:13px">◫</span> Banner</a>
+    <a class="nav-link" href="Button.preview.html"><span class="nav-icon" style="font-size:13px">▣</span> Button</a>
+    <a class="nav-link" href="Checkbox.preview.html"><span class="nav-icon" style="font-size:13px">☑</span> Checkbox</a>
+    <a class="nav-link" href="TextField.preview.html"><span class="nav-icon" style="font-size:13px">▭</span> Input</a>
+    <a class="nav-link" href="ProgressBar.preview.html"><span class="nav-icon" style="font-size:13px">◌</span> Progress</a>
+    <a class="nav-link" href="RadioButton.preview.html"><span class="nav-icon" style="font-size:13px">◉</span> Radio</a>
+    <a class="nav-link" href="Tabs.preview.html"><span class="nav-icon" style="font-size:13px">▤</span> Tabs</a>
+    <a class="nav-link active" href="Tag.preview.html"><span class="nav-icon" style="font-size:13px">◈</span> Tag</a>
+    <a class="nav-link" href="Toast.preview.html"><span class="nav-icon" style="font-size:13px">◩</span> Toast</a>
+    <a class="nav-link" href="Toggle.preview.html"><span class="nav-icon" style="font-size:13px">⬭</span> Toggle</a>
+  </aside>
+
+  <main class="main">
+
+    <div class="component-header">
+      <div class="component-header-left">
+        <p class="component-breadcrumb"><a href="tokens.preview.html">Design System</a> / Components</p>
+        <h1>Tag</h1>
+      </div>
+      <div class="component-header-right">
+        <p>Pill-shaped label. 2 styles × 4 states × 3 types. Optional dismiss icon and subtext.</p>
+      </div>
+    </div>
+
+    <!-- ─── PLAYGROUND ─── -->
+    <div class="section">
+      <p class="section-title">Playground</p>
+      <div class="playground-card">
+        <div class="playground-preview" id="playgroundPreview"></div>
+        <div class="playground-controls">
+          <div class="ctrl-group">
+            <span class="ctrl-group-label">Style</span>
+            <div class="pills" id="stylePills"></div>
+          </div>
+          <div class="ctrl-group">
+            <span class="ctrl-group-label">State</span>
+            <div class="pills" id="statePills"></div>
+          </div>
+          <div class="ctrl-group">
+            <span class="ctrl-group-label">Type</span>
+            <div class="pills" id="typePills"></div>
+          </div>
+          <div class="ctrl-group">
+            <div class="toggle-row">
+              <span class="toggle-wrap on" id="toggleDismiss" onclick="toggleProp('dismiss')">
+                <div class="toggle-track"></div><div class="toggle-thumb"></div>
+              </span>
+              <span class="toggle-label">Dismiss icon</span>
+            </div>
+            <div class="toggle-row">
+              <span class="toggle-wrap" id="toggleSubtext" onclick="toggleProp('subtext')">
+                <div class="toggle-track"></div><div class="toggle-thumb"></div>
+              </span>
+              <span class="toggle-label">Subtext "(4)"</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── VARIANTS ─── -->
+    <div class="section">
+      <p class="section-title">All Variants</p>
+
+      <p class="variants-section-title">Stroke</p>
+      <div class="variants-grid" id="strokeGrid"></div>
+
+      <p class="variants-section-title">Filled</p>
+      <div class="variants-grid" id="filledGrid"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── PROPS ─── -->
+    <div class="section">
+      <p class="section-title">Props</p>
+      <table class="props-table">
+        <thead>
+          <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="prop-name"><code>tagStyle</code></td>
+            <td>'Filled' · 'Stroke'</td>
+            <td class="prop-default">'Stroke'</td>
+            <td>Filled uses background color; Stroke uses a border</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>state</code></td>
+            <td>'Default' · 'Hover' · 'Active' · 'Disabled'</td>
+            <td class="prop-default">'Default'</td>
+            <td>Active turns green (Filled) or dark-outlined (Stroke)</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>type</code></td>
+            <td>'Basic' · 'Left Icon' · 'Avatar'</td>
+            <td class="prop-default">'Basic'</td>
+            <td>Prepends a pushpin icon or avatar image to the label</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>label</code></td>
+            <td>string</td>
+            <td class="prop-default">'Tag'</td>
+            <td>Main tag text</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>subtext</code></td>
+            <td>string</td>
+            <td class="prop-default">—</td>
+            <td>Secondary label shown after the main text, e.g. "(4)"</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>dismissIcon</code></td>
+            <td>boolean</td>
+            <td class="prop-default">true</td>
+            <td>Show an X button after the label</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>onDismiss</code></td>
+            <td>() =&gt; void</td>
+            <td class="prop-default">—</td>
+            <td>Called when the X button is clicked</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <script>
+    // ── Token lookup ─────────────────────────────────────────────
+    const TOKENS = {
+      Stroke: {
+        Default:  { bg: '#ffffff', border: '#f0f0f0', text: '#828282', sub: '#a3a3a3', fw: 500, icon: '#828282' },
+        Hover:    { bg: '#fafafa', border: null,       text: '#828282', sub: '#a3a3a3', fw: 500, icon: '#828282' },
+        Active:   { bg: '#ffffff', border: '#303030',  text: '#303030', sub: '#5c5c5c', fw: 600, icon: '#303030' },
+        Disabled: { bg: '#fafafa', border: null,       text: '#ababab', sub: '#d1d1d1', fw: 500, icon: '#ababab' },
+      },
+      Filled: {
+        Default:  { bg: '#fafafa', border: null,       text: '#828282', sub: '#a3a3a3', fw: 500, icon: '#828282' },
+        Hover:    { bg: '#ffffff', border: '#f0f0f0',  text: '#828282', sub: '#a3a3a3', fw: 500, icon: '#828282' },
+        Active:   { bg: '#d0fbe9', border: null,       text: '#178c4e', sub: '#5c5c5c', fw: 600, icon: '#178c4e' },
+        Disabled: { bg: '#fafafa', border: null,       text: '#ababab', sub: '#d1d1d1', fw: 500, icon: '#ababab' },
+      },
+    };
+
+    const CLOSE_SVG = (color) =>
+      `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:block;flex-shrink:0">
+        <path d="M11 5L5 11M5 5l6 6" stroke="${color}" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>`;
+
+    const PIN_SVG = (color) =>
+      `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:block;flex-shrink:0">
+        <path d="M9 1.5L14.5 7L11.5 8.5L10 10L10.5 13L9 14.5L7 10.5L3.5 14L2 12.5L5.5 9L1.5 7L3 5.5L6 6L7.5 4.5L9 1.5Z" fill="${color}"/>
+      </svg>`;
+
+    const AVATAR_SVG =
+      `<div style="width:16px;height:16px;border-radius:50%;background:#e0e0e0;overflow:hidden;flex-shrink:0;display:flex;align-items:flex-end;justify-content:center;">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="#9e9e9e">
+          <circle cx="6" cy="4" r="2.2"/>
+          <path d="M1 12C1 9.2 3.2 7 6 7C8.8 7 11 9.2 11 12"/>
+        </svg>
+      </div>`;
+
+    function buildTag(style, state, type, showDismiss, showSubtext, label = 'Tag') {
+      const cfg = TOKENS[style][state];
+      const hasLeft = type !== 'Basic';
+
+      // Padding
+      let pl, pr, pt = 4, pb = 4;
+      if (type === 'Basic') {
+        pl = 8; pr = showDismiss ? 4 : 8;
+      } else {
+        pl = 4; pr = showDismiss ? 4 : 8;
+      }
+
+      const borderVal = cfg.border ? `1px solid ${cfg.border}` : '1px solid transparent';
+      const gap = hasLeft ? 4 : 0;
+
+      let leftEl = '';
+      if (type === 'Left Icon') leftEl = PIN_SVG(cfg.icon);
+      else if (type === 'Avatar') leftEl = AVATAR_SVG;
+
+      const subEl = showSubtext
+        ? `<span style="font-family:'Outfit',sans-serif;font-size:12px;font-weight:${state==='Active'?500:400};line-height:16px;color:${cfg.sub};white-space:nowrap;">(4)</span>`
+        : '';
+
+      const closeEl = showDismiss
+        ? `<span style="display:flex;align-items:center;justify-content:center;flex-shrink:0;">${CLOSE_SVG(cfg.icon)}</span>`
+        : '';
+
+      return `<div style="
+        display:inline-flex;align-items:center;
+        gap:${gap}px;border-radius:56px;
+        background:${cfg.bg};border:${borderVal};
+        padding:${pt}px ${pr}px ${pb}px ${pl}px;
+        flex-shrink:0;
+      ">
+        ${leftEl}
+        <div style="display:flex;align-items:center;gap:2px;flex-shrink:0;">
+          <span style="font-family:'Outfit',sans-serif;font-size:12px;font-weight:${cfg.fw};line-height:16px;color:${cfg.text};white-space:nowrap;">${label}</span>
+          ${subEl}
+          ${closeEl}
+        </div>
+      </div>`;
+    }
+
+    // ── Playground ───────────────────────────────────────────────
+    let pgStyle = 'Stroke', pgState = 'Default', pgType = 'Basic';
+    let pgDismiss = true, pgSubtext = false;
+
+    function renderPlayground() {
+      document.getElementById('playgroundPreview').innerHTML = buildTag(pgStyle, pgState, pgType, pgDismiss, pgSubtext);
+    }
+
+    function makePills(elId, options, current, setter) {
+      const el = document.getElementById(elId);
+      options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'pill' + (opt === current ? ' active' : '');
+        btn.textContent = opt;
+        btn.addEventListener('click', () => {
+          setter(opt);
+          el.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+          btn.classList.add('active');
+          renderPlayground();
+        });
+        el.appendChild(btn);
+      });
+    }
+
+    makePills('stylePills', ['Stroke', 'Filled'], pgStyle, v => pgStyle = v);
+    makePills('statePills', ['Default', 'Hover', 'Active', 'Disabled'], pgState, v => pgState = v);
+    makePills('typePills',  ['Basic', 'Left Icon', 'Avatar'], pgType, v => pgType = v);
+
+    function toggleProp(prop) {
+      if (prop === 'dismiss') {
+        pgDismiss = !pgDismiss;
+        document.getElementById('toggleDismiss').classList.toggle('on', pgDismiss);
+      } else {
+        pgSubtext = !pgSubtext;
+        document.getElementById('toggleSubtext').classList.toggle('on', pgSubtext);
+      }
+      renderPlayground();
+    }
+
+    renderPlayground();
+
+    // ── Variants grids ───────────────────────────────────────────
+    const STATES = ['Default', 'Hover', 'Active', 'Disabled'];
+    const TYPES  = ['Basic', 'Left Icon', 'Avatar'];
+
+    function buildGrid(style, containerId) {
+      const grid = document.getElementById(containerId);
+      // Header row
+      grid.innerHTML =
+        `<div class="grid-cell grid-header">State</div>` +
+        TYPES.map(t => `<div class="grid-cell grid-header">${t}</div>`).join('');
+
+      STATES.forEach((state, i) => {
+        const isLast = i === STATES.length - 1;
+        const rowClass = isLast ? ' grid-row-last' : '';
+        grid.innerHTML +=
+          `<div class="grid-cell grid-label${rowClass}">${state}</div>` +
+          TYPES.map(type =>
+            `<div class="grid-cell${rowClass}" style="gap:8px;">${buildTag(style, state, type, true, false)}</div>`
+          ).join('');
+      });
+    }
+
+    buildGrid('Stroke', 'strokeGrid');
+    buildGrid('Filled', 'filledGrid');
+  </script>
+
+</body>
+
+</html>
