@@ -63,7 +63,13 @@
     /* ── MapPin component styles (pure CSS) ── */
     .mp-wrap { display: inline-flex; flex-direction: column; align-items: center; }
 
-    /* Shared pink pill bubble */
+    /* Shared pink pill bubble — body+tail wrapper */
+    .mp-body-wrap {
+      position: relative;
+      filter: drop-shadow(0 2px 4px rgba(247,15,121,0.18))
+              drop-shadow(0 6px 14px rgba(247,15,121,0.22))
+              drop-shadow(0 12px 24px rgba(247,15,121,0.12));
+    }
     .mp-bubble {
       background: var(--pink);
       border-radius: 14px;
@@ -71,23 +77,17 @@
       align-items: center;
       gap: 5px;
       padding: 8px 12px;
-      filter: drop-shadow(0 2px 4px rgba(247,15,121,0.18))
-              drop-shadow(0 6px 14px rgba(247,15,121,0.22))
-              drop-shadow(0 12px 24px rgba(247,15,121,0.12));
     }
-    .mp-bubble-label { font-family: var(--font-ui); font-size: 16px; font-weight: 700; color: white; line-height: 20px; white-space: nowrap; }
+    .mp-bubble-label { font-family: var(--font-ui); font-size: 16px; font-weight: 700; color: white; line-height: 20px; letter-spacing: 0.2px; white-space: nowrap; }
 
-    /* User icon (inline SVG as background) */
-    .mp-user-icon { width: 18px; height: 18px; flex-shrink: 0; }
+    /* User icon */
+    .mp-user-icon { width: 16px; height: 16px; flex-shrink: 0; }
 
     /* Circle bubble for user-only variant */
     .mp-circle-bubble {
-      width: 40px; height: 40px; border-radius: 50%;
+      width: 36px; height: 36px; border-radius: 50%;
       background: var(--pink);
       display: flex; align-items: center; justify-content: center;
-      filter: drop-shadow(0 2px 4px rgba(247,15,121,0.18))
-              drop-shadow(0 6px 14px rgba(247,15,121,0.22))
-              drop-shadow(0 12px 24px rgba(247,15,121,0.12));
     }
 
     /* Instruction text bubble */
@@ -95,34 +95,45 @@
       background: var(--pink);
       border-radius: 12px;
       padding: 10px 14px;
-      filter: drop-shadow(0 2px 4px rgba(247,15,121,0.18))
-              drop-shadow(0 6px 14px rgba(247,15,121,0.22));
     }
     .mp-instruction-text { font-family: var(--font-ui); font-size: 11px; font-weight: 600; color: white; line-height: 14px; white-space: nowrap; }
 
-    /* Triangular tail */
+    /* Triangular tail — absolutely positioned to overlap body for seamless join */
     .mp-tail {
-      width: 0; height: 0;
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-      border-top: 8px solid var(--pink);
-      flex-shrink: 0;
-    }
-    .mp-tail-lg {
+      position: absolute; bottom: -7px; left: 50%; transform: translateX(-50%);
       width: 0; height: 0;
       border-left: 7px solid transparent;
       border-right: 7px solid transparent;
-      border-top: 10px solid var(--pink);
-      flex-shrink: 0;
+      border-top: 8px solid var(--pink);
+    }
+    .mp-tail-sm {
+      position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 7px solid var(--pink);
+    }
+    .mp-tail-lg {
+      position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 9px solid var(--pink);
     }
 
     /* Drop pin SVG wrapper */
     .mp-drop-pin { flex-shrink: 0; filter: drop-shadow(0 2px 4px rgba(247,15,121,0.18)) drop-shadow(0 6px 14px rgba(247,15,121,0.22)); }
 
-    /* Precise location dot */
-    .mp-dot-wrap { position: relative; width: 16px; height: 12px; flex-shrink: 0; }
-    .mp-dot-shadow { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 14px; height: 7px; background: rgba(0,0,0,0.09); border-radius: 50%; }
-    .mp-dot { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: white; border: 2.5px solid var(--pink); border-radius: 50%; }
+    /* Spacer between body+tail and dot */
+    .mp-spacer { height: 4px; }
+    .mp-spacer-sm { height: 3px; }
+    .mp-spacer-lg { height: 6px; }
+
+    /* Precise location dot — pink filled ring with white center + glow */
+    .mp-dot-wrap { position: relative; width: 16px; height: 16px; flex-shrink: 0; }
+    .mp-dot-glow { position: absolute; inset: -4px; border-radius: 50%; background: radial-gradient(circle, rgba(247,15,121,0.15) 0%, transparent 70%); }
+    .mp-dot-outer { position: absolute; inset: 1px; border-radius: 50%; background: var(--pink); }
+    .mp-dot-inner { position: absolute; inset: 5px; border-radius: 50%; background: white; }
 
     /* Current Location card */
     .mp-current-location {
@@ -209,12 +220,15 @@
           <span class="variant-card-label">User + Label</span>
           <div class="variant-card-demo">
             <div class="mp-wrap">
-              <div class="mp-bubble">
-                <svg class="mp-user-icon" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6.5" r="3.2" fill="white"/><path d="M2.5 17C2.5 13.134 5.41 10 9 10C12.59 10 15.5 13.134 15.5 17" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg>
-                <span class="mp-bubble-label">You</span>
+              <div class="mp-body-wrap">
+                <div class="mp-bubble">
+                  <svg class="mp-user-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.8" fill="white"/><path d="M2 14C2 10.686 4.686 8 8 8C11.314 8 14 10.686 14 14" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>
+                  <span class="mp-bubble-label">You</span>
+                </div>
+                <div class="mp-tail"></div>
               </div>
-              <div class="mp-tail"></div>
-              <div class="mp-dot-wrap"><div class="mp-dot-shadow"></div><div class="mp-dot"></div></div>
+              <div class="mp-spacer"></div>
+              <div class="mp-dot-wrap"><div class="mp-dot-glow"></div><div class="mp-dot-outer"></div><div class="mp-dot-inner"></div></div>
             </div>
           </div>
         </div>
@@ -224,11 +238,14 @@
           <span class="variant-card-label">User</span>
           <div class="variant-card-demo">
             <div class="mp-wrap">
-              <div class="mp-circle-bubble">
-                <svg width="20" height="20" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6.5" r="3.2" fill="white"/><path d="M2.5 17C2.5 13.134 5.41 10 9 10C12.59 10 15.5 13.134 15.5 17" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <div class="mp-body-wrap">
+                <div class="mp-circle-bubble">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.8" fill="white"/><path d="M2 14C2 10.686 4.686 8 8 8C11.314 8 14 10.686 14 14" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>
+                </div>
+                <div class="mp-tail-sm"></div>
               </div>
-              <div class="mp-tail"></div>
-              <div class="mp-dot-wrap"><div class="mp-dot-shadow"></div><div class="mp-dot"></div></div>
+              <div class="mp-spacer-sm"></div>
+              <div class="mp-dot-wrap"><div class="mp-dot-glow"></div><div class="mp-dot-outer"></div><div class="mp-dot-inner"></div></div>
             </div>
           </div>
         </div>
@@ -238,10 +255,13 @@
           <span class="variant-card-label">Instruction</span>
           <div class="variant-card-demo">
             <div class="mp-wrap">
-              <div class="mp-instruction-bubble">
-                <span class="mp-instruction-text">Move pin to your exact location</span>
+              <div class="mp-body-wrap">
+                <div class="mp-instruction-bubble">
+                  <span class="mp-instruction-text">Move pin to your exact location</span>
+                </div>
+                <div class="mp-tail-lg"></div>
               </div>
-              <div class="mp-tail-lg"></div>
+              <div class="mp-spacer-lg"></div>
               <div class="mp-drop-pin">
                 <svg width="44" height="56" viewBox="0 0 44 56" fill="none">
                   <path d="M22 0 C9.85 0 0 9.85 0 22 C0 34.15 22 56 22 56 C22 56 44 34.15 44 22 C44 9.85 34.15 0 22 0 Z" fill="#f70f79"/>
@@ -249,7 +269,7 @@
                   <circle cx="22" cy="21" r="5" fill="#f70f79"/>
                 </svg>
               </div>
-              <div class="mp-dot-wrap"><div class="mp-dot-shadow"></div><div class="mp-dot"></div></div>
+              <div class="mp-dot-wrap"><div class="mp-dot-glow"></div><div class="mp-dot-outer"></div><div class="mp-dot-inner"></div></div>
             </div>
           </div>
         </div>
@@ -313,28 +333,28 @@
     let pgVariant = 'user-label';
 
     function userIconSvg(size) {
-      return `<svg width="${size}" height="${size}" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6.5" r="3.2" fill="white"/><path d="M2.5 17C2.5 13.134 5.41 10 9 10C12.59 10 15.5 13.134 15.5 17" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg>`;
+      return `<svg width="${size}" height="${size}" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.8" fill="white"/><path d="M2 14C2 10.686 4.686 8 8 8C11.314 8 14 10.686 14 14" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>`;
     }
 
     function dotHtml() {
-      return `<div class="mp-dot-wrap"><div class="mp-dot-shadow"></div><div class="mp-dot"></div></div>`;
+      return `<div class="mp-dot-wrap"><div class="mp-dot-glow"></div><div class="mp-dot-outer"></div><div class="mp-dot-inner"></div></div>`;
     }
 
     function buildPin(variant) {
       if (variant === 'user-label') {
         return `<div class="mp-wrap">
-          <div class="mp-bubble">${userIconSvg(18)}<span class="mp-bubble-label">You</span></div>
-          <div class="mp-tail"></div>${dotHtml()}</div>`;
+          <div class="mp-body-wrap"><div class="mp-bubble">${userIconSvg(16)}<span class="mp-bubble-label">You</span></div><div class="mp-tail"></div></div>
+          <div class="mp-spacer"></div>${dotHtml()}</div>`;
       }
       if (variant === 'user') {
         return `<div class="mp-wrap">
-          <div class="mp-circle-bubble">${userIconSvg(20)}</div>
-          <div class="mp-tail"></div>${dotHtml()}</div>`;
+          <div class="mp-body-wrap"><div class="mp-circle-bubble">${userIconSvg(16)}</div><div class="mp-tail-sm"></div></div>
+          <div class="mp-spacer-sm"></div>${dotHtml()}</div>`;
       }
       if (variant === 'instruction') {
         return `<div class="mp-wrap">
-          <div class="mp-instruction-bubble"><span class="mp-instruction-text">Move pin to your exact location</span></div>
-          <div class="mp-tail-lg"></div>
+          <div class="mp-body-wrap"><div class="mp-instruction-bubble"><span class="mp-instruction-text">Move pin to your exact location</span></div><div class="mp-tail-lg"></div></div>
+          <div class="mp-spacer-lg"></div>
           <div class="mp-drop-pin">
             <svg width="44" height="56" viewBox="0 0 44 56" fill="none">
               <path d="M22 0 C9.85 0 0 9.85 0 22 C0 34.15 22 56 22 56 C22 56 44 34.15 44 22 C44 9.85 34.15 0 22 0 Z" fill="#f70f79"/>

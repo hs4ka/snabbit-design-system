@@ -14,13 +14,13 @@ type MapPinProps = {
 };
 
 // ── Inline icons ───────────────────────────────────────────────────
-function UserIcon({ size = 18 }: { size?: number }) {
+function UserIcon({ size = 16 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 18 18" fill="none" style={{ flexShrink: 0 }}>
-      <circle cx="9" cy="6.5" r="3.2" fill="white" />
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0 }}>
+      <circle cx="8" cy="5.5" r="2.8" fill="white" />
       <path
-        d="M2.5 17C2.5 13.134 5.41 10 9 10C12.59 10 15.5 13.134 15.5 17"
-        stroke="white" strokeWidth="1.6" strokeLinecap="round"
+        d="M2 14C2 10.686 4.686 8 8 8C11.314 8 14 10.686 14 14"
+        stroke="white" strokeWidth="1.4" strokeLinecap="round"
       />
     </svg>
   );
@@ -34,79 +34,36 @@ function NavArrowIcon() {
   );
 }
 
-// Classic teardrop map pin SVG
-function DropPin({ width = 44, height = 56 }: { width?: number; height?: number }) {
-  const cx = width / 2;
-  const cy = width / 2; // circle center at same as width/2 from top
-  const r = width / 2;
-  return (
-    <svg
-      width={width}
-      height={height}
-      viewBox={`0 0 ${width} ${height}`}
-      fill="none"
-      style={{ flexShrink: 0 }}
-    >
-      {/* Outer teardrop body */}
-      <path
-        d={`M${cx} 0 C${cx * 0.447} 0 0 ${cy * 0.447} 0 ${cy} C 0 ${cy * 1.553} ${cx} ${height} ${cx} ${height} C ${cx} ${height} ${width} ${cy * 1.553} ${width} ${cy} C${width} ${cy * 0.447} ${cx * 1.553} 0 ${cx} 0 Z`}
-        fill="#f70f79"
-      />
-      {/* Inner white aura ring */}
-      <circle cx={cx} cy={cy - 1} r={r * 0.46} fill="rgba(255,255,255,0.88)" />
-      {/* Inner pink dot */}
-      <circle cx={cx} cy={cy - 1} r={r * 0.23} fill="#f70f79" />
-    </svg>
-  );
-}
-
-// Ground shadow + pink circle location indicator
+// Precise location dot — pink filled circle with white center + pink glow
 function PreciseLocationDot() {
   return (
-    <div style={{ position: 'relative', width: 16, height: 12, flexShrink: 0 }}>
-      {/* Ground shadow ellipse */}
+    <div style={{ position: 'relative', width: 16, height: 16, flexShrink: 0 }}>
+      {/* Pink glow halo */}
       <div style={{
         position: 'absolute',
-        bottom: 0,
-        left: '50%',
-        transform: 'translateX(-50%)',
-        width: 14,
-        height: 7,
-        background: 'rgba(0,0,0,0.09)',
+        inset: -4,
         borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(247,15,121,0.15) 0%, transparent 70%)',
       }} />
-      {/* White circle with pink border */}
+      {/* Pink outer circle */}
       <div style={{
         position: 'absolute',
-        top: 0,
-        left: '50%',
-        transform: 'translateX(-50%)',
-        width: 10,
-        height: 10,
-        background: 'white',
-        border: '2.5px solid #f70f79',
+        inset: 1,
         borderRadius: '50%',
-        boxSizing: 'border-box',
+        background: '#f70f79',
+      }} />
+      {/* White center */}
+      <div style={{
+        position: 'absolute',
+        inset: 5,
+        borderRadius: '50%',
+        background: 'white',
       }} />
     </div>
   );
 }
 
-// Downward-pointing triangle tail
-function Tail({ color = '#f70f79', width = 12, height = 8 }: { color?: string; width?: number; height?: number }) {
-  return (
-    <div style={{
-      width: 0,
-      height: 0,
-      borderLeft: `${width / 2}px solid transparent`,
-      borderRight: `${width / 2}px solid transparent`,
-      borderTop: `${height}px solid ${color}`,
-      flexShrink: 0,
-    }} />
-  );
-}
-
-// ── Drop shadow filter for pin shapes ─────────────────────────────
+// ── Drop shadow ────────────────────────────────────────────────────
 const PIN_SHADOW = [
   'drop-shadow(0 2px 4px rgba(247,15,121,0.18))',
   'drop-shadow(0 6px 14px rgba(247,15,121,0.22))',
@@ -123,95 +80,143 @@ export default function MapPin({
   locationText = 'Current Location',
 }: MapPinProps) {
 
-  // ── User+Label ─────────────────────────────────────────────────
+  // ── User+Label — 72×73px speech-bubble pin ────────────────────
   if (variant === 'user-label') {
     return (
       <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center' }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 5,
-          padding: '8px 12px',
-          background: '#f70f79',
-          borderRadius: 14,
-          filter: PIN_SHADOW,
-        }}>
-          <UserIcon size={18} />
-          <span style={{
-            fontFamily: '"Instrument Sans", sans-serif',
-            fontSize: 16,
-            fontWeight: 700,
-            color: 'white',
-            lineHeight: '20px',
-            letterSpacing: 0.032,
-            whiteSpace: 'nowrap',
+        {/* Body + tail as one unit */}
+        <div style={{ position: 'relative', filter: PIN_SHADOW }}>
+          {/* Rounded pill body */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 5,
+            padding: '8px 12px',
+            background: '#f70f79',
+            borderRadius: 14,
           }}>
-            {label}
-          </span>
+            <UserIcon size={16} />
+            <span style={{
+              fontFamily: '"Instrument Sans", sans-serif',
+              fontSize: 16,
+              fontWeight: 700,
+              color: 'white',
+              lineHeight: '20px',
+              letterSpacing: 0.2,
+              whiteSpace: 'nowrap',
+            }}>
+              {label}
+            </span>
+          </div>
+          {/* Tail — positioned absolutely to overlap body bottom for seamless join */}
+          <div style={{
+            position: 'absolute',
+            bottom: -7,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: 0,
+            height: 0,
+            borderLeft: '7px solid transparent',
+            borderRight: '7px solid transparent',
+            borderTop: '8px solid #f70f79',
+          }} />
         </div>
-        <Tail />
+        {/* Spacer for tail overhang */}
+        <div style={{ height: 4 }} />
+        {/* Location dot */}
         <PreciseLocationDot />
       </div>
     );
   }
 
-  // ── User ───────────────────────────────────────────────────────
+  // ── User — circular pin without label ─────────────────────────
   if (variant === 'user') {
     return (
       <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center' }}>
-        <div style={{
-          width: 40,
-          height: 40,
-          borderRadius: '50%',
-          background: '#f70f79',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          filter: PIN_SHADOW,
-        }}>
-          <UserIcon size={20} />
+        <div style={{ position: 'relative', filter: PIN_SHADOW }}>
+          <div style={{
+            width: 36,
+            height: 36,
+            borderRadius: '50%',
+            background: '#f70f79',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <UserIcon size={16} />
+          </div>
+          {/* Tail */}
+          <div style={{
+            position: 'absolute',
+            bottom: -6,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: 0,
+            height: 0,
+            borderLeft: '6px solid transparent',
+            borderRight: '6px solid transparent',
+            borderTop: '7px solid #f70f79',
+          }} />
         </div>
-        <Tail />
+        <div style={{ height: 3 }} />
         <PreciseLocationDot />
       </div>
     );
   }
 
-  // ── Instruction ────────────────────────────────────────────────
+  // ── Instruction — text bubble + teardrop pin ──────────────────
   if (variant === 'instruction') {
     return (
       <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center' }}>
-        {/* Text bubble */}
-        <div style={{
-          padding: '10px 14px',
-          background: '#f70f79',
-          borderRadius: 12,
-          filter: PIN_SHADOW,
-          maxWidth: 240,
-        }}>
-          <span style={{
-            fontFamily: '"Instrument Sans", sans-serif',
-            fontSize: 11,
-            fontWeight: 600,
-            color: 'white',
-            lineHeight: '14px',
-            whiteSpace: 'nowrap',
+        {/* Text bubble with integrated tail */}
+        <div style={{ position: 'relative', filter: PIN_SHADOW }}>
+          <div style={{
+            padding: '10px 14px',
+            background: '#f70f79',
+            borderRadius: 12,
+            maxWidth: 240,
           }}>
-            {instructionText}
-          </span>
+            <span style={{
+              fontFamily: '"Instrument Sans", sans-serif',
+              fontSize: 11,
+              fontWeight: 600,
+              color: 'white',
+              lineHeight: '14px',
+              whiteSpace: 'nowrap',
+            }}>
+              {instructionText}
+            </span>
+          </div>
+          <div style={{
+            position: 'absolute',
+            bottom: -8,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: 0,
+            height: 0,
+            borderLeft: '7px solid transparent',
+            borderRight: '7px solid transparent',
+            borderTop: '9px solid #f70f79',
+          }} />
         </div>
-        {/* Tail bridging to the drop pin */}
-        <Tail width={14} height={10} />
+        <div style={{ height: 6 }} />
         {/* Classic teardrop map pin */}
         <div style={{ filter: PIN_SHADOW }}>
-          <DropPin width={44} height={56} />
+          <svg width="44" height="56" viewBox="0 0 44 56" fill="none">
+            <path
+              d="M22 0C9.85 0 0 9.85 0 22C0 34.15 22 56 22 56C22 56 44 34.15 44 22C44 9.85 34.15 0 22 0Z"
+              fill="#f70f79"
+            />
+            <circle cx="22" cy="21" r="10" fill="rgba(255,255,255,0.88)" />
+            <circle cx="22" cy="21" r="5" fill="#f70f79" />
+          </svg>
         </div>
         <PreciseLocationDot />
       </div>
     );
   }
 
-  // ── Current Location ──────────────────────────────────────────
+  // ── Current Location — floating card ──────────────────────────
   if (variant === 'current-location') {
     return (
       <div style={{
