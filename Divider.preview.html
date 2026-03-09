@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Divider — Snabbit Design System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&family=Inter:wght@500&display=swap"
+    rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-ui: "Instrument Sans", sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-ui);
+      background: #ffffff;
+      color: #303030;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed; top: 0; left: 0; width: 216px; height: 100vh;
+      background: #fafafa; border-right: 1px solid #ebebeb;
+      padding: 48px 16px; display: flex; flex-direction: column;
+      gap: 2px; z-index: 100; overflow-y: auto;
+    }
+    .sidebar-heading {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: #ababab; padding: 0 12px; margin-bottom: 8px;
+    }
+    .sidebar-separator { height: 1px; background: #ebebeb; margin: 20px 4px; }
+    .nav-link {
+      display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+      border-radius: 8px; font-size: 14px; font-weight: 500; color: #ababab;
+      text-decoration: none; transition: color 0.15s, background 0.15s;
+    }
+    .nav-link:hover { color: #303030; background: #ebebeb; }
+    .nav-link.active { color: #303030; background: #f0f0f0; }
+    .nav-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+
+    /* ── Main ── */
+    .main { margin-left: 216px; flex: 1; padding: 60px 80px; min-height: 100vh; }
+
+    /* ── Component header ── */
+    .component-header {
+      background: #f5f5f5; margin: -60px -80px 60px; padding: 44px 80px;
+      display: flex; align-items: flex-end; justify-content: space-between;
+    }
+    .component-header-left { display: flex; flex-direction: column; gap: 10px; }
+    .component-breadcrumb { font-size: 13px; font-weight: 500; color: #ababab; }
+    .component-breadcrumb a { color: #ababab; text-decoration: none; }
+    .component-breadcrumb a:hover { color: #303030; }
+    .component-header h1 { font-size: 56px; font-weight: 700; line-height: 1; letter-spacing: -2px; }
+    .component-header-right p {
+      font-size: 14px; font-weight: 500; color: #828282;
+      max-width: 280px; line-height: 20px; text-align: right;
+    }
+
+    /* ── Sections ── */
+    .section { margin-bottom: 64px; }
+    .section-title { font-size: 32px; font-weight: 500; letter-spacing: -1px; margin-bottom: 24px; color: #303030; }
+    .divider-sep { height: 1px; background: #e8e8e8; margin: 48px 0; }
+
+    /* ── Playground card ── */
+    .playground-card {
+      background: #f5f5f5; border-radius: 16px; padding: 48px 40px;
+      display: flex; flex-direction: column; align-items: center; gap: 32px;
+    }
+    .playground-preview { width: 320px; }
+    .playground-controls { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 480px; }
+    .ctrl-group { display: flex; flex-direction: column; gap: 10px; }
+    .ctrl-group-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: #ababab;
+    }
+    .pills { display: flex; gap: 8px; flex-wrap: wrap; }
+    .pill {
+      padding: 6px 14px; border-radius: 100px; font-size: 13px; font-weight: 600;
+      background: #ebebeb; color: #ababab; border: none; cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .pill.active { background: #303030; color: #fff; }
+
+    /* ── Variants list ── */
+    .variants-list {
+      display: flex; flex-direction: column; gap: 0;
+      border-radius: 16px; overflow: hidden; border: 1px solid #f0f0f0;
+    }
+    .variant-row {
+      display: flex; align-items: center; gap: 32px;
+      padding: 28px 32px; background: #fff;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .variant-row:last-child { border-bottom: none; }
+    .variant-label {
+      font-size: 12px; font-weight: 600; color: #ababab;
+      min-width: 140px; flex-shrink: 0; letter-spacing: 0.02em;
+    }
+    .variant-preview { flex: 1; min-width: 0; }
+
+    /* ── Divider component styles (pure CSS) ── */
+    .ds-line {
+      width: 100%; height: 1px; background: #f0f0f0;
+    }
+    .ds-line-spacing {
+      width: 100%; height: 1px; background: #f0f0f0;
+      margin: 1.5px 0;
+    }
+    .ds-dotted {
+      width: 100%; height: 0;
+      border-top: 1.5px dotted #f0f0f0;
+    }
+    .ds-text-line {
+      width: 100%; display: flex; align-items: center; gap: 10px;
+    }
+    .ds-text-line-bar {
+      flex: 1 0 0; height: 1px; background: #f0f0f0;
+    }
+    .ds-text-line-label {
+      font-family: "Inter", sans-serif;
+      font-size: 11px; font-weight: 500; line-height: 12px;
+      letter-spacing: 0.22px; color: #ababab; text-transform: uppercase;
+      white-space: nowrap; flex-shrink: 0;
+    }
+
+    /* ── Props table ── */
+    .props-table { width: 100%; border-collapse: collapse; border-radius: 16px; overflow: hidden; }
+    .props-table th { background: #fff; color: #828282; font-size: 13px; font-weight: 600; padding: 14px 20px; text-align: left; }
+    .props-table td { background: #fff; padding: 0 20px; height: 52px; font-size: 13px; font-weight: 500; color: #303030; border-top: 1px solid #e8e8e8; }
+    .props-table td code { background: #f5f5f5; border: 1px solid #e8e8e8; border-radius: 4px; padding: 2px 6px; font-size: 12px; color: #f70f79; }
+    .props-table td.prop-name { color: #303030; font-weight: 600; }
+    .props-table td.prop-default { color: #828282; }
+  </style>
+</head>
+
+<body>
+
+  <aside class="sidebar">
+    <p class="sidebar-heading">Foundations</p>
+    <a class="nav-link" href="tokens.preview.html#color"><span class="nav-icon">⬛</span> Color</a>
+    <a class="nav-link" href="tokens.preview.html#shadow"><span class="nav-icon">◻️</span> Shadow</a>
+    <a class="nav-link" href="tokens.preview.html#typography"><span class="nav-icon">Aa</span> Typography</a>
+    <a class="nav-link" href="tokens.preview.html#radius"><span class="nav-icon">◜</span> Radius</a>
+
+    <div class="sidebar-separator"></div>
+    <p class="sidebar-heading">Components</p>
+    <a class="nav-link" href="Accordion.preview.html"><span class="nav-icon" style="font-size:13px">☰</span> Accordion</a>
+    <a class="nav-link" href="Banner.preview.html"><span class="nav-icon" style="font-size:13px">◫</span> Banner</a>
+    <a class="nav-link" href="Button.preview.html"><span class="nav-icon" style="font-size:13px">▣</span> Button</a>
+    <a class="nav-link" href="Checkbox.preview.html"><span class="nav-icon" style="font-size:13px">☑</span> Checkbox</a>
+    <a class="nav-link active" href="Divider.preview.html"><span class="nav-icon" style="font-size:13px">▬</span> Divider</a>
+    <a class="nav-link" href="Dropdown.preview.html"><span class="nav-icon" style="font-size:13px">▾</span> Dropdown</a>
+    <a class="nav-link" href="TextField.preview.html"><span class="nav-icon" style="font-size:13px">▭</span> Input</a>
+    <a class="nav-link" href="ProgressBar.preview.html"><span class="nav-icon" style="font-size:13px">◌</span> Progress</a>
+    <a class="nav-link" href="RadioButton.preview.html"><span class="nav-icon" style="font-size:13px">◉</span> Radio</a>
+    <a class="nav-link" href="Tabs.preview.html"><span class="nav-icon" style="font-size:13px">▤</span> Tabs</a>
+    <a class="nav-link" href="Tag.preview.html"><span class="nav-icon" style="font-size:13px">◈</span> Tag</a>
+    <a class="nav-link" href="Toast.preview.html"><span class="nav-icon" style="font-size:13px">◩</span> Toast</a>
+    <a class="nav-link" href="Toggle.preview.html"><span class="nav-icon" style="font-size:13px">⬭</span> Toggle</a>
+  </aside>
+
+  <main class="main">
+
+    <div class="component-header">
+      <div class="component-header-left">
+        <p class="component-breadcrumb"><a href="tokens.preview.html">Design System</a> / Components</p>
+        <h1>Divider</h1>
+      </div>
+      <div class="component-header-right">
+        <p>Horizontal separator in 4 variants — Line, Line Spacing, Dotted, and Text & Line.</p>
+      </div>
+    </div>
+
+    <!-- ─── PLAYGROUND ─── -->
+    <div class="section">
+      <p class="section-title">Playground</p>
+      <div class="playground-card">
+        <div class="playground-preview" id="playgroundPreview"></div>
+        <div class="playground-controls">
+          <div class="ctrl-group">
+            <span class="ctrl-group-label">Type</span>
+            <div class="pills" id="typePills"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider-sep"></div>
+
+    <!-- ─── VARIANTS ─── -->
+    <div class="section">
+      <p class="section-title">All Variants</p>
+      <div class="variants-list">
+        <div class="variant-row">
+          <span class="variant-label">Line</span>
+          <div class="variant-preview"><div class="ds-line"></div></div>
+        </div>
+        <div class="variant-row">
+          <span class="variant-label">Line Spacing</span>
+          <div class="variant-preview"><div class="ds-line-spacing"></div></div>
+        </div>
+        <div class="variant-row">
+          <span class="variant-label">Dotted</span>
+          <div class="variant-preview"><div class="ds-dotted"></div></div>
+        </div>
+        <div class="variant-row">
+          <span class="variant-label">Text & Line Divider</span>
+          <div class="variant-preview">
+            <div class="ds-text-line">
+              <div class="ds-text-line-bar"></div>
+              <span class="ds-text-line-label">OR</span>
+              <div class="ds-text-line-bar"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider-sep"></div>
+
+    <!-- ─── PROPS ─── -->
+    <div class="section">
+      <p class="section-title">Props</p>
+      <table class="props-table">
+        <thead>
+          <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="prop-name"><code>type</code></td>
+            <td>'Line' · 'Line Spacing' · 'Dotted' · 'Text &amp; Line Divider'</td>
+            <td class="prop-default">'Line'</td>
+            <td>Visual style of the divider</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>text</code></td>
+            <td>string</td>
+            <td class="prop-default">'OR'</td>
+            <td>Label shown in the center — only used for 'Text &amp; Line Divider'</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>width</code></td>
+            <td>number | string</td>
+            <td class="prop-default">'100%'</td>
+            <td>Width of the divider</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <script>
+    const TYPES = ['Line', 'Line Spacing', 'Dotted', 'Text & Line Divider'];
+    let pgType = 'Line';
+
+    function buildDivider(type) {
+      if (type === 'Line Spacing') {
+        return `<div style="width:100%;height:1px;background:#f0f0f0;margin:1.5px 0;"></div>`;
+      }
+      if (type === 'Dotted') {
+        return `<div style="width:100%;height:0;border-top:1.5px dotted #f0f0f0;"></div>`;
+      }
+      if (type === 'Text & Line Divider') {
+        return `<div style="width:100%;display:flex;align-items:center;gap:10px;">
+          <div style="flex:1 0 0;height:1px;background:#f0f0f0;"></div>
+          <span style="font-family:'Inter',sans-serif;font-size:11px;font-weight:500;line-height:12px;letter-spacing:0.22px;color:#ababab;text-transform:uppercase;white-space:nowrap;flex-shrink:0;">OR</span>
+          <div style="flex:1 0 0;height:1px;background:#f0f0f0;"></div>
+        </div>`;
+      }
+      // Line
+      return `<div style="width:100%;height:1px;background:#f0f0f0;"></div>`;
+    }
+
+    function renderPlayground() {
+      document.getElementById('playgroundPreview').innerHTML = buildDivider(pgType);
+    }
+
+    const pillsEl = document.getElementById('typePills');
+    TYPES.forEach(type => {
+      const btn = document.createElement('button');
+      btn.className = 'pill' + (type === pgType ? ' active' : '');
+      btn.textContent = type;
+      btn.addEventListener('click', () => {
+        pgType = type;
+        pillsEl.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        renderPlayground();
+      });
+      pillsEl.appendChild(btn);
+    });
+
+    renderPlayground();
+  </script>
+
+</body>
+</html>

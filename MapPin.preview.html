@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Map Pin — Snabbit Design System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --font-ui: "Instrument Sans", sans-serif; --pink: #f70f79; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-ui); background: #ffffff; color: #303030; display: flex; min-height: 100vh; }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed; top: 0; left: 0; width: 216px; height: 100vh;
+      background: #fafafa; border-right: 1px solid #ebebeb;
+      padding: 48px 16px; display: flex; flex-direction: column;
+      gap: 2px; z-index: 100; overflow-y: auto;
+    }
+    .sidebar-heading { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #ababab; padding: 0 12px; margin-bottom: 8px; }
+    .sidebar-separator { height: 1px; background: #ebebeb; margin: 20px 4px; }
+    .nav-link { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; font-size: 14px; font-weight: 500; color: #ababab; text-decoration: none; transition: color 0.15s, background 0.15s; }
+    .nav-link:hover { color: #303030; background: #ebebeb; }
+    .nav-link.active { color: #303030; background: #f0f0f0; }
+    .nav-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+
+    /* ── Main ── */
+    .main { margin-left: 216px; flex: 1; padding: 60px 80px; min-height: 100vh; }
+
+    /* ── Component header ── */
+    .component-header { background: #f5f5f5; margin: -60px -80px 60px; padding: 44px 80px; display: flex; align-items: flex-end; justify-content: space-between; }
+    .component-header-left { display: flex; flex-direction: column; gap: 10px; }
+    .component-breadcrumb { font-size: 13px; font-weight: 500; color: #ababab; }
+    .component-breadcrumb a { color: #ababab; text-decoration: none; }
+    .component-breadcrumb a:hover { color: #303030; }
+    .component-header h1 { font-size: 56px; font-weight: 700; line-height: 1; letter-spacing: -2px; }
+    .component-header-right p { font-size: 14px; font-weight: 500; color: #828282; max-width: 300px; line-height: 20px; text-align: right; }
+
+    /* ── Sections ── */
+    .section { margin-bottom: 64px; }
+    .section-title { font-size: 32px; font-weight: 500; letter-spacing: -1px; margin-bottom: 24px; color: #303030; }
+    .divider-sep { height: 1px; background: #e8e8e8; margin: 48px 0; }
+
+    /* ── Playground ── */
+    .playground-card { background: #f5f5f5; border-radius: 16px; padding: 48px 40px; display: flex; flex-direction: column; align-items: center; gap: 32px; }
+    .playground-preview { min-height: 120px; display: flex; align-items: center; justify-content: center; }
+    .playground-controls { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 480px; }
+    .ctrl-group { display: flex; flex-direction: column; gap: 10px; }
+    .ctrl-group-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #ababab; }
+    .pills { display: flex; gap: 8px; flex-wrap: wrap; }
+    .pill { padding: 6px 14px; border-radius: 100px; font-size: 13px; font-weight: 600; background: #ebebeb; color: #ababab; border: none; cursor: pointer; transition: background 0.15s, color 0.15s; }
+    .pill.active { background: #303030; color: #fff; }
+
+    /* ── Variants grid ── */
+    .variants-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .variant-card { background: #f5f5f5; border-radius: 16px; padding: 32px 28px; display: flex; flex-direction: column; gap: 20px; }
+    .variant-card-label { font-size: 12px; font-weight: 600; color: #ababab; letter-spacing: 0.04em; }
+    .variant-card-demo { display: flex; align-items: flex-end; justify-content: center; min-height: 120px; padding-bottom: 8px; }
+
+    /* ── MapPin component styles (pure CSS) ── */
+    .mp-wrap { display: inline-flex; flex-direction: column; align-items: center; }
+
+    /* Shared pink pill bubble */
+    .mp-bubble {
+      background: var(--pink);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 8px 12px;
+      filter: drop-shadow(0 2px 4px rgba(247,15,121,0.18))
+              drop-shadow(0 6px 14px rgba(247,15,121,0.22))
+              drop-shadow(0 12px 24px rgba(247,15,121,0.12));
+    }
+    .mp-bubble-label { font-family: var(--font-ui); font-size: 16px; font-weight: 700; color: white; line-height: 20px; white-space: nowrap; }
+
+    /* User icon (inline SVG as background) */
+    .mp-user-icon { width: 18px; height: 18px; flex-shrink: 0; }
+
+    /* Circle bubble for user-only variant */
+    .mp-circle-bubble {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--pink);
+      display: flex; align-items: center; justify-content: center;
+      filter: drop-shadow(0 2px 4px rgba(247,15,121,0.18))
+              drop-shadow(0 6px 14px rgba(247,15,121,0.22))
+              drop-shadow(0 12px 24px rgba(247,15,121,0.12));
+    }
+
+    /* Instruction text bubble */
+    .mp-instruction-bubble {
+      background: var(--pink);
+      border-radius: 12px;
+      padding: 10px 14px;
+      filter: drop-shadow(0 2px 4px rgba(247,15,121,0.18))
+              drop-shadow(0 6px 14px rgba(247,15,121,0.22));
+    }
+    .mp-instruction-text { font-family: var(--font-ui); font-size: 11px; font-weight: 600; color: white; line-height: 14px; white-space: nowrap; }
+
+    /* Triangular tail */
+    .mp-tail {
+      width: 0; height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 8px solid var(--pink);
+      flex-shrink: 0;
+    }
+    .mp-tail-lg {
+      width: 0; height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 10px solid var(--pink);
+      flex-shrink: 0;
+    }
+
+    /* Drop pin SVG wrapper */
+    .mp-drop-pin { flex-shrink: 0; filter: drop-shadow(0 2px 4px rgba(247,15,121,0.18)) drop-shadow(0 6px 14px rgba(247,15,121,0.22)); }
+
+    /* Precise location dot */
+    .mp-dot-wrap { position: relative; width: 16px; height: 12px; flex-shrink: 0; }
+    .mp-dot-shadow { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 14px; height: 7px; background: rgba(0,0,0,0.09); border-radius: 50%; }
+    .mp-dot { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: white; border: 2.5px solid var(--pink); border-radius: 50%; }
+
+    /* Current Location card */
+    .mp-current-location {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px; background: white;
+      border: 1.5px solid #fff3f8; border-radius: 12px;
+      box-shadow: 0 1px 2px rgba(51,51,51,0.04), 0 4px 12px rgba(51,51,51,0.07);
+      white-space: nowrap;
+    }
+    .mp-current-label { font-family: var(--font-ui); font-size: 12px; font-weight: 500; color: #4d4d4d; line-height: 16px; }
+
+    /* ── Props table ── */
+    .props-table { width: 100%; border-collapse: collapse; border-radius: 16px; overflow: hidden; }
+    .props-table th { background: #fff; color: #828282; font-size: 13px; font-weight: 600; padding: 14px 20px; text-align: left; }
+    .props-table td { background: #fff; padding: 0 20px; height: 52px; font-size: 13px; font-weight: 500; color: #303030; border-top: 1px solid #e8e8e8; }
+    .props-table td code { background: #f5f5f5; border: 1px solid #e8e8e8; border-radius: 4px; padding: 2px 6px; font-size: 12px; color: #f70f79; }
+    .props-table td.prop-name { color: #303030; font-weight: 600; }
+    .props-table td.prop-default { color: #828282; }
+  </style>
+</head>
+
+<body>
+
+  <aside class="sidebar">
+    <p class="sidebar-heading">Foundations</p>
+    <a class="nav-link" href="tokens.preview.html#color"><span class="nav-icon">⬛</span> Color</a>
+    <a class="nav-link" href="tokens.preview.html#shadow"><span class="nav-icon">◻️</span> Shadow</a>
+    <a class="nav-link" href="tokens.preview.html#typography"><span class="nav-icon">Aa</span> Typography</a>
+    <a class="nav-link" href="tokens.preview.html#radius"><span class="nav-icon">◜</span> Radius</a>
+
+    <div class="sidebar-separator"></div>
+    <p class="sidebar-heading">Components</p>
+    <a class="nav-link" href="Accordion.preview.html"><span class="nav-icon" style="font-size:13px">☰</span> Accordion</a>
+    <a class="nav-link" href="Banner.preview.html"><span class="nav-icon" style="font-size:13px">◫</span> Banner</a>
+    <a class="nav-link" href="Button.preview.html"><span class="nav-icon" style="font-size:13px">▣</span> Button</a>
+    <a class="nav-link" href="Checkbox.preview.html"><span class="nav-icon" style="font-size:13px">☑</span> Checkbox</a>
+    <a class="nav-link" href="Divider.preview.html"><span class="nav-icon" style="font-size:13px">▬</span> Divider</a>
+    <a class="nav-link" href="Dropdown.preview.html"><span class="nav-icon" style="font-size:13px">▾</span> Dropdown</a>
+    <a class="nav-link" href="TextField.preview.html"><span class="nav-icon" style="font-size:13px">▭</span> Input</a>
+    <a class="nav-link active" href="MapPin.preview.html"><span class="nav-icon" style="font-size:13px">⊙</span> Map Pin</a>
+    <a class="nav-link" href="ProgressBar.preview.html"><span class="nav-icon" style="font-size:13px">◌</span> Progress</a>
+    <a class="nav-link" href="RadioButton.preview.html"><span class="nav-icon" style="font-size:13px">◉</span> Radio</a>
+    <a class="nav-link" href="Tabs.preview.html"><span class="nav-icon" style="font-size:13px">▤</span> Tabs</a>
+    <a class="nav-link" href="Tag.preview.html"><span class="nav-icon" style="font-size:13px">◈</span> Tag</a>
+    <a class="nav-link" href="Toast.preview.html"><span class="nav-icon" style="font-size:13px">◩</span> Toast</a>
+    <a class="nav-link" href="Toggle.preview.html"><span class="nav-icon" style="font-size:13px">⬭</span> Toggle</a>
+  </aside>
+
+  <main class="main">
+
+    <div class="component-header">
+      <div class="component-header-left">
+        <p class="component-breadcrumb"><a href="tokens.preview.html">Design System</a> / Components</p>
+        <h1>Map Pin</h1>
+      </div>
+      <div class="component-header-right">
+        <p>Map overlay markers in 4 variants — user label, user, instruction callout, and current location card.</p>
+      </div>
+    </div>
+
+    <!-- ─── PLAYGROUND ─── -->
+    <div class="section">
+      <p class="section-title">Playground</p>
+      <div class="playground-card">
+        <div class="playground-preview" id="playgroundPreview"></div>
+        <div class="playground-controls">
+          <div class="ctrl-group">
+            <span class="ctrl-group-label">Variant</span>
+            <div class="pills" id="variantPills"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider-sep"></div>
+
+    <!-- ─── ALL VARIANTS ─── -->
+    <div class="section">
+      <p class="section-title">All Variants</p>
+      <div class="variants-grid">
+
+        <!-- User + Label -->
+        <div class="variant-card">
+          <span class="variant-card-label">User + Label</span>
+          <div class="variant-card-demo">
+            <div class="mp-wrap">
+              <div class="mp-bubble">
+                <svg class="mp-user-icon" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6.5" r="3.2" fill="white"/><path d="M2.5 17C2.5 13.134 5.41 10 9 10C12.59 10 15.5 13.134 15.5 17" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg>
+                <span class="mp-bubble-label">You</span>
+              </div>
+              <div class="mp-tail"></div>
+              <div class="mp-dot-wrap"><div class="mp-dot-shadow"></div><div class="mp-dot"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- User only -->
+        <div class="variant-card">
+          <span class="variant-card-label">User</span>
+          <div class="variant-card-demo">
+            <div class="mp-wrap">
+              <div class="mp-circle-bubble">
+                <svg width="20" height="20" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6.5" r="3.2" fill="white"/><path d="M2.5 17C2.5 13.134 5.41 10 9 10C12.59 10 15.5 13.134 15.5 17" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg>
+              </div>
+              <div class="mp-tail"></div>
+              <div class="mp-dot-wrap"><div class="mp-dot-shadow"></div><div class="mp-dot"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Instruction -->
+        <div class="variant-card">
+          <span class="variant-card-label">Instruction</span>
+          <div class="variant-card-demo">
+            <div class="mp-wrap">
+              <div class="mp-instruction-bubble">
+                <span class="mp-instruction-text">Move pin to your exact location</span>
+              </div>
+              <div class="mp-tail-lg"></div>
+              <div class="mp-drop-pin">
+                <svg width="44" height="56" viewBox="0 0 44 56" fill="none">
+                  <path d="M22 0 C9.85 0 0 9.85 0 22 C0 34.15 22 56 22 56 C22 56 44 34.15 44 22 C44 9.85 34.15 0 22 0 Z" fill="#f70f79"/>
+                  <circle cx="22" cy="21" r="10" fill="rgba(255,255,255,0.88)"/>
+                  <circle cx="22" cy="21" r="5" fill="#f70f79"/>
+                </svg>
+              </div>
+              <div class="mp-dot-wrap"><div class="mp-dot-shadow"></div><div class="mp-dot"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Current Location -->
+        <div class="variant-card">
+          <span class="variant-card-label">Current Location</span>
+          <div class="variant-card-demo">
+            <div class="mp-current-location">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5L12.5 12.5L7 9.2L1.5 12.5L7 1.5Z" fill="#f70f79"/></svg>
+              <span class="mp-current-label">Current Location</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="divider-sep"></div>
+
+    <!-- ─── PROPS ─── -->
+    <div class="section">
+      <p class="section-title">Props</p>
+      <table class="props-table">
+        <thead>
+          <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="prop-name"><code>variant</code></td>
+            <td>'user-label' · 'user' · 'instruction' · 'current-location'</td>
+            <td class="prop-default">'user-label'</td>
+            <td>Visual style of the map pin</td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>label</code></td>
+            <td>string</td>
+            <td class="prop-default">'You'</td>
+            <td>Text shown in the bubble — only for <code>user-label</code></td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>instructionText</code></td>
+            <td>string</td>
+            <td class="prop-default">'Move pin to your exact location'</td>
+            <td>Instruction message — only for <code>instruction</code></td>
+          </tr>
+          <tr>
+            <td class="prop-name"><code>locationText</code></td>
+            <td>string</td>
+            <td class="prop-default">'Current Location'</td>
+            <td>Label text — only for <code>current-location</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <script>
+    const VARIANTS = ['user-label', 'user', 'instruction', 'current-location'];
+    let pgVariant = 'user-label';
+
+    function userIconSvg(size) {
+      return `<svg width="${size}" height="${size}" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6.5" r="3.2" fill="white"/><path d="M2.5 17C2.5 13.134 5.41 10 9 10C12.59 10 15.5 13.134 15.5 17" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg>`;
+    }
+
+    function dotHtml() {
+      return `<div class="mp-dot-wrap"><div class="mp-dot-shadow"></div><div class="mp-dot"></div></div>`;
+    }
+
+    function buildPin(variant) {
+      if (variant === 'user-label') {
+        return `<div class="mp-wrap">
+          <div class="mp-bubble">${userIconSvg(18)}<span class="mp-bubble-label">You</span></div>
+          <div class="mp-tail"></div>${dotHtml()}</div>`;
+      }
+      if (variant === 'user') {
+        return `<div class="mp-wrap">
+          <div class="mp-circle-bubble">${userIconSvg(20)}</div>
+          <div class="mp-tail"></div>${dotHtml()}</div>`;
+      }
+      if (variant === 'instruction') {
+        return `<div class="mp-wrap">
+          <div class="mp-instruction-bubble"><span class="mp-instruction-text">Move pin to your exact location</span></div>
+          <div class="mp-tail-lg"></div>
+          <div class="mp-drop-pin">
+            <svg width="44" height="56" viewBox="0 0 44 56" fill="none">
+              <path d="M22 0 C9.85 0 0 9.85 0 22 C0 34.15 22 56 22 56 C22 56 44 34.15 44 22 C44 9.85 34.15 0 22 0 Z" fill="#f70f79"/>
+              <circle cx="22" cy="21" r="10" fill="rgba(255,255,255,0.88)"/>
+              <circle cx="22" cy="21" r="5" fill="#f70f79"/>
+            </svg>
+          </div>${dotHtml()}</div>`;
+      }
+      if (variant === 'current-location') {
+        return `<div class="mp-current-location">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5L12.5 12.5L7 9.2L1.5 12.5L7 1.5Z" fill="#f70f79"/></svg>
+          <span class="mp-current-label">Current Location</span></div>`;
+      }
+      return '';
+    }
+
+    function renderPlayground() {
+      document.getElementById('playgroundPreview').innerHTML = buildPin(pgVariant);
+    }
+
+    const pillsEl = document.getElementById('variantPills');
+    VARIANTS.forEach(v => {
+      const btn = document.createElement('button');
+      btn.className = 'pill' + (v === pgVariant ? ' active' : '');
+      btn.textContent = v;
+      btn.addEventListener('click', () => {
+        pgVariant = v;
+        pillsEl.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        renderPlayground();
+      });
+      pillsEl.appendChild(btn);
+    });
+
+    renderPlayground();
+  </script>
+
+</body>
+</html>

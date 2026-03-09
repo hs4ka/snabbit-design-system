@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "ES2018",
+    "lib": ["ES2018", "DOM"],
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "declaration": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "outDir": "dist"
+  },
+  "include": [
+    "index.ts",
+    "tokens.ts",
+    "Accordion.tsx",
+    "Banner.tsx",
+    "Button.tsx",
+    "Checkbox.tsx",
+    "OfferToast.tsx",
+    "ProgressBar.tsx",
+    "RadioButton.tsx",
+    "Tabs.tsx",
+    "Tag.tsx",
+    "TextField.tsx",
+    "Toast.tsx",
+    "Toggle.tsx"
+  ],
+  "exclude": ["node_modules", "dist"]
+}

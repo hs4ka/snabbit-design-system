@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bookings Screen — Snabbit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent-primary:   #f70f79;
+      --accent-light:     #fff3f8;
+      --bg-tertiary:      #f0f0f0;
+      --text-primary:     #303030;
+      --text-secondary:   #828282;
+      --text-tertiary:    #ababab;
+      --stroke-secondary: #f0f0f0;
+      --font-ui:          "Instrument Sans", sans-serif;
+      --font-outfit:      "Outfit", sans-serif;
+    }
+
+    body {
+      font-family: var(--font-ui);
+      background: #f0f0f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 48px 0 64px;
+    }
+
+    /* ── Phone frame ── */
+    .phone {
+      width: 390px;
+      height: 844px;
+      background: #fff;
+      border-radius: 44px;
+      overflow: hidden;
+      box-shadow:
+        0 40px 80px rgba(0,0,0,0.14),
+        0 0 0 1px rgba(0,0,0,0.06);
+      position: relative;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Status bar notch area ── */
+    .status-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 28px 0;
+      z-index: 10;
+    }
+    .status-time {
+      font-family: var(--font-outfit);
+      font-size: 13px;
+      font-weight: 600;
+      color: #303030;
+    }
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* ═══════════════════════════════════════════
+       PROGRESS HEADER + TABS  (top: 56px)
+    ═══════════════════════════════════════════ */
+    .progress-section {
+      padding: 56px 15px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .progress-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .progress-greeting {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-family: var(--font-outfit);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 16px;
+      width: 102px;
+    }
+    .progress-greeting .hey   { color: var(--text-secondary); }
+    .progress-greeting .daily { color: var(--text-primary); }
+
+    /* ── Tabs — exact classes from Tabs.preview.html ── */
+    .tabs {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      border-bottom: 1px solid #f0f0f0;
+      font-family: var(--font-outfit);
+    }
+
+    .tab-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0 0 0 0;
+      flex-shrink: 0;
+    }
+
+    .tab-label {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 16px;
+      color: #828282;
+      white-space: nowrap;
+      transition: color 0.15s;
+    }
+
+    .tab-item.active .tab-label { color: #f70f79; }
+
+    .tab-indicator {
+      height: 4px;
+      width: 100%;
+      border-radius: 2px;
+      background: transparent;
+      transition: background 0.15s;
+    }
+
+    .tab-item.active .tab-indicator { background: #f70f79; }
+
+    /* ═══════════════════════════════════════════
+       CONTENT AREA  (top: 196px)
+    ═══════════════════════════════════════════ */
+    .content-area {
+      padding: 20px 15px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      flex: 1;
+    }
+
+    /* ── Accordion — exact classes from Accordion.preview.html ── */
+    .accordion-item {
+      background: #fff;
+      border: 1px solid #f0f0f0;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .accordion-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .accordion-header-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .accordion-title {
+      flex: 1;
+      font-family: var(--font-outfit);
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+      color: #303030;
+    }
+
+    .accordion-chevron {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      transition: transform 0.22s ease;
+    }
+
+    .accordion-item.open .accordion-chevron { transform: rotate(180deg); }
+
+    .accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.25s ease;
+      padding: 0 16px;
+    }
+
+    .accordion-item.open .accordion-body {
+      max-height: 200px;
+      padding: 0 16px 16px;
+    }
+
+    .accordion-divider { height: 1px; background: #f0f0f0; margin-bottom: 12px; }
+
+    .accordion-text {
+      font-family: var(--font-outfit);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 16px;
+      color: #828282;
+    }
+
+    /* ── Banner — exact classes from Banner.preview.html ── */
+    .bn {
+      border-radius: 12px;
+      font-family: var(--font-outfit);
+    }
+
+    .bn--white {
+      background: #fff;
+      border: 1px solid #f0f0f0;
+    }
+
+    .bn-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .bn-icon-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    .bn--inline-link {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 12px;
+    }
+
+    .bn--inline-link .bn-content {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .bn-inline-text {
+      flex: 1;
+      font-size: 14px;
+      line-height: 18px;
+    }
+
+    .bn-inline-text .grey { color: #ababab; font-weight: 400; }
+    .bn-inline-text .pink { color: #f70f79; font-weight: 600; }
+
+    /* ── TextField — exact classes from TextField.preview.html ── */
+    .tf-section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .tf-section-label {
+      font-family: var(--font-outfit);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      color: #303030;
+    }
+
+    .tf-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      width: 100%;
+      font-family: var(--font-outfit);
+    }
+
+    .tf-field-wrap { position: relative; }
+
+    .tf-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      background: white;
+      border: 1.2px solid;
+      gap: 8px;
+      font-family: var(--font-outfit);
+    }
+
+    .tf-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .tf-right {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .tf-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-family: var(--font-outfit);
+      font-weight: 500;
+      min-width: 0;
+      color: #ababab;
+    }
+
+    .tf-input::placeholder { color: #ababab; font-family: var(--font-outfit); font-weight: 500; }
+
+    .tf-hint-row {
+      display: flex;
+      align-items: center;
+      padding: 8px 16px;
+      font-family: var(--font-outfit);
+      font-size: 11px;
+      font-weight: 400;
+      line-height: 14px;
+      color: #ababab;
+      background: #f3f3f3;
+      border-radius: 0 0 12px 12px;
+    }
+
+    /* Size 56 */
+    .tf-sz-56 .tf-box {
+      height: 56px;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .tf-sz-56 .tf-input { font-size: 16px; line-height: 24px; }
+
+    /* Default state */
+    .tf-s-default .tf-box { border-color: #ababab; }
+
+    /* ── Toggle — exact classes from Toggle.preview.html ── */
+    .toggle-wrap {
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0;
+      user-select: none;
+    }
+
+    .toggle-track {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 999px;
+      background: #f0f0f0;
+      transition: background 0.2s;
+      pointer-events: none;
+    }
+
+    .toggle-wrap.on .toggle-track { background: #f70f79; }
+
+    .toggle-thumb {
+      position: absolute;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0px 1px 4px rgba(0,0,0,0.22), 0px 0.5px 1px rgba(0,0,0,0.08);
+      transition: left 0.2s;
+      pointer-events: none;
+    }
+
+    .toggle-dot {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: #f0f0f0;
+      pointer-events: none;
+    }
+
+    .toggle-wrap.on .toggle-dot { background: #f70f79; }
+
+    /* 20px size */
+    .toggle-20 { width: 34px; height: 20px; }
+    .toggle-20 .toggle-track { width: 28px; height: 16px; }
+    .toggle-20 .toggle-thumb { width: 12px; height: 12px; top: 4px; left: 5.17px; }
+    .toggle-20 .toggle-dot   { width: 4px; height: 4px; }
+    .toggle-20.on .toggle-thumb { left: 17.17px; }
+
+    /* ═══════════════════════════════════════════
+       BOTTOM SECTION  (bottom: 40px)
+    ═══════════════════════════════════════════ */
+    .bottom-section {
+      padding: 0 15px;
+      margin-top: auto;
+      margin-bottom: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* ── Checkbox — exact classes from Checkbox.preview.html ── */
+    .cb-wrap {
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0;
+      user-select: none;
+      overflow: hidden;
+    }
+
+    .cb-bg {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: #f0f0f0;
+      transition: background 0.15s;
+      pointer-events: none;
+    }
+
+    .cb-wrap.on .cb-bg { background: #f70f79; }
+
+    .cb-box {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      pointer-events: none;
+    }
+
+    .cb-wrap.on .cb-box { display: none; }
+
+    .cb-check {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      display: none;
+      pointer-events: none;
+    }
+
+    .cb-wrap.on .cb-check { display: block; }
+
+    /* 20px size */
+    .cb-20 { width: 20px; height: 20px; }
+    .cb-20 .cb-bg  { width: 16px; height: 16px; border-radius: 4px; }
+    .cb-20 .cb-box { width: 13px; height: 13px; border-radius: 2.6px; }
+
+    .tc-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tc-text {
+      font-family: var(--font-outfit);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      color: #828282;
+    }
+
+    /* ── Buttons — exact classes from Button.preview.html ── */
+    .btn-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-outfit);
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.15s;
+      flex: 1;
+      height: 56px;
+      padding: 16px 20px;
+      border-radius: 16px;
+    }
+
+    .btn-primary          { background: #f70f79; color: #ffffff; }
+    .btn-secondary-light  { background: #fff3f8; color: #f70f79; }
+
+    .btn:hover { opacity: 0.88; }
+  </style>
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- Status bar -->
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+        <rect x="0" y="4" width="3" height="8" rx="1" fill="#303030"/>
+        <rect x="4.5" y="2.5" width="3" height="9.5" rx="1" fill="#303030"/>
+        <rect x="9" y="0.5" width="3" height="11.5" rx="1" fill="#303030"/>
+        <rect x="13.5" y="0" width="2.5" height="12" rx="0.8" fill="#d0d0d0"/>
+      </svg>
+      <svg width="16" height="12" viewBox="0 0 24 24" fill="none">
+        <path d="M1.5 8.5C5.36 4.64 10.4 2.5 12 2.5s6.64 2.14 10.5 6" stroke="#303030" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M4.5 11.5C7.5 8.5 10.2 7 12 7s4.5 1.5 7.5 4.5" stroke="#303030" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M7.5 14.5C9.2 12.8 10.7 12 12 12s2.8.8 4.5 2.5" stroke="#303030" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="12" cy="18" r="1.5" fill="#303030"/>
+      </svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
+        <rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#303030" stroke-opacity="0.35"/>
+        <rect x="2" y="2" width="17" height="8" rx="2" fill="#303030"/>
+        <path d="M23 4.5v3a1.5 1.5 0 000-3z" fill="#303030" fill-opacity="0.4"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ── Progress Header + Tabs ── -->
+  <div class="progress-section">
+
+    <div class="progress-row">
+      <div id="progressRing"></div>
+      <div class="progress-greeting">
+        <span class="hey">Hey Akash</span>
+        <span class="daily">Your daily progress</span>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-item active" onclick="setTab(this)">
+        <span class="tab-label">Bookings</span>
+        <div class="tab-indicator"></div>
+      </button>
+      <button class="tab-item" onclick="setTab(this)">
+        <span class="tab-label">Account</span>
+        <div class="tab-indicator"></div>
+      </button>
+      <button class="tab-item" onclick="setTab(this)">
+        <span class="tab-label">Payments</span>
+        <div class="tab-indicator"></div>
+      </button>
+      <button class="tab-item" onclick="setTab(this)">
+        <span class="tab-label">Feedback</span>
+        <div class="tab-indicator"></div>
+      </button>
+      <button class="tab-item" onclick="setTab(this)">
+        <span class="tab-label">Safety</span>
+        <div class="tab-indicator"></div>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ── Content Area ── -->
+  <div class="content-area">
+
+    <!-- Accordion -->
+    <div class="accordion-item" id="accordion1">
+      <button class="accordion-header" onclick="toggleAccordion('accordion1')">
+        <div class="accordion-header-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="7.5" r="3" stroke="#303030" stroke-width="1.4"/>
+            <path d="M3.5 17.5c0-3.59 2.91-6.5 6.5-6.5s6.5 2.91 6.5 6.5" stroke="#303030" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="accordion-title">How can I make a booking?</span>
+        <svg class="accordion-chevron" width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M5 7.5L10 12.5L15 7.5" stroke="#828282" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-divider"></div>
+        <p class="accordion-text">Browse available services, select a professional, choose a time slot, and confirm your booking. It takes less than a minute.</p>
+      </div>
+    </div>
+
+    <!-- Banner -->
+    <div class="bn bn--white bn--inline-link">
+      <div class="bn-content">
+        <div class="bn-icon-circle">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <circle cx="11" cy="11" r="6.5" stroke="#f70f79" stroke-width="1.5"/>
+            <path d="M20 20l-3.5-3.5" stroke="#f70f79" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="bn-inline-text">
+          <span class="grey">Find deals with Klarna's price comparison </span><span class="pink">Status Privacy</span>
+        </div>
+      </div>
+      <button class="bn-close">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M1 1l12 12M13 1L1 13" stroke="#ababab" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- TextField Section -->
+    <div class="tf-section">
+      <p class="tf-section-label">Enter you name</p>
+      <div class="tf-wrapper tf-sz-56 tf-s-default">
+        <div class="tf-field-wrap">
+          <div class="tf-box">
+            <div class="tf-left">
+              <input class="tf-input" type="text" placeholder="Enter details" />
+            </div>
+            <div class="tf-right">
+              <div class="toggle-wrap toggle-20 on" onclick="this.classList.toggle('on')">
+                <div class="toggle-track"></div>
+                <div class="toggle-thumb">
+                  <div class="toggle-dot"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tf-hint-row">Enter name as per your Govt ID</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Bottom Section ── -->
+  <div class="bottom-section">
+    <div class="tc-row">
+      <div class="cb-wrap cb-20" onclick="this.classList.toggle('on')">
+        <div class="cb-bg"></div>
+        <div class="cb-box"></div>
+        <div class="cb-check">
+          <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+            <path d="M1 4l3 3 5-6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <span class="tc-text">Accept the terms and conditions for snabbit</span>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary-light">Button</button>
+      <button class="btn btn-primary">Button</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  /* ── Circular progress ring — same buildRing from ProgressBar.preview.html ── */
+  const SIZE_CFG = {
+    80: { strokeWidth: 8,   radius: 36,    fontSize: 14, lineHeight: 20, showLabel: true  },
+    72: { strokeWidth: 7,   radius: 32.5,  fontSize: 14, lineHeight: 20, showLabel: true  },
+    64: { strokeWidth: 6,   radius: 29,    fontSize: 14, lineHeight: 20, showLabel: true  },
+    56: { strokeWidth: 5.5, radius: 25.25, fontSize: 12, lineHeight: 16, showLabel: true  },
+    48: { strokeWidth: 5,   radius: 21.5,  fontSize: 12, lineHeight: 16, showLabel: false },
+  };
+
+  function buildRing(size, value) {
+    const cfg = SIZE_CFG[size];
+    const pct = Math.min(100, Math.max(0, value));
+    const circ = 2 * Math.PI * cfg.radius;
+    const offset = circ * (1 - pct / 100);
+    const half = size / 2;
+
+    const fill = pct > 0
+      ? `<circle cx="${half}" cy="${half}" r="${cfg.radius}" fill="none"
+           stroke="#f70f79" stroke-width="${cfg.strokeWidth}" stroke-linecap="round"
+           stroke-dasharray="${circ}" stroke-dashoffset="${offset}"/>`
+      : '';
+
+    const label = cfg.showLabel
+      ? `<span style="position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);
+           text-align:center;font-family:'Outfit',sans-serif;font-size:${cfg.fontSize}px;
+           font-weight:500;line-height:${cfg.lineHeight}px;color:#303030;
+           letter-spacing:-0.006em;pointer-events:none">${Math.round(pct)}%</span>`
+      : '';
+
+    return `<div style="position:relative;width:${size}px;height:${size}px;flex-shrink:0">
+      <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"
+        style="display:block;transform:rotate(-90deg)">
+        <circle cx="${half}" cy="${half}" r="${cfg.radius}" fill="none"
+          stroke="#f0f0f0" stroke-width="${cfg.strokeWidth}" stroke-linecap="round"/>
+        ${fill}
+      </svg>
+      ${label}
+    </div>`;
+  }
+
+  document.getElementById('progressRing').innerHTML = buildRing(56, 50);
+
+  /* ── Tab switching ── */
+  function setTab(el) {
+    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  /* ── Accordion toggle ── */
+  function toggleAccordion(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>
